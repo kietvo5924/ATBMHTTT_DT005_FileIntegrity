@@ -1,0 +1,4 @@
+version: '3.8'
+services:
+  worker_29:
+    image: enterprise/worker:29

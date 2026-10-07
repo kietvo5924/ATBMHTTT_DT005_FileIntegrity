@@ -1,0 +1,4 @@
+version: '3.8'
+services:
+  worker_61:
+    image: enterprise/worker:61

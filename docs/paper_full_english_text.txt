@@ -1,0 +1,2200 @@
+=== PAGE 1 ===
+Journal of Cybersecurity , 2025, tyaf006 
+https://doi.org/10.1093/cybsec/tyaf006 
+Article 
+The adversary: the philosophy of cryptography 
+Harry Halpin 
+* 
+Nym Technologies, Place Numa-Droz 2, 2000 Neuchâtel, Switzerland 
+∗Corresponding author. E-mail: hhalpin@ibiblio.org 
+Received 5 April 2024; revised 2 October 2024; accepted 20 March 2025 
+Abstract 
+The essence of cryptography is secure communication in the presence of adversaries. We present an analysis of 
+cryptography in terms of a philosophy founded on Dretske’s classical philosophy of information, which naturally is 
+built on the work of Shannon and is so amendable to being extended with the notion of adversary. The attempts to 
+transform cryptography from an art to a science were based on formalizing the adversary, but these very formal- 
+izations fall short in the face of real-world adversaries, as demonstrated by the Snowden leaks. Nevertheless, this 
+problem is not unique to cryptography per se , but a problem inherent in the process of abstraction itself, and so we 
+sketch a research agenda wherein overcoming the limits of abstraction necessitates the embrace of complexity and 
+empirical data, as well as the questioning of our own ontological assumptions. 
+Keywords: philosophy; cryptography; secrecy; history 
+Introduction 
+The internet’s promise of universally connecting the world has re- 
+sulted in a seemingly infinite space teeming with new and unknown 
+adversaries, and cryptography is one of the few crucial mechanisms 
+of defense possible in this new world. Yet, while there has been much 
+ado about information theory in philosophy [ 1 ,2 ], there has been lit- 
+tle philosophical work on cryptography despite cryptography itself 
+being the origin of information theory [ 3 ]. In order to bring cryptog- 
+raphy to the attention of philosophy, as well as elucidate the possible 
+contributions of philosophy to cryptography, we outline the crucial 
+concepts of cryptography from a historical perspective, while in turn 
+applying philosophical critique to these concepts. Based on this anal- 
+ysis, our contribution is then to sketch out a research agenda for the 
+broader field of cybersecurity that benefits from the insights and tools 
+given by philosophy. 
+For most of human history, issues of security have involved phys- 
+ical dangers posed by relatively known groups of adversaries, and 
+trust confined to small bands of humans, such as the family and the 
+tribe. In the last century, the development of large-scale social insti- 
+tutions, such as nation-states, has grounded trust between unknown 
+parties in explicit social norms and bureaucratic procedures at the 
+cost of surveillance of potential adversaries, including its own popu- 
+lation, while its own information organization becomes increasingly 
+dependent on secrecy [ 4 ]. Cryptography, the study of techniques for 
+secure communication in the presence of adversaries, makes the revo- 
+lutionary and ultimately philosophical claim that secrets can be com- 
+municated in the digital world via the application of mathematics. It 
+is precisely this claim that we will historicize and philosophically in- 
+terrogate, as it leads to the possibility of new notions of trust and 
+security if adversaries can be bound by the chains of cryptography. 
+First, we discuss the intuitive concept of a secret and how it fits 
+within the philosophy of information as initially theorized by Dretske 
+[ 1 ]. Then we turn to how the problem of the preservation of secrets 
+in the presence of adversaries led to Shannon’s first formalization 
+of cryptography [ 3 ]. Next, we turn to the historical development of 
+cryptography and the debates, which were ultimately philosophical 
+in nature, over its increasing abstraction, and inspect the theoretical 
+limits of these models. Surprisingly, we then show how an entirely dif- 
+ferent type of adversary presented itself: the global mass surveillance 
+system of the National Security Agency (NSA) of the United States 
+of America as revealed by Edward Snowden, effectively bringing the 
+field of cryptography to a crisis point by revealing the practical lim- 
+its of these formal models. By returning to our initial philosophical 
+analysis in the conclusion, we propose that a paradigm based on com- 
+plex networks with real-world data is needed to properly philosoph- 
+ically analyse the wider socio-technical system of adversaries and 
+secrets. 
+In summary, we offer more of a broad-ranging philosophical in- 
+quiry into secrecy in the digital era than a rigorous formal theory 
+of secrecy. Nonetheless, our goal is to lay the groundwork for a 
+more empirical and model-based critique of the limits of existing for- 
+malizations. This method of construction via critique should be one 
+1 
+© The Author(s) 2025. Published by Oxford University Press. This is an Open Access article distributed under the terms of the Creative Commons 
+Attribution-NonCommercial-NoDerivs licence ( https://creativecommons.org/licenses/by- nc- nd/4.0/ ), which permits non-commercial reproduction and distribution of the 
+work, in any medium, provided the original work is not altered or transformed in any way, and that the work is properly cited. For commercial re-use, please contact 
+journals.permissions@oup.com 
+Downloaded from academic.oup.com/cybersecurity/article/11/1/tyaf006/8097877 by guest on 01 October 2026
+
+
+=== PAGE 2 ===
+2 
+Halpin 
+proper role of the philosophy of any science, including the philosophy 
+of cryptography, even if there is not agreement on the conclusions. 
+Philosophical preliminaries 
+In order to begin any philosophical analysis of cryptography, a pre- 
+liminary definition of terms is needed. Although our goal is to pro- 
+vide insight into the philosophical nature of the adversary rather 
+than create philosophical adversaries, we will nonetheless have to 
+make a number of perhaps problematic philosophical assumptions 
+at the outset. Each of these assumptions can provoke whole debates 
+in philosophical fields from metaphysics to epistemology. On those 
+debates, while it would best to be rigorously neutral, we will nonethe- 
+less have to sketch a minimal picture in order to get our inquiry off 
+the ground. In doing so, we will draw on the classical analysis of 
+Fred Dretske in Knowledge and the Flow of Information [ 1 ], while 
+reverting to the minimalist metaphysical assumptions and ontologi- 
+cal pluralism of Brian Cantwell Smith’s On the Origin of Objects [ 5 ] 
+in order to deploy Cantwell Smith’s critique of abstraction to cryp- 
+tography. 
+To begin with a brief foray into metaphysics, the world can be 
+considered a primordial metaphysical flux from which local states of 
+affairs arise. These states of affairs may be relatively proximal , and 
+so capable of mechanistic causal interaction where they affect each 
+other necessarily, or distal , such that these states of affairs cannot 
+affect each other [ 5 ]. The world can thus be “cut” at various joints 
+when analysed in terms of separate systems, although the boundaries 
+are often dynamic over time at best and arbitrary at worst. Following 
+a traditional reading of Dretske, information consists of regularities 
+in these states of affairs that may be transmitted and so lead to inter- 
+action between these systems [ 1 ]. 
+Information can be transmitted via various information-carrying 
+vehicles, often called messages or signals , between systems, which 
+may include agents who have the capability of perceiving informa- 
+tion through various sensory and perceptual apparatuses. Via their 
+autonomous agency, agents take actions upon the world and possess 
+a proximal local state that they can access to determine their actions. 
+Agents such as humans can be distinguished from mere information- 
+carrying vehicles such as DNA and thermometers by virtue of having 
+commitments to their own intentional structure: thoughts, plans, be- 
+liefs about the world, a commitment to a world as a world, and the 
+ability to change the world via their own agency [ 5 ]. However tenu- 
+ous and changing it may be, there is a boundary between themselves 
+and the world, and between themselves and other distal agents. 
+Agents also may internalize information and so can be thought to 
+“posses” or, informally, to “know” the information via incorporat- 
+ing information into their local state, including via cognition. Rather 
+than be led astray in epistemological debates, it is enough to say that 
+agents then have access to information when they can incorporate it 
+into their local state. Agents such as humans can communicate infor- 
+mation to other agents via encoding information as an information- 
+bearing message in an analogue or digital manner [ 6 ]. Agents then 
+communicate with each other to share information and coordinate 
+behavior. This leads to the phenomenon of distributed cognition, 
+where agents coordinate their cognition via the “propagation of rep- 
+resentational state across a series of representational media”[ 7 ]. This 
+serves as the foundation of information organization , where informa- 
+tion is shared between various collective groups of agents, and others 
+are excluded. These excluded agents may nonetheless want access to 
+this information, and are so thought of as adversaries, a key notion 
+to which we will return. 
+The end result of these preliminaries is that we have the language 
+to discuss the nature of a secret philosophically, while still grounding 
+ourselves on the traditional paradigm of Shannon information theory 
+in which information is sent as messages through a channel between 
+a sender and a recipient, which themselves are agents [ 8 ]. With these 
+preliminaries out of the way, let us get to the heart of the philosoph- 
+ical matter: What is a secret? Informally, a secret is information not 
+known by everyone, but only by a few, who can purposefully exclude 
+this information from access by adversaries. In other words, a secret 
+is information possessed by some agents, but not all, who try to limit 
+the flow of this information. 
+One can further define the nature of a secret by two conditions. 
+First, a secret is a relationship between one or more agents, called 
+secret k eeper s , and the information. Second, a secret is relative to the 
+adversaries that desire to possess the secret, where any possible ad- 
+versaries are excluded from access to the information by the secret 
+keepers. Thus, secrecy is a relationship over information between se- 
+cret keepers and adversaries, where secret keepers are defending their 
+secrets from various adversaries, and the secret keepers and adver- 
+saries should be disjoint sets of agents as long as some particular 
+information is to remain a secret. 
+Any such information itself is not intrinsically a secret per se ; 
+what is a secret to one group may not be a secret to another group. 
+For example, a map—even if it has the location of underground 
+American nuclear warheads in Europe—is not in and of itself a se- 
+cret, but only a secret in relation to a set of secret keepers, such as 
+the US intelligence agencies who do not want this map to be more 
+widely known to their adversaries like Russia. For a secret to remain 
+a secret, it must not be transmitted to just anyone, but only to the 
+intended recipient(s) who maintain its secrecy and so join the ranks 
+of the secret keepers. However, for the sake of brevity, the concept 
+of “secret information relative to a group of secret keepers” will be 
+abbreviated simply as “secret.”
+This brings the question of the adv er sary to the forefront. The ad- 
+v er sary is an agent that is trying to gain access to secret information 
+despite not being a secret keeper. When the adversary gains access 
+to this information, the secret is revealed and the information is no 
+longer a secret. The secret only has to be revealed by the adversary to 
+themselves, not the general public, and the very fact that the secret has 
+been revealed may be kept secret by the adversary themselves. For se- 
+crecy to be true, no adversary can possess the secret. The secret keep- 
+ers and the adversary are thus in a state of eternal opposition, where 
+the secret keepers try to defend their secrets from the adversary. The 
+secret keepers may know the adversary quite well: for example, the 
+adversary of the American agency in terms of nuclear weaponry was 
+the Russian intelligence agency, and vice v er sa . However, the secret 
+keepers may not know the adversary is trying to reveal their secrets; 
+the secret keepers may consider them harmless or even an ally. The 
+Ethiopians originally assumed the Italians were friendly until a trans- 
+lator revealed that the Italians were trying to gain access to Ethiopian 
+secrets in order to colonize their country [ 9 ]. The secret keepers may 
+not even be aware of the success of their adversary in revealing their 
+secrets; the Third Reich did not know the Enigma machines were 
+cracked by British intelligence at Bletchley Park [ 10 ]. In the extreme 
+case, the secret keepers do not have to know that an adversary exists: 
+It is increasingly common that an unknown anonymous group may 
+hack into a group of computers and that secrets may be revealed, 
+but to whom is a matter of mystery . Concretely , an adversary could 
+corrupt a secret keeper’s device to access the message, but they may 
+also passively record all information sent across a channel, which is 
+usually imperceptible to their targets. For this reason, secrets thus are 
+typically protected against unknown adversaries. 
+Downloaded from academic.oup.com/cybersecurity/article/11/1/tyaf006/8097877 by guest on 01 October 2026
+
+
+=== PAGE 3 ===
+The philosophy of cryptography 
+3 
+No secrets are eternal; they hold only for a period of time. So 
+no information is a secret in of itself. A secret involves a relative re- 
+lationship between information and secret keepers over a period of 
+time relative to the adversaries and the wider world, such that no 
+secret can be absolute. Any secret information in a message must be 
+actively kept secret for the relationship of secrecy to continue; the 
+behavior and information organization of the secret keepers is struc- 
+tured to protect their secret. For example, take the paradigmatic cat- 
+egory of classified information, such as US State Department cables. 
+Once they were released into the world by Wikileaks, anyone could 
+access them and read the information: the cables were no longer de 
+facto secrets even if the cables were secrets de jure . These cables were 
+only a secret until they were leaked. Revealing a secret does not mean 
+that everyone knows the information (as in a leak), but merely that 
+the information is known outside the group of secret keepers. 
+Once a secret is revealed, it may be kept as a secret by the ad- 
+versary themselves or it may be released to the general public via a 
+leak , and so the secret becomes public knowledge. It is useful to dis- 
+tinguish public knowledge from common knowledge. Lewis defines 
+“common knowledge” as the kind of information in a population of 
+agents, wherein everyone in the population has reason to believe that 
+a particular state of affairs holds [ 11 ]. What we need is a weaker no- 
+tion of public knowledge , which is information that any agent could 
+potentially have access to, but does not necessarily know (as is the 
+case with common knowledge). A secret is the opposite of public 
+knowledge and so “uncommon knowledge.” Interestingly enough, 
+one of the ramifications of this common-sense view of secrecy is that 
+the opposite of secrecy is publicity , such that what is public cannot 
+be secret. 
+Heavyweight epistemological terms are bandied about informally 
+in cryptography, such that an agent like an adversary “knows the se- 
+cret” or secret keepers “believe the secret is secure.” Although the 
+tricky epistemological question of belief is part and parcel of secrecy, 
+a proper treatment of secrecy would be book-length, and so it should 
+suffice to note that these terms are used informally to designate a re- 
+lationship of access rather than justification or even belief. For ex- 
+ample, secret keepers must believe that the information is secret so 
+that they work towards keeping it a secret. Does this mean that they 
+believe or even know the secret itself? Take the example of the first 
+known use of steganography in which Histiaeus of Miletus tattooed 
+a message warning of a Persian attack on his poor slave’s scalp in 
+a language the slave likely could not read. Was the slave a secret 
+keeper? In more modern times, an entire apparatus of agencies exist 
+to keep secrets such as maps of US warheads, but not every member 
+knows the information in the map. In our analysis, secret keepers do 
+not have to personally know the secret (although they may), and so 
+secret keeping typically includes a large number of agents who do 
+not know the secret but nonetheless work to preserve knowledge of 
+the secret from adversaries. Furthermore, secret keepers themselves 
+may have access to the information that comprises the secret but may 
+not believe in the truth of the secret, such as intelligence of uncer- 
+tain or unreliable origin, and such information is often kept secret 
+just in case it is true. However, secrecy is not a relationship of mere 
+belief, for if a secret is revealed by an adversary, it is no longer se- 
+cret even if the secret keepers believe the relationship of secrecy still 
+holds. 
+While working cryptographers may consider this all an unneces- 
+sary metaphysical and ontological excursion, the point of this sec- 
+tion is to familiarize philosophers with cryptography by showing 
+how cryptographic concepts, once grafted on top of relatively well- 
+known philosophical theories of information, can remain neutral to 
+questions of epistemology by thinking in terms of access to informa- 
+tion rather than belief or knowledge [ 1 ]. In essence, secrecy is rela- 
+tive to the adversary, as the adversary is excluded from access to the 
+information by the secret keepers. The adversary is trying to reveal 
+the secret and, in the extreme case, even make the secret public via a 
+leak. The information organization of secret keepers expands beyond 
+those with personal knowledge of the secret, to a set of techniques 
+and behaviors to defend the secret against possibly even unknown 
+adversaries. The philosophy of cryptography can then be thought of 
+as a progression of conceptual models of the adversary throughout 
+history. It is to this question that we turn next. 
+Foundations of modern cryptography 
+Cryptography is the study of how to communicate secrets without re- 
+vealing these secrets to an adversary. The origin of the term cryptog- 
+raphy comes from the Greek kryptos , meaning “hidden,” and graph , 
+which means “writing,” so that cryptography is literally the “art of 
+secret writing.” So far, we have not discussed the precise techniques 
+used by secret keepers to hide secrets from adversaries, and before the 
+advent of modern cryptography these cryptographic techniques were 
+varied and not subsumed theoretically in a single paradigm [ 10 ]. The 
+crucial breakthrough was the creation of the first formal model of 
+the adversary, where its powers in leaking secret information could 
+be mathematically analyzed. In a move that has confused generations 
+of philosophers, this required stripping away questions of semantics 
+from information, and analyzing information purely in terms of its 
+encoding as done by Shannon [ 8 ]. The motivation for this theoreti- 
+cal revolution that led to information theory was Shannon’s crypto- 
+graphic work, which was classified at the time [ 3 ]. 
+Shannon’s formalization of cryptography 
+Modern cryptography can be dated to the publication of “Commu- 
+nication Theory of Secrecy Systems” in 1949 in which the terms of 
+cryptography were for the first time given a general mathematical 
+treatment, with proofs provided for security in terms of probability 
+theory [ 12 ]. As Shannon outlines in his “A Mathematical Theory of 
+Communication” [ 8 ], the creation of modern cryptography appears 
+to be a predictable result of prior published work in defining the 
+communication of information in general over a channel between 
+a sender and a receiver. The only addition to classical Shannon 
+information theory is that some transformation should be applied—
+namely encryption—that makes the message unreadable to the 
+adversary by transformation into a ciphertext , while the intended 
+recipient can equally apply another transformation—decryption—to 
+reveal the message. Given that Shannon’s model of information 
+is also deployed philosophically by Dretske [ 1 ], the philosophical 
+preliminaries in Section 2 neatly map to a conceptual analysis of 
+modern cryptography. 
+There is a small wrinkle in traditional philosophical accounts of 
+information and cryptography; rather than building cryptography 
+in terms of information theory, it should be noted that Shannon 
+worked in Bell Labs on classified research for the USA involv- 
+ing cryptography during the Second World War, and his original 
+publication on the formal foundations of cryptography, entitled A 
+Mathematical Theory of Cryptography was actually written years 
+before his more lauded publication on information theory called A 
+Mathematical Theory of Communication [ 3 ]. Therefore, the fun- 
+damentals of Shannon information theory, including such notions 
+as entropy, were actually developed for cryptographic systems and 
+not for general purpose telephone communication as is commonly 
+believed. It has little been explored that cryptography is the central 
+Downloaded from academic.oup.com/cybersecurity/article/11/1/tyaf006/8097877 by guest on 01 October 2026
+
+
+=== PAGE 4 ===
+4 
+Halpin 
+motivation of Shannon information theory, even though philoso- 
+phers like Bar-Hillel, Carnap, Dretske, and more recently Floridi have 
+found Shannon to be central to their philosophical work [ 1 , 2 , 13 ]. 
+To rephrase the general problem, we assume there are two 
+agents—a sender and a receiver—communicating secret information 
+encoded into a number of bits. This message must be given to the 
+sender in some language “in the clear” (i.e. cleartext , which can be 
+understood), but the message needs to be sent through a cipher to 
+become ciphertext (or a “cryptogram”) that an adversary cannot un- 
+derstand, even if intercepted. A system of communication between 
+secret keepers is considered secure if the adversary cannot reveal the 
+secrets. For Shannon, the system should not depend on the meaning—
+the semantics—of the information, but only on how it is encoded. The 
+process of transforming the encoding of a message into ciphertext is 
+encryption and its reverse is decryption , where the method of en- 
+cryption and decryption combined can be considered the cryptosys- 
+tem . The cipher is assumed to be some mechanical system, such as 
+an algorithm implemented on a computer, but—as Shannon’s maxim 
+states—it should be assumed that “the enemy knows the system”
+[ 12 ]. While the design of the system should be public, there is as- 
+sumed to be a part of the system that is a secret from the adversary: 
+The key used to encrypt and decrypt, and the security of the entire 
+system should be reducible to the secrecy of the key, the ancient prin- 
+ciple of Kerckhoffs’ principle [ 14 ]. The adversary is assumed to be 
+able to commit to cryptanalysis , which means being able to use tech- 
+niques such as statistical analysis to attempt to reveal the secret with- 
+out having access to the secret key. Shannon assumes that the sender 
+and receiver both have secret keys. 
+Shannon’s first controversial, yet revolutionary, move is to get rid 
+of any concept of the meaning of the information, as he is assuming 
+the information is encrypted in such a way as to hide its meaning 
+on the level of the bit-wise encoding, and he assumes if the message 
+was decrypted then the secret would be revealed and fully semanti- 
+cally transparent. These are plausible assumptions given the nature 
+of wartime cryptography, although it is less clear if these assump- 
+tions are plausible for a full-fledged philosophical analysis of infor- 
+mation [ 2 ,6 ]. Using this framework, Shannon proves two surprising 
+results that shape to this day the landscape of modern cryptography. 
+First, Shannon defines theoretical secrecy (often called “Shannon se- 
+curity” or “informationally theoretically secure”) as: “How immune 
+is a system to cryptanalysis when the cryptanalyst has unlimited time 
+and manpower available for the analysis of cryptograms?” In other 
+words, a system is theoretically secret—perfectly secret—if there is 
+a way to encrypt a message so that no amount of computation can 
+break it to reveal the secret [ 3 ]. Second, Shannon then proves that in 
+order for a system to be perfectly secret, the system must have a key 
+of equal length to the message itself (i.e. a “one time pad”), which 
+means that “perfect secrecy requires an infinite amount of key if we 
+allow messages of unlimited length.” [ 3 ]. To the eternal disappoint- 
+ment of any simple-minded approach to encryption, Shannon then 
+proves that if this key is reused, the cryptanalyst can in theory break 
+the encryption. 
+While perfection may be impossible, there is a ray of hope, as 
+Shannon proposes a new definition of practical secrecy : The amount 
+of “work” that is “characteristic of the system [...] taken over all 
+messages and all keys with their appropriate probabilities,” where 
+the work can be measured in the amount of computation it takes 
+to decrypt an encrypted message [ 12 ]. Thus, the idea is that the ad- 
+versary must have a finite amount of time and power to break the 
+decryption, and so keys shorter than the message must be possible, 
+but the exact cryptosystem to be used was not given and the powers 
+of the adversary were not formalized by Shannon. Due to the clas- 
+sified nature of Shannon’s work and cryptography in general, work 
+in cryptography disappeared in the USA into the National Security 
+Agency, formed in 1952 and superseding the peacetime cryptanalysis 
+done by Black Chamber and during the Second World War by the 
+Signal Intelligence Service. 
+To take a step back, what is truly underappreciated by both his- 
+torians and philosophers is that Shannon wrote his A Mathematical 
+Theory of Cryptography in 1945 before he published his much more 
+famous A Mathematical Theory of Communication Systems in 1948. 
+In fact, Shannon’s classical information theory is simply his theory of 
+the communication of secrets purged of any cryptographic elements 
+and is not widely taught or even known outside cryptography. Due 
+to his original work being classified during the Second World War, 
+Shannon was only able to publish his declassified wartime work as 
+the Communication Theory of Secrecy Systems in 1949 after his in- 
+formation theory gained popularity. In this manner, the entire concept 
+of information is a by-product of cryptography, as is the invention of 
+modern computers [ 10 ], a historical fact lost upon philosophers who 
+tend to focus on cybernetics and artificial intelligence. As philoso- 
+phers like Dretske based their work on Shannon information theory 
+[ 1 ], Shannon’s formalization of the power of the adversary in terms 
+of perfect and practical secrecy fits neatly on top of our initial philo- 
+sophical analysis of information. 
+Access control and information organization 
+Yet even though cryptography disappeared from the public view 
+to become the province of intelligence agencies, governments still 
+needed control to avoid revealing secrets. The task of keeping se- 
+crets between secret keepers can be thought of as access control , 
+where there is information and a policy that determines which 
+agents may have access to the secrets. While the secrecy of partic- 
+ular information-bearing messages may require cryptography, access 
+control is the foundation of the information organization of secrets 
+in general. For example, there have been attempts to use one-time 
+pads to create perfectly secure secret-sharing systems, and for a long- 
+period of time Soviet communications required the use of one-time 
+pads. Yet, this kind of cryptosystem under Shannon’s paradigm had 
+a fatal flaw: each message required a new key. This means that the 
+Soviet encryption system essentially had to centralize the production 
+of key material in Moscow so that all secret communications went 
+through a single point in Moscow, even for covert communications 
+between two agents inside the USA. The sheer hassle of the amount of 
+key material being produced led to accidental key reusage, which in 
+turn enabled American intelligence to successfully decrypt messages 
+[ 15 ]. It is not just the techniques of cryptography but the social sys- 
+tem of the secret keepers that is required to keep a secret. Adversaries 
+are not limited to technical means, they may actively be attempting 
+to reveal secrets of their targets by intercepting the message, but also 
+monitoring or interfering with—or even subverting—the behavior of 
+secret keepers and their information organization. 
+The origins of access control systems typically come from the 
+military, where secrets must be strictly restricted to secret keep- 
+ers, where there is a hierarchical degree of “levels” of classification 
+ranging in the US government from “top secret,” merely “confiden- 
+tial,” to completely “unclassified”—although additional qualifica- 
+tions such as “NOFORN”(no foreign national) complicate the seem- 
+ingly simple hierarchy into a more “lattice”-like structure [ 16 ]. These 
+policies originated as human-centric levels of access control. How- 
+ever, the spread of digital computing sparked concerns that foreign 
+governments and other adversaries would attack government com- 
+puter systems and networks to gain access to secrets. It thus became 
+Downloaded from academic.oup.com/cybersecurity/article/11/1/tyaf006/8097877 by guest on 01 October 2026
+
+
+=== PAGE 5 ===
+The philosophy of cryptography 
+5 
+imperative that this line of research get transferred to computer sys- 
+tems [ 17 ]. In particular, the deployment of the Multics operating sys- 
+tem, where many users shared a single computer and so could eas- 
+ily share information, began to highlight the problem of maintaining 
+the confidentiality of easily copied and digitally encoded information 
+[ 18 ]. Formalized models of these levels of access control, in order to 
+attach them to computing systems, became an area of active work for 
+the military and intelligence agencies, with concepts and techniques 
+slowly drifting into an emerging and more public field of security 
+engineering [ 19 ]. 
+Access control systems with a security model were first formal- 
+ized in the Bell–Padula model, which effectively aimed to keep secrets 
+between groups of secret-keepers arranged in a strict hierarchy, and 
+where agents on the “top” of hierarchy could transfer information 
+between themselves and read information of those lower in the hi- 
+erarchy [ 20 ]. Another issue was being certain messages maintained 
+their integrity, i.e. that agents at a lower-level could not alter informa- 
+tion meant for a higher-level [ 21 ]. The more complex lattice-structure 
+used by the US government and inside many organizations, where 
+different agents can have different levels of access control, ended up 
+being formalized much later [ 16 ]. In contrast to cryptography, these 
+access control systems are typically enforced via the computer’s ad- 
+ministrator or operating system that creates the various groups and 
+user identities. One of their most ambitious research agendas was 
+to create, in contrast to Multics, a provably secure operating system 
+[ 22 ]. 
+Three important security properties are typically desired by 
+early access control systems, which were then later taken to be 
+requirements for cryptosystems. The first and most important is 
+confidentiality to ensure that a secret is only revealed to its intended 
+recipient(s), thereby keeping the secret in the circle of secret keep- 
+ers. There are two more properties that can be accomplished by 
+cryptography that do not on the surface have anything to do with 
+confidentiality. The second is integrity , namely that the information 
+encoded in a message has not been changed en route over a channel. 
+The third property is authentication , such that a recipient can verify 
+that it was indeed the sender that sent the message. An additional 
+fourth property is often implied by authentication, namely that of 
+nonrepudiation , so that a sender cannot deny having sent a message 
+to a recipient. These latter two properties of integrity and authentica- 
+tion may seem divorced from confidentiality, but in fact are crucially 
+important to maintaining secrecy. The property of authentication 
+is required to identify secret keepers and so separate them from the 
+general population and possible adversaries, and integrity is then 
+required to ensure that the secret itself is maintained, the information 
+contained in the message is not accidental or intentionally lost. Typi- 
+cally it should be noted that in the wider security community, the term 
+“availability”—information is available when required—was often 
+substituted for authentication, although availability is not a security 
+property. 
+Beyond Shannon’s analysis of cryptography, what is also not 
+properly appreciated is the invention of access control modeling as a 
+science of information for the organization of secret keepers, as it was 
+mostly hidden from the public and only used by governments as ne- 
+cessitated by digital computing. However, early access control mod- 
+els assume a centralized information organization with the ability to 
+identify users and distribute cryptographic secret keys. When used in 
+the real world, as shown by the centralization of one-time pads by 
+Russian intelligence in Moscow, which eventually led to its failure 
+due to accidental key reuse [ 23 ], these systems quickly became cum- 
+bersome and difficult to deploy in a ever-changing dynamic world of 
+secrets and adversaries. 
+Formalizing the adversary 
+Two philosophical questions bedevilled the use of cryptography. The 
+first was how cryptography could be used by secret keepers that were 
+not part of a centralized organization that could deliver secret keys. 
+The second question was how could it be guaranteed that a real- 
+world adversary, as opposed to the perfect adversary imagined by 
+Shannon, could not break a particular cryptographic encoding of a 
+message by secret keepers. 
+The revolution of public key cryptography 
+Up until 1976, cryptosystems were symmetric key-based systems of 
+the type formalized by Shannon, where the sender and receiver used 
+a secret key for both decryption and encryption. Yet for messages to 
+be encrypted and decrypted by a secret key, both the receiver and the 
+sender had to have their secret key somehow securely given to them 
+via some secure channel. In other words, it was generally assumed 
+that the keys were distributed by a trusted third-party in the larger 
+organization of secret keepers. A trusted third-party is an element of 
+a communication protocol that is trusted not to reveal any secret. 
+In practice, this tended to limit the use of cryptography in practice 
+to centralized social organizations such as governments with nec- 
+essary infrastructures. This, and the fact that most cryptographers 
+were employed by intelligence agencies, meant that the public aca- 
+demic field of cryptography barely existed, although the publication 
+of Kahn’s The Codebreak er s in 1967 renewed interest in the devel- 
+opment of a possible science of secrets [ 10 ]. Academics such as Whit- 
+field Diffie and Martin Hellman began to question whether or not the 
+usage of cryptography was possible over insecure channels by multi- 
+ple users when observed by an adversary without preexisting secret 
+keys [ 24 ].1 
+The invention of public-key cryptography by Diffie and Hellman 
+in their New Directions in Cryptography [ 25 ] solved the problem 
+of key distribution amongst an open-ended number of parties over 
+insecure channels via the creation of public key cryptography . Their 
+central insight was to “split”the key into a public key and private key, 
+where two users could then exchange public keys and, via the use of 
+their private key, create a new shared secret key to secure the chan- 
+nel even with the adversary intercepting the public keys and view- 
+ing all ciphertext messages. This would allow any person, even those 
+without organizations, to become a secret keeper and use cryptogra- 
+phy to protect their secrets from adversaries. The philosophical and 
+even political ramifications of the historic shift in the landscape of 
+sovereignty caused by this breakthrough have yet to be fully appre- 
+ciated [ 4 ]. 
+Earlier, Shannon enigmatically ended his original essay by noting 
+that “the problem of good cipher design is essentially one of finding 
+difficult problems” [ 12 ]. Building on this insight, Diffie and Hellman 
+discovered that certain mathematical functions had “trap door” in- 
+formation that allowed an agent with this secret information (such 
+as a key) to reverse a function. Without such information it was im- 
+possible, however, and these “one way” functions could be used to 
+build new types of public key cryptosystems, where the private key 
+was the “trap door.” As Jacques Stern, the founding figure of French 
+cryptography, put it: “from an epistemological perspective, one can 
+say that Diffie and Hellman have drawn the most extreme conse- 
+quence” from Kerckhoffs’ principle so that the encrypting key can be 
+public and only the decrypting key must be secret [ 26 ]. The public 
+1 A technique for this “nonsecret” cryptography (as the initial keys were not 
+needed to be secret) to do so had in fact been discovered by GCHQ over a 
+decade earlier in 1967, but had remained classified until until 1997 [ 23 ]. 
+Downloaded from academic.oup.com/cybersecurity/article/11/1/tyaf006/8097877 by guest on 01 October 2026
+
+
+=== PAGE 6 ===
+6 
+Halpin 
+key could then just be an exponentiation of the large random number 
+of the secret key. This led to the Diffie–Hellman key exchange pro- 
+tocol in which the public key could be sent over the clear and shown 
+to the adversary, but only then combined with the secret key of the 
+receiver in order to create a symmetric key [ 25 ]. 
+Diffie–Hellman key exchange neatly solved the problem of key 
+distribution without a trusted third party, but it failed to actually 
+provide algorithms to encrypt and decrypt messages using public 
+key cryptography. While Diffie and Hellman did list a number of 
+attacks—such as the adversary being able to send arbitrary plain- 
+texts to encrypt (the chosen plaintext attack), or the adversary pos- 
+sessing the decrypted plaintext for arbitrary ciphertexts (the chosen 
+ciphertext attack)—their ground-breaking work also did not provide 
+a method for determining whether an encryption algorithm was se- 
+cure against unknown adversaries [ 25 ]. Whether or not a cryptosys- 
+tem was secure was hard to judge for proposed cryptosystems, as 
+some problems that seemed to be hard “trapdoor” type problems 
+for worst-case scenarios, such as Merkle’s knapsacks [ 27 ], would fail 
+against actual adversaries who possessed “average-case” computa- 
+tional power in the real world [ 28 ]. Therefore, the field of cryptogra- 
+phy simply had to imagine what could be done against known attacks 
+by adversaries. After all, there is no reason to believe that adversaries 
+would limit themselves to known attacks. 
+Diffie and Hellman stated that “we stand today on the brink of 
+a revolution in cryptography,” and the revolution they began was 
+completed by the invention of the Rivest–Shamir–Adleman (R S A) 
+cryptosystem that could encrypt, decrypt, and also sign and verify 
+digital signatures using the factorization of the product of two large 
+prime numbers as the trapdoor function [ 29 ]. Further work by Hell- 
+man’s student El-Gamal then extended the work of Diffie–Hellman 
+Key Exchange to provide encryption and decryption-based on mod- 
+ular exponentiation. Yet, even these cryptosystems effectively were 
+not proven to be secure using mathematical proofs. Attempts to con- 
+struct a R S A cryptosystem based on standard assumptions, such as 
+the provably secure Rabin cryptosystem [ 30 ], discovered that the very 
+properties that made it provably secure could be provably broken by 
+chosen ciphertext attacks [ 31 ]. These problems could be solved by 
+the introduction of randomness into the decryption and encryption 
+operations themselves. This would include not just the keys, but also 
+randomness appended to the message before encryption [ 32 ]. Yet the 
+exact key sizes, padding, and other matters appeared to be more an 
+art than a science. 
+Furthermore, real deployed cryptosystems needed to have these 
+parameters set in order to interoperate. After at first attempting to 
+suppress the spread of public-key cryptography, the NSA eventu- 
+ally began to work with National Institute of Standards and Tech- 
+nology (NIST) to standardize cryptosystems for use outside govern- 
+ments. This led to the distinction between cryptographic primitives , 
+the components of a cryptosystem whose function is assumed to pro- 
+vide a security property, against cryptographic protocols that are 
+constructed out of cryptographic primitives to achieve a more com- 
+plex function in a secure manner. Examples of cryptographic prim- 
+itives include hash functions used to create cryptographic one-way 
+“digests” (similar to a unique fingerprint for an encoding of infor- 
+mation), ranging from Secure Hashing Algorithm (SHA) to symmet- 
+ric encryption algorithms like Advanced Encryption Standard (AES), 
+as well as public key systems for encryption, decryption, and digi- 
+tal signatures. As cryptography spread, the standardization of these 
+primitives was led by nation-state level standards bodies that were 
+closely connected to their respective intelligence agencies in terms 
+of cryptography, such as NIST (USA), CRYPTREC (Japan), GOST 
+(Russia), and ETSI (Europe), with standards from the USA domi- 
+nating deployments. In the early days of cryptographic systems, na- 
+tion standards were done in an opaque manner, as exemplified by 
+the production of Digital Encryption Standard (DES) by IBM with 
+NSA approval and Digital Signature Algorithm (DSA), an algorithm 
+that was purposefully crippled to prevent confidentiality (which the 
+NSA viewed as dangerous at the time to spread to the public, though 
+it allowed authentication). The USA moved to running open con- 
+tests like NIST, where cryptographers attacked each other’s propos- 
+als for primitives. These were produced via cryptographic contests 
+ran by NIST that nonetheless left the question open: How do we 
+know the power of the adversary, and can we prevent unknown 
+attacks? 
+Formalizing the adversary via computational 
+complexity 
+The philosophical answer was to formalize the adversary on a level 
+of abstraction so that all possible attacks could be precisely charac- 
+terized in terms of the theory of computation, and security could be 
+proven against such an abstract adversary. The advent of provable 
+security was began by Shafi Goldwasser and Silvio Micali’s precise 
+mathematical formalization of the adversary in terms of computa- 
+tional complexity theory, which could characterize an adversary with 
+a bounded amount of computation as a particular kind of Turing ma- 
+chine operating over binary encoded messages [ 33 ]. One way for the 
+adversary to break any cryptosystem is simply to enumerate all pos- 
+sible keys, which on a classical (super)computer still takes an expo- 
+nential amount of time, and so would not terminate in thousands of 
+years. Thus, an exponential–time algorithm to break a cryptosystem 
+is as good as not having an algorithm for the purposes of practi- 
+cal security. In order to formalize this insight, the adversary can be 
+given a Turing machine that runs in polynomial time; its running 
+time is upper bounded by a polynomial expression in the size of the 
+input, where the input may be any observable information given by 
+the sending of the encrypted message between the sender and the re- 
+ceiver [ 34 ]. The adversary can also be considered to have access to 
+uniformly chosen and independent randomness, and so is a prob- 
+abilistic polynomial–time Turing machine (PPT). To generalize, for 
+each possible input size, the adversary could possess a different al- 
+gorithm, so the adversary is a nonuniform PPT. A computationally 
+secure cryptosystem requires proving that a cryptosystem could be re- 
+duced to the computational intractability of a mathematical problem. 
+The proof typically produced bounds on the success of the nonuni- 
+form PPT adversary, with a system being secure if the probability of 
+success was shown to be negligible within a bound. 
+Via this breakthrough, previously informally characterized at- 
+tacks could be reformulated mathematically, and so systems could 
+be proven to be secure in terms of cryptographic properties like con- 
+fidentiality. For example, chosen plaintext attacks could be rephrased 
+mathematically via semantic security in terms of the polynomial–time 
+(efficient) adversary: “Whatever is efficiently computable about the 
+cleartext given the ciphertext, is also efficiently computable without 
+the ciphertext” [ 34 ]. While some probabilistic advantage of the ad- 
+versary must exist because the plaintext is mixed into the ciphertext 
+by the key, it is bounded to be negligible. This notion could be for- 
+malized into the formal property of indistinguishability in the face 
+of plaintext and ciphertext attacks, with the eventual result that a 
+particular cryptosystem could be provably secure against these kinds 
+of attacks. 
+Cryptography started to be systematized in a new Hilbert pro- 
+gram for secrecy, becoming as respectable as any other branch 
+of mathematics, a feat made possible through replacing paranoid 
+Downloaded from academic.oup.com/cybersecurity/article/11/1/tyaf006/8097877 by guest on 01 October 2026
+
+
+=== PAGE 7 ===
+The philosophy of cryptography 
+7 
+intuitions with provable results from computational complexity. 
+Cryptographers would use “games” to define reductions to known 
+hard problems in mathematics; showing that an adversary must solve 
+a hard problem in order to break the system. As long as the hard 
+problem remained unsolvable by the computationally defined adver- 
+sary, the cryptographic edifice built upon the hard problem would 
+be secure. There was a veritable golden age in provable security, 
+pushing the boundaries of what was even possible with cryptog- 
+raphy, as exemplified by zero-knowledge proofs, where one could 
+prove knowledge of information without revealing anything besides 
+the possession of the knowledge [ 35 ]. There were also practical 
+ramifications. For example, the difficulty of breaking a cryptosys- 
+tem to reveal a secret increases faster than any polynomial func- 
+tion of the key, so the cryptosystem becomes more difficult to break 
+by any polynomial–time adversary simply by increasing the key 
+length. 
+Could cryptography transform from a mathematical discipline 
+to a scientific method with real-world impact? Provable security 
+was theorized to have potentially huge ramifications for the prac- 
+tical standardization of protocols, which had started with param- 
+eters being determined in an ad hoc manner. For example, R S A 
+needed common encoding and padding to be used in practice se- 
+curely, so new standards like Public Key Cryptography Standards 
+(PKCS) #1 were drafted [ 36 ]. Standards could depend on practice- 
+oriented provable security , where the security properties of various 
+deployed standards could be studied rigorously and proven [ 37 ]. Yet 
+with a few exceptions, such as the Cramer–Schoup cryptosystem 
+[ 38 ], most cryptosystems—even R S A—could not be proven secure 
+within a standard computational model [ 39 ]. 
+The core of the problem was that many real-world primitives, 
+such as hash functions, were not clearly definable mathematically 
+under the standard model of cryptography. Therefore, there were 
+new extensions to provable security that substituted the ideal 
+functionality in proofs for the use of a standard primitive in the real 
+world. For example, the SHA1 hash function could be modeled as 
+a “random oracle model” in order to be used in proofs, where the 
+random oracle maps each possible input to a random output whose 
+infinite output could then be truncated [ 40 ]. Likewise, proofs could 
+be made in the generic group model, where an encoding that was 
+efficient (such as the finite fields used by R S A) could be substituted 
+with a random encoding [ 41 ]. Trusted third-parties whose behav- 
+ior was considered nonadversarial could also be invoked for the 
+need in proofs, such as the setup of a common reference string in 
+zero-knowledge proofs [ 42 ]. 
+Progress in formalization led to a veritable blossoming of a thou- 
+sand proofs, with proofs for useful new constructions and proofs 
+of existing protocols becoming the bread and butter of academic 
+cryptography. Previously unsolved problems could be solved, with 
+the provably secure optimal padding for R S A being put forward for 
+standardization [ 32 ]. Going even further, combinations of protocols 
+could even be proven secure using proof techniques such as universal 
+composabilty, where one could define the functionality in an “ideal 
+world” and prove that a “real world” instantiation fulfilled certain 
+security and privacy properties [ 43 ]. Work on indistinguishability ob- 
+fuscation held the promise of being able to construct all the diverse 
+branches of cryptography with the addition of “one-way” functions 
+[ 44 ]. Large-scale work began systematizing a formal treatment of 
+cryptography based in complexity theory [ 45 ]. For readers wishing to 
+learn cryptography, textbooks on cryptography based on precise def- 
+initions with proofs are available [ 46 ]. The hope was that the design 
+of cryptographic protocols could, by building on formally provable 
+security, transform cryptography from an informal art to a branch of 
+mathematics on par with any other [ 37 ]. 
+Formalizing the adversary via logic 
+The nascent field of security engineering formed to analyze not just 
+cryptography, but cryptography as part of the construction of larger 
+systems of information organization. The revolution of public key 
+cryptography allowed new decentralized models of access control, 
+which became exceptionally important due to the increased adoption 
+of the internet. Unlike previous access-control systems such as the 
+Biba model, which assumed a finite number of secret keepers [ 21 ], 
+the internet is an open world containing a vast number of different 
+kinds of adversaries and secret keepers. In this new environment, a 
+system needs to distinguish secret keepers from possible adversaries. 
+This insight gave rise to the field of authentication protocols , where 
+an agent could prove using cryptography that they are a legitimate 
+secret keeper to a larger information organization. 
+The first use-cases were authentication between agents, each with 
+a symmetric key on a trust server, in the face of communicating in the 
+presence of an adversary attempting breaches of integrity and confi- 
+dentiality, as well as “replay”attacks, where messages were held back 
+or forwarded by the adversary. A host of strangely named home- 
+brewed protocols, such as the Wide-Mouthed Frog and Yahalom 
+protocols, were shown to be insecure upon closer inspection [ 47 ]. 
+This led to the more rigorous Needham–Schroeder protocol for key 
+distribution [ 47 ], which in turn became the basis for Kerberos, the 
+first widely used authentication system on the internet [ 48 ]. Still, it 
+was not clear if even the Needham–Schroeder protocol was secure. 
+A number of attacks led to features being added in an ad hoc man- 
+ner to the protocol, like “timestamps” to prevent replay attacks [ 49 ]. 
+To address these issues, a revolution in formalization took place in 
+the study of the security of these authentication protocols, strangely 
+in parallel to the formalization of cryptography as it was led by a 
+separate research community [ 50 ]. As opposed to the formalization 
+of cryptography, where “cryptographic operations are seen as func- 
+tions on strings of bits” and their security properties are “defined in 
+terms of the probability and computational complexity of successful 
+attacks,” in the logic-based paradigm used by access control systems, 
+cryptographic operations and their security properties “are seen as 
+functions on a space of symbolic (formal) expressions” [ 50 ]. 
+The general approach was that the communication of secrets 
+could be studied in terms of the beliefs about the messages by both 
+secret keepers and adversaries. Prior to the invention of cryptogra- 
+phy, this was formalized in terms of epistemic logic, whose roots 
+were in philosophy [ 51 ]. In a logic-based analysis, agents are ab- 
+stract machines that can send and receive messages. In contrast to 
+the investigation of the correctness of cryptosystems, cryptographic 
+operations are assumed to be perfectly correct. However, the adver- 
+sary is characterized in a completely different manner: Rather than 
+a polynomial–time Turing machine, under the Dolev–Yao symbolic 
+model the adversary is extremely powerful and “carries the message”
+over a hostile network, where the adversary can intercept, alter, and 
+generate any message [ 52 ]. 
+The first influential logic for authentication protocols, Burrows–
+Abadi–Needham (BAN) logic, applied an epistemic logic-based 
+approach to existing authentication protocols, showing that the 
+Needham–Schroeder was “secure” [ 53 ]. However, BAN logic lacked 
+a standard model-theoretic semantics of possible universes, and pro- 
+tocols proven secure by BAN logic in theory were found to be 
+actually insecure in practice due to the level of abstraction and limits 
+in the logic itself [ 54 ]. In the wake of these deep-seated problems of 
+BAN logic, researchers created a panoply of new logics: some with 
+soundness properties [ 55 ], others based on the pi-calculus [ 56 ], still 
+others on strand spaces [ 57 ], and well-defined multiagent epistemic 
+logics [ 58 ]. The eventual victory of finding a suitable and more per- 
+fect logic appeared to be assured, and the unification of logic-based 
+Downloaded from academic.oup.com/cybersecurity/article/11/1/tyaf006/8097877 by guest on 01 October 2026
+
+
+=== PAGE 8 ===
+8 
+Halpin 
+approaches with computational complexity was valiantly attempted 
+for authentication protocols [ 50 ] by taming the powerful Dolev–Yao 
+adversary in terms of the PPT adversary [ 59 ]. 
+One advantage of being able to capture the philosophical notion 
+of secrecy in standard logics is that protocols could then in theory be 
+amendable to automated theorem-proving, where a machine rather 
+than a human cryptographer generates the proofs using an automatic 
+model-checker [ 60 ]. The core idea was that a run of the protocol, 
+and all attacks by an adversary against it, could be conceptualized as 
+moves in a space of all possible states of the protocol. A human cryp- 
+tographer, with finite attention, was only likely to explore a relatively 
+small subset of the space and thus only able to notice a few possi- 
+ble attacks. Alternatively, a machine could explore much more of the 
+state space automatically—if not the entire state space—and find oth- 
+erwise unknown attacks that would be too bizarre for a mere mortal 
+to easily imagine without machinic help. There were of course com- 
+putational limits in practice: These automated proof-systems were 
+typically sound but not complete, and also often required interac- 
+tion with a human to guide the heuristics used by the model-checker. 
+Generally a human had to describe the model of the protocol and its 
+security properties using whatever formal language was supported 
+by the theorem prover before putting its automation to work. The 
+early results were promising: A new attack was found on the vener- 
+able Needham–Schroeder key exchange protocol 17 years after the 
+protocol was published [ 61 ], and this attack could be formalized us- 
+ing an automated theorem-prover based on the well-known Com- 
+municating Sequential Processes formalism [ 54 ]. The hope was that 
+while Needham–Schroeder was a tiny protocol composed of only 
+three lines of code, automated methods could be used to prove the se- 
+curity of very complex protocols like Transport Layer Security (TLS) 
+that were based on thousands of lines of code. With the use of the 
+higher-order logic-based proof-prover Isabelle [ 62 ], the very complex 
+protocol TLS was also proven to be secure [ 63 ]. As a result, the tri- 
+umph of formalism in cryptography seemed complete, and a bright 
+future of cryptography—and its wider application in complex secu- 
+rity protocols—seemed to be inexorable. 
+The question of what it means for a cryptosystem to be secure 
+against an adversary is a philosophical question embodied as a tech- 
+nical question. First, if the larger philosophical notion of secure com- 
+munication could be reduced to the sending of an encrypted message 
+between secret keepers using a cryptosystem such that a known-class 
+of adversaries could not decrypt the message, then in principle secu- 
+rity could be reduced to a matter of mathematical proof. So while 
+Shannon proved no adversary can break an information-theoretic 
+and perfectly secure cryptosystem, where the key is never reused, 
+in practice, these new results proved breaking a cryptosystem with 
+key reusage is practically impossible if the adversary has a bounded 
+amount of time and computational power. The initial application of 
+computational complexity theory and logic-based formal verification 
+made huge strides in solving some of these difficult questions for both 
+cryptosystems and their usage in the authentication logics for access 
+control systems. However, the philosophical question of whether or 
+not there were fundamental limits to formal abstraction would show 
+that questions of metaphysics and ontology had consequences for 
+preserving secrets against adversaries. 
+The limits of formalization in cryptography 
+All was not well for formalism; systems had to be implemented by 
+working code to be usable by secret keepers, but the capabilities of 
+adversaries were not limited by any formal model. First, a number 
+of protocols that were proven to be cryptographically secure in the- 
+ory were shown to be insecure when implemented in practice [ 64 ]. 
+The famous provably secure R S A padding proof was shown to have 
+an error in the proof [ 65 ]. Worse, there was a brutal attack on R S A, 
+which took advantage of TLS servers telling clients about improper 
+padding, which could then be used to decrypt their encrypted traf- 
+fic [ 36 ], despite the core of TLS being shown to be formally secure 
+[ 63 ]. There was further worry that if protocols were proven secure 
+under the Random Oracle assumption, they were not actually secure 
+in practice as a hash function could be a poor approximation of a 
+random oracle. After all, a random oracle is not even physically re- 
+alizable by a finite computer, as it would require a description of in- 
+finite length; its underlying idea is that given infinite possible inputs, 
+each input produces a random output independent from every other 
+possible random output [ 66 ]. 
+Despite the considerable success of formalization, the issue of 
+concrete parameters also was still more guess-work than a proper 
+science. For elements of cryptography like keys, bigger was always 
+better: Yet, exactly what key size was reasonable to resist an adver- 
+sary like the NSA with supercomputing resources? The move away 
+from R S A to more efficient elliptic curve cryptography (ECC) exem- 
+plified concerns as it was not even clear which curve to use. Despite 
+formal proofs, in practice security was based more on an oral tradi- 
+tion than a science as “the decision about what kind of curve to use 
+in ECC is a subjective one based on the user’s best guess about future 
+vulnerabilities” [ 67 ]. The debate over the actual properties delivered 
+by provable security came to a head when the inventor of elliptic 
+curve cryptography [ 68 ], Neal Koblitz published an infamous paper 
+with Alfred Menezes called Another Look at Provable Security that 
+claimed “One has to wonder how many ‘proofs’ of security are ever 
+read carefully with a critical eye” [ 69 ]. As they note, Mihir Bellare 
+and Phil Rogaway’s proof of optimal padding for R S A “went essen- 
+tially unexamined for 7 years,” so “one cannot help asking whether 
+the lengthy and often poorly written “proofs” of less famous secu- 
+rity claims are ever read carefully by anyone” [ 69 ]. Although one 
+would hope a computer could verify these proofs, automated the- 
+orem provers effectively reduced the security of a protocol to the 
+underlying—and perhaps flawed—model-checking software, which 
+could be sound, but nonetheless was not complete and could not 
+handle the complex assumptions of most proofs. The epistemologi- 
+cal question of whether these computer-generated proofs could even 
+be checked and trusted could not be banished [ 70 ]. Automated the- 
+orem provers produced proofs that were typically so complex and 
+long that it would be impractical for any human to bother to check 
+their correctness [ 71 ]. If the cryptographic research community did 
+not regularly check important and concise proofs produced by its 
+own members, what were the chances of their checking the tedious 
+proofs generated by machines? 
+Despite building a large-case against the nature of reductionist 
+security proofs in cryptography being error-prone and even circular 
+[ 72 ], most academic cryptographers believed that abandoning secu- 
+rity definitions and cryptographic proofs would be a step backwards. 
+Otherwise, cryptography would be based on subjective intuition, and 
+so prevented from being based on rigorous and scientific grounds 
+[ 73 ]. This debate over the status of proofs within cryptography had 
+a philosophical parallel in an earlier debate between the formalist 
+and intuitionist approaches to the status of proofs in the foundations 
+of mathematics. This philosophical debate arose out of the failure of 
+Russell and Whitehead to construct the foundations of mathematics 
+on logic [ 74 ]. For the formalists, what was important was that a set 
+of axioms created a system of objects, and for each new object there 
+can be a reduction in a consistent manner to the underlying model 
+Downloaded from academic.oup.com/cybersecurity/article/11/1/tyaf006/8097877 by guest on 01 October 2026
+
+
+=== PAGE 9 ===
+The philosophy of cryptography 
+9 
+with no ontological commitment [ 75 ]. In contrast, intuitionism 
+defined the origin of truth in mathematics in human experience, for 
+it had “no other source than an intuition, which places its concepts 
+and inferences before our eyes as immediately clear” [ 76 ]. For 
+intuitionists, proofs force mathematicians to construct valid objects 
+while avoiding constructions that make use of metaphysical presup- 
+positions that could not be constructed by an effective algorithm 
+grounded in finite human experience, such as the law of the excluded 
+middle. Intuitionism thus offers justification via construction in place 
+of a Platonic notion of the human-independent truth of mathemati- 
+cal objects [ 77 ]. For intuitionism, the disturbing feeling remains that 
+the validity of a statement in a proof is then dependent on the cog- 
+nitive faculties and subjective state of the individual mathematician, 
+which inevitably leads us down the path of solipsism, where—per 
+Feyerabend—“anything goes” [ 78 ]. In a world of adversarial be- 
+havior where consequential secrets are at stake, this nonchalant 
+approach to security is an unacceptable path for most members of 
+the cryptographic research community, and certainly the general 
+public. 
+The question of the status of proofs can thus be restated in terms 
+of the reality of mathematical objects. Are mathematical proofs real 
+objects in terms of metaphysics? It would seem that mathematical 
+objects could be as ontologically real as the rest of our world, or 
+at least real structural regularities in our world [ 79 ]. While it ap- 
+pears feasible that one could claim that a perfect circle is some sort 
+of Platonic object about which a mathematician could have a pri- 
+ori knowledge, it seems absurd to claim that Needham–Schroeder 
+key agreement or R S A padding schemes have some sort of neces- 
+sary ontological existence that precedes their invention. As noted by 
+Rogaway [ 80 ], cryptographic programs are literally constructed by 
+human engineers and cryptographers. Therefore, some variant of so- 
+cial constructivism over the nature of mathematical objects used to 
+study cryptography would naturally fit the work of the cryptographic 
+research community, which could then vary in opinion over the meta- 
+physical status of these objects and their proofs [ 81 ]. 
+However, there are dangers with replacing the objective reality 
+with social consensus: “The cost is that “objectivity” is reinterpreted 
+as “social,”and although it still refers to something external to the in- 
+dividual it is no longer external to humankind” [ 81 ]. As per Lakatos, 
+proofs are then constructed by all-too-human scientific communities 
+who, while adversarial over the details, are united by their common 
+desire for knowledge about their subject matter [ 82 ]. In cryptogra- 
+phy, there is no common humankind, or even a unified research com- 
+munity; the common understanding of the social as put forward in 
+the philosophy of science is a cooperative scientific community, but in 
+cryptography humans are divided into secret keepers and adversaries. 
+Thus, for a system to be secure against an adversary, it requires more 
+than social consensus: The system must hold up its properties against 
+full-blooded adversaries actively trying to undermine and find flaws 
+in the work of the community of cryptographic researchers. More 
+suitable is the approach of Daniel Dennett, who argues that math- 
+ematics, science, and even engineering can discover “real patterns”
+that are causally efficacious in the world, and so can be helpful in ac- 
+complishing evolutionary goals while avoiding Platonism and more 
+stringent versions of scientific realism [ 83 ]. A cryptosystem may be 
+socially constructed, but it may nonetheless discover and exploit a 
+real pattern in the world; it must work in detecting and creating 
+ontological regularities in the world that are independent of agents, 
+whether or not they are secret keepers or adversaries. Whether or not 
+something is secure then is a matter of its survival in the real world 
+against adversaries, rather than against attacks made by the scientific 
+community within an austere and pristine formal framework. Rather 
+than being an arbitrator of the status of security, the cryptographic 
+research community can be thought of as a testing ground—or, better 
+yet, a collective laboratory—for new primitives and protocols. 
+Proofs thus provide an important role as “intuition-pumps”
+of the research community in finding weaknesses in security be- 
+fore a new cryptographic construction is created and in repair- 
+ing already-existing cryptography in the wild [ 84 ]. The proofs pro- 
+duced by mathematicians—and accepted by the larger mathematical 
+community—are often quite informal if not rigorous [ 85 ], and would 
+require further transformations to count as a proof in a formalized 
+logical system [ 86 ]. While many proofs are indeed informal and intu- 
+itive in cryptography, the historical tendency has been to move in the 
+other direction by constructing increasingly rigorous logical proofs, 
+including the aid of automatic theorem provers to detect unknown 
+adversarial behavior. The very reliance on computing machinery to 
+make proofs further undermines the claim that these proofs are a sort 
+of Platonic a priori knowledge, rather than being quasi-empirical dis- 
+coveries [ 70 ]. This positions cryptography as a discipline more akin 
+to engineering or science than a relative of pure mathematics. 
+The received view is that engineering emanates historically from 
+the application of science [ 87 ]. With cryptography and computer sci- 
+ence as a whole, it is more often than not the other way around: 
+Concrete engineering practices precede the slow work of scientific 
+systematization in cryptography. This does not mean that the objects 
+created by engineering are not real, but precisely the opposite: cryp- 
+tography is a kind of philosophical engineering that is creating new 
+ontologies with novel properties [ 88 ]. The new ontologies embod- 
+ied by cryptographic primitives and protocols, whose security and 
+weaknesses outstrip the intended design of their inventors, demand 
+that mathematical and empirical work be done to determine the exact 
+properties of these engineered artifacts in the wild. This is precisely 
+because these embodied programs function in the real world while 
+also being designed in the abstract with only a partial model of the 
+world in the minds of their creators [ 89 ]. So cryptography can be 
+considered as both designing new objects via engineering based on 
+idealized models and making scientific, empirical discoveries about 
+the operations—and security—of these objects in the real world. 
+The model is only useful in clarifying aspects of the entire sys- 
+tem and so abstracts away from the rich details of their underlying 
+subject matter. This is not only an issue for cryptography, as all for- 
+mal models abstract from the real world. Even Hilbert and Bernays, 
+the founders of the formalism, recognized that the work of mathe- 
+maticians operates “predominately with theories which do not repro- 
+duce the actual state of affairs completely, but represent a simplifying 
+idealization of the state of affairs and have their meaning therein”
+[ 75 ]. The problem with relying on purely formal models for security 
+properties is that, as Cantwell Smith puts is: “Mathematics is unique, 
+with respect to models, because (at least to a first level of approxima- 
+tion) its subject matter is the world of models and abstract structures, 
+and therefore the model–world relationship is relatively unproblem- 
+atic” [ 5 ]. 
+The subject matter of formal models in cryptography, therefore, 
+is not mathematics—as would be the case in meta-mathematics—but 
+rather an engineered system facing an adversary. The limits of for- 
+malization in cryptography are due to the model of a system being 
+mistaken for the system itself as embedded in the world, which in- 
+cludes the social behavior of secret keepers. Likewise, a model of an 
+adversary cannot be mistaken for the actual adversary, which could 
+possess attacks unconstrained by any model. The root of the prob- 
+lem was that formal definitions that undergirded the entire field of 
+provable security: the definitions were idealizations of reality, which 
+failed to take into account important aspects of the implementa- 
+Downloaded from academic.oup.com/cybersecurity/article/11/1/tyaf006/8097877 by guest on 01 October 2026
+
+
+=== PAGE 10 ===
+10 
+Halpin 
+tion, and it was precisely the aspects left out of the idealization 
+that were often crucial for a successful adversarial attack. For ex- 
+ample, semantic security assumed that the length of the encrypted 
+message was public, as in theory a message may be of unbounded 
+length [ 34 ]. In practice messages in the real-world did have varying 
+lengths, and the behavior of encryption algorithms in the face of vary- 
+ing lengths led to real-world attacks like CRIME and BREACH on 
+TLS [ 90 ]. 
+The philosophical question of the limits of formalism is of prime 
+importance to cryptography. Debates within cryptography echo de- 
+bates earlier in the philosophy of mathematics, ranging from debates 
+over whether mathematics provides privileged access to the nature to 
+reality of whether or not the metaphysical complexity of the world 
+outstrips any formal model of the world [ 5 ]. If there are indeed funda- 
+mental limits to correctness in computers, then even automated the- 
+orem provers would never truly be able to prove that security prop- 
+erties would hold in the real world [ 89 ]. As Ross Anderson notes in 
+his seminal paper Why Crypto-systems Fail , the engineers who con- 
+struct these systems and the cryptographic community that attempts 
+to prove their security properties “have suffered from a lack of infor- 
+mation about how their products fail in practice, as opposed to how 
+they might fail in theory,” as an adversary would typically not reveal 
+that they had broken a cryptosystem [ 91 ]. The reason for cryptog- 
+raphy’s lack of the virtuous feedback cycle of other scientific disci- 
+plines and engineering research fields was simple: secret keepers that 
+reveal their secrets due to broken cryptosystems may also be loathe 
+to reveal their failure or not even know that their secret has been 
+revealed. 
+The adversary revealed 
+The limits of formalization are revealed when the capabilities of an 
+adversary are not captured by a formal model. While the notion of 
+an adversary had been formalized with increasingly sophisticated ab- 
+stractions, the details of how actual nation-state level adversaries 
+worked remained speculation. With the leaks by Edward Snowden, 
+the unthinkable happened: the raw secret techniques of the most 
+powerful adversary yet imagined were revealed to the general pub- 
+lic. This guiding example of the limits of formalization was an event 
+of historic proportions to the field of cryptography as, precisely be- 
+cause the NSA was the most powerful adversary imaginable in terms 
+of cryptography, academics had long-used the NSA as a sort of mythi- 
+cal adversary in their research papers. If a technique could defeat the 
+power of the NSA, it was surmized to be able to withstand the at- 
+tacks of any lesser adversary. Before Snowden’s leaks, although the 
+academic cryptographic research community knew that the NSA had 
+long suppressed the release of public key cryptography, their precise 
+capabilities as an adversary could only be guessed [ 23 ]. For exam- 
+ple, the discovery of a large secret server farm under construction in 
+Utah was surmized to be a cryptanalytic facility aimed at the “brute- 
+forcing” of private key material, at least judging by its massive size 
+and its energy consumption [ 92 ]. The Snowden leaks finally offered 
+a glimpse into what a large-scale adversary with thousands of em- 
+ployed secret keepers and more than a billion dollars in budget was 
+capable of. Although the number of secrets leaked by Snowden are 
+clearly far from exhaustive and rapidly dating, we will touch upon a 
+number of findings that revealed blindspots in the prior philosophical 
+framing of cryptography [ 93 ]. 
+The first surprise was that defeating cryptography via breaking 
+a cryptosystem was not the primary methodology employed by a 
+real-world adversary to reveal secrets. Although the NSA was active 
+in cryptanalysis, there was no evidence of their having hidden revo- 
+lutionary cryptographic techniques to break existing cryptosystems: 
+The polynomial adversary did seem to be an accurate assessment of 
+the NSA’s cryptanalytic capabilities, and even the NSA could not de- 
+feat modern cryptography. Years earlier it had been shown that the 
+NSA had discovered and deployed differential cryptanalysis, a pow- 
+erful mathematical technique capable of breaking early cryptosys- 
+tems, before the technique had been discovered by the cryptographic 
+academics [ 94 ]. Instead of cryptanalysis, the NSA was obsessed with 
+obtaining secret key material via attacking parts of the system left 
+out of standard information-theoretic model of cryptographic com- 
+munication from Shannon onwards. Why would an adversary attack 
+the encrypted messages when it could more easily attack the secret 
+keepers themselves? Often key material was stored insecurely by the 
+sender or receiver of a secret and could be extracted by attacking 
+the secret keeper’s device via malware (as shown by “Foxacid”) [ 95 ]. 
+Rather than attack the message, the communication channel itself 
+could be subverted; such malware could even be deployed against 
+the communication channel itself in order to access sensitive data, as 
+shown by an attack the British Government Communications Head- 
+quarters (GCHQ) did against a Belgian telecommunications provider 
+in order to obtain secret information from their nominal allies [ 95 ]. 
+Implementation details left out of abstract models of protocols were 
+ripe for attack: The NSA had a particular focus on subverting the 
+TLS protocol used to secure access to websites. One technique, called 
+“Quantum Insertion,” was simply injecting fake packets into an oth- 
+erwise seemingly secure TLS connection in order to redirect an agent 
+toward a malicious website of the attacker’s choosing [ 95 ]. Lastly, the 
+point-to-point model of communication used since Shannon did not 
+take into account massive trusted third-party platforms that medi- 
+ated most communication channels. Via the PRISM programme, the 
+NSA was revealed to have access to Microsoft, Google, Facebook, 
+Apple, and other large centralized platforms, including access to the 
+plaintext of emails and web data. 
+The second finding was that the simplest primitives used in the 
+reductions for security proofs could be attacked far more easily than 
+the protocols itself. Via Project Bullrun, the NSA had a budget of 
+250 million dollars to subvert cryptographic standards [ 96 ]. This was 
+no surprise, as standards like DSA for digital signatures, created by 
+NIST but designed by the NSA, were clearly crippled to the extent 
+that DSA was both inefficient and could only be used for authenti- 
+cation, not confidentiality [ 23 ]. On the one hand, major standards 
+by NIST long-rumored to be weakened by the NSA—such as the 
+symmetric key encryption of AES—were shown not to be broken 
+by the NSA in the Snowden leaks. On the other hand, Snowden con- 
+firmed some long-standing suspicions about the NSA subversion of 
+the NIST Dual_EC_DRBG (Dual Elliptic Curve Deterministic Ran- 
+dom Bit Generator) standard [ 96 ], which was also internationalized 
+by the International Standards Organization [ 97 ]. Cryptosystems as- 
+sume that the keys are generated via random number generators, but 
+a subtle “backdoor” was put in the random number generation so 
+that even though its output appeared random, the possessor of the 
+backdoor information could predict the generated keys. This inse- 
+cure random number generation meant that TLS connections using 
+it could be compromised. The NSA even worked with vendors—
+such as the R S A company, although without the knowledge of Ron 
+Rivest and his coinventors—to ensure placement of the insecure 
+random number generator in high-value corporate infrastructures 
+[ 98 ]. This shocked the cryptographic research community, and Rivest 
+himself was surprised at the poor judgment of his own company. Fur- 
+thermore, this strategy of having deliberately weakened standards 
+or products with backdoors could easily be applied to other crypto- 
+Downloaded from academic.oup.com/cybersecurity/article/11/1/tyaf006/8097877 by guest on 01 October 2026
+
+
+=== PAGE 11 ===
+The philosophy of cryptography 
+11 
+graphic system, which the NSA would then help place in commercial 
+products. Of course, this strategy to gathering secret information is 
+technically questionable: as soon as such a backdoor was discovered, 
+it would be usable by any other adversary and in no way limited to 
+the party that designed the backdoor. This seems to have been the case 
+with the NSA backdoor in Dual_EC_DRBG: while it let the NSA de- 
+crypt the internet traffic of Juniper routers, after the technique went 
+public it appears that Chinese intelligence also took advantage of the 
+backdoor [ 99 ]. 
+The last finding of the Snowden leaks was that the patterns of 
+messages given by secret keepers was just as important, if not more 
+so, to the adversary than the encrypted message itself. While the most 
+fundamental problem in cryptography is the protection of secret in- 
+formation being sent from a sender to a receiver, another even more 
+difficult problem is how to send a message without revealing the iden- 
+tity of the sender and receiver to an adversary. In other words, how 
+can one hide not just the data of the encrypted message, but also the 
+metadata of who is communicating with whom? Techniques to do 
+this would unlink the sender and the receiver of a message so that they 
+can communicate anonymously [ 100 ]. In short, the pattern of com- 
+munication revealed the information organization of the secret keep- 
+ers to the adversary, and keeping the organization’s structure secret 
+was itself more important in many cases than the secrets themselves. 
+Take for example the organizers of a protest in a country under au- 
+thoritarian rule, who must keep the information about the time and 
+location of the protest hidden, but also their own identities to escape 
+arrest. Even if the message was encrypted, often the encrypted mes- 
+sage has metadata that is itself plaintext on the level of the protocol 
+implementation, such as the name of the website being visited using 
+TLS. The monitoring of messages, including encrypted messages, for 
+patterns in communication by an adversary is called traffic analysis , 
+and as Diffie and Landau put it: “Traffic analysis, not cryptanalysis, 
+is the backbone of communications intelligence” [ 15 ]. The Snowden 
+leaks showed that the NSA was a master of traffic analysis: the slo- 
+gan of the NSA was “Collect it all, know it all, exploit it all” [ 93 ]. 
+With millions upon millions of messages collected everyday across 
+almost every country, the NSA could do large-scale data analysis and 
+visualization of social networks via programs like “Boundless Infor- 
+mant” and personalized monitoring in real-time via “Keyscore-X”
+[ 101 ]. VPNs and anonymous communication networks such as Tor 
+deliver messages from sender to receiver in a first-in, first-out man- 
+ner through a series of decentralized relays [ 102 ]. Existing real-world 
+techniques were insufficient: VPNs and even Tor were vulnerable to 
+traffic analysis by a powerful adversary such as the NSA that could 
+capture and record every message, although deanonymizing Tor users 
+took considerable manual work by the NSA due to its decentralized 
+nature [ 103 ]. 
+What sort of research problems were provoked by the NSA 
+that went beyond the prior formal frameworks? The Snowden leaks 
+shocked not only the general public, but many members of the cryp- 
+tographic research community to their core. One of the founders of 
+provable security, Phil Rogaway, wrote an eloquent call to arms, en- 
+titled The Mor al Char acter of Cryptographic Work , where he said: 
+“As computer scientists and cryptographers, we are twice culpable 
+when it comes to mass surveillance: computer science created the 
+technologies that underlie our communications infrastructure, and 
+that are now turning it into an apparatus for surveillance and con- 
+trol; while cryptography contains within it the underused potential 
+to help redirect this tragic turn”[ 104 ]. Having the adversary revealed 
+caused a transformation of the paradigm of the field of cryptography, 
+at least for researchers like Rogaway [ 105 ]. Although the majority of 
+the cryptographic research community continued with little thought 
+to real-world implementation or concerns, a portion of the crypto- 
+graphic research community did work to resolve the most egregious 
+attacks brought to light by Snowden. New protocols like Signal were 
+created for secure messaging that featured new properties like for- 
+ward secrecy , where the compromise of a key did not allow the adver- 
+sary to decrypt all past and even future messages [ 106 ]. The ancient 
+TLS protocol was finally properly analyzed, and new techniques in 
+formal verification allowed the model-checking software to go be- 
+yond the mere analysis of a model to actually generate code that was 
+verified to embody the model [ 107 ]. Focus on key storage in hard- 
+ware that was difficult to extract via secure enclaves also became a 
+major focus of work [ 108 ], as did the logging of key material to pre- 
+vent forgeries (including for TLS) [ 109 ] and the decentralization of 
+information away from large platforms, leading eventually to interest 
+in blockchain-based systems to preserve the integrity of information 
+against adversarial and centralized systems [ 110 ]. 
+Due to the Snowden leaks, the field of provable security had to 
+revisit its formal assumptions: the NSA subversion of cryptographic 
+primitives and basic protocols was a thorny problem to address. 
+Suspicions naturally fell on the NIST-selected elliptic curves, whose 
+precise choice of parameters were difficult to publicly verify, and 
+which seemed less than ideal in terms of efficiency. Daniel Bern- 
+stein and Tanja Lange created an alternative with the peer-reviewed 
+Curve25519 curve that was even more efficient than the standard- 
+ized NIST curves, and it soon found its way into major standards 
+like TLS [ 111 ]. Another research paradigm, called malicious secu- 
+rity , had been explored earlier in terms of viruses and malware by 
+a small group of cryptographers to determine if a protocol could be 
+made secure even if the fundamental primitives to which proofs re- 
+duced security were subverted [ 112 ]. In the wake of the possibility of 
+standardized primitives being subverted, this line of research could 
+then be applied to the assumptions of modern cryptographic proto- 
+cols [ 113 ]. 
+Traditional cryptographic research did not focus on enabling 
+anonymous communication, and what little research existed on 
+anonymous communication was woefully underdeveloped [ 114 ]. Al- 
+though the field of cryptography had been well-developed mathe- 
+matically, the study of anonymity still seemed stuck at the presci- 
+entific stage of determining a basic terminology and methodology 
+[ 100 ]. While work in epistemic logic can formalize anonymity, it has 
+not been united with other models [ 115 ]. In contrast to traditional 
+work in cryptography, work in anonymity consists of hiding meta- 
+data details, like timing and volume information of encrypted mes- 
+sages. However, widely used anonymous communication networks 
+such as Tor did not protect against a global passive adversary that 
+could watch and copy every single message on a network [ 102 ]. Prior 
+to the Snowden leaks, this kind of adversary was considered unreal- 
+istic, but post-Snowden it became clear this kind of mass data col- 
+lection was already possible. This led to renewed interest in mix net- 
+working, a technique invented by David Chaum in which encrypted 
+messages were shuffled like a deck of cards in a series of decentralized 
+servers, and so delivered to receivers in a different order than sent, 
+effectively anonymizing the message [ 114 ]. After laying dormant for 
+almost 30 years, mixnets like Nym were developed to prevent the 
+traffic analysis of users, exemplifying the next step in protocol devel- 
+opment beyond TLS [ 116 ]. 
+The adversary may have been revealed, but the full extent of their 
+powers is still unknown as the Snowden leaks gave only a glimpse 
+of their cryptanalytic power at a particular point in time. A further 
+paradigm shift awaits, as the invention of a real-world quantum com- 
+puter, by implementing Shor’s algorithm to exponentially parallelize 
+factoring, might break the fundamental trap door assumptions that 
+Downloaded from academic.oup.com/cybersecurity/article/11/1/tyaf006/8097877 by guest on 01 October 2026
+
+
+=== PAGE 12 ===
+12 
+Halpin 
+were built into almost all cryptography ranging from Diffie–Hellman 
+key exchange to elliptic curve cryptography [ 117 ]. Such a quantum 
+computer no longer seems distant, and could feasibly be created by 
+the intelligence agencies of large nation-states within decades or less. 
+Therefore, the cryptographic research community, working hand- 
+in-hand with NIST, standardized a new series of postquantum re- 
+placements for public key cryptography based on new mathemat- 
+ical problems, such as the shortest vector problem that would re- 
+sist a quantum computer [ 118 ]. Nonetheless, the question remains: 
+can the NSA and NIST be trusted in the context of using much 
+less-studied mathematical problems to create a new generation of 
+cryptography? 
+The Snowden leaks pulled the mask off the NSA, showing that 
+powerful global passive adversaries and active attacks on all aspects 
+of communication are a realistic threat model. From a philosophi- 
+cal perspective, the Snowden leaks provide an example of how both 
+our initial philosophical framework can analyze an adversary like 
+the NSA, while demonstrating the limits of various abstract models, 
+for example, in capturing the NSA’s actual capabilities. Of course, 
+being an adversary is a relative notion: For the NSA, Snowden him- 
+self was the adversary that leaked their secret techniques. Snowden’s 
+leaks also brought to popular attention a political and philosophi- 
+cal shift: cryptography was historically a weapon of defense used by 
+large-scale information organizations of secret keepers such as gov- 
+ernments, yet now tools such as big data analysis and the exploita- 
+tion of security flaws were focused on individuals in the general pop- 
+ulation, even indiscriminately in the case of mass surveillance. The 
+adversaries were also changing. On the one hand, individuals were 
+increasingly empowered to guard their own secrets with cryptogra- 
+phy due to the invention of public key cryptography. On the other 
+hand, the attacks that were once considered only the province of the 
+NSA, such as brute-force attacks and malware, increasingly became 
+usable by not only other intelligence agencies, but also a host of non- 
+state actors ranging from criminal networks to private organizations. 
+The successful formalization of the adversary had effectively caused 
+cryptography to ignore important aspects that fell outside this model: 
+attacks on the communication channel and secret keepers themselves, 
+the subversion of cryptographic primitives, and the statistical anal- 
+ysis of the social network of secret keepers. The kernel of a future 
+research agenda had been revealed. 
+Conclusion: a research agenda 
+Philosophy has long been the handmaiden of science, yet in the case 
+of cryptography the question of the adversary seems to reveal a la- 
+cuna at the heart of philosophy as well. One should not forget that 
+the translation of “Satan” in Hebrew is adversary, and “program- 
+ming Satan’ s computer”—where the very channel to carry communi- 
+cations can be malicious—is one of the most difficult tasks imagin- 
+able [ 119 ]. Politics has long been the realm of adversarial behavior, 
+but now—as shown by the Snowden leaks and the increased ubiq- 
+uity of attacks on digital communication of all sorts—the problem of 
+communicating in the presence of adversaries is also a technical ques- 
+tion. This technical question impacts not only governments and other 
+information organizations, but nearly all of humanity as we increas- 
+ingly become dependent on the Internet. And, as has been shown by 
+our analysis of cryptography, any technology is built on a robust, if 
+implicit, philosophical foundation that is worthy of study in its own 
+right. 
+While cryptography has come quite a long way in defending com- 
+munications, the purpose of a philosophy of cryptography should be 
+2-fold: first, to make philosophical insights legible to cryptographers; 
+and second, insofar as information theory has served as the funda- 
+mental building block of the philosophy of cognitive science, artificial 
+intelligence, and even the newly founded philosophy of information, 
+there is no reason why philosophers should not apply their philo- 
+sophical machinery to cryptography. Rather than view cryptography 
+as a pristine, if not bizarre, branch of mathematics where philoso- 
+phers have to be called in to tidy up the foundations, it would be 
+better to use the insights provided by philosophy to point towards 
+ways of expanding cryptography into a more general science of se- 
+curity. 
+In order to qualify as a science, abstraction must be tempered 
+by empirical research in order to allow secure communication in re- 
+ality, not just on pen and paper. So far the progress of cryptogra- 
+phy has critically depended since Shannon on the advancement of 
+abstraction, yet future progress may require—in order to not mis- 
+take the map for the territory per Korzybski—the rev er se of ab- 
+straction: reconciliation with the underlying subject matter. Cantwell 
+Smith defines reconciliation as “filling in the details” of any theory 
+[ 5 ]. This could allow us to revisit our abstractions and choices to 
+produce more accurate models that do justice to their underlying 
+subject matter, whether in terms of predictions or even just explana- 
+tions. We suggest the following four questions for a research agenda 
+to reconcile the drive towards abstraction in cryptography with its 
+embedding in the world, where each question is to be explored in 
+more detail. 
+(1) Can we study dynamic social networks of secret communica- 
+tion modeled on the empirical behavior of secret keepers? 
+(2) By incorporating statistics, can new models of the adversary 
+take into account more accurate data about their capabilities? 
+(3) Can cryptography incorporate interdisciplinary methods and 
+insights that can capture the complexity of secure communica- 
+tion? 
+(4) Will philosophy let us make explicit and then reformulate the 
+hidden assumptions of cryptographic communication, and vice 
+v er sa ? 
+Fir st, can w e stud y d ynamic social netw or ks of secret communica- 
+tion modeled on the social behavior of secret k eeper s? As initially ex- 
+plored by access control and authentication logics, the question of the 
+secret is a question of information organization. Adversaries are not 
+limited to technical means, they may actively be attempting to reveal 
+secrets of their targets by intercepting the message, but also monitor- 
+ing or interfering with—or even subverting—the behavior of secret 
+keepers. Today, information organization is thought of as a social 
+network rather than a simplified centralized organization. It is at this 
+point, we should note the limits of Shannon’s simplification of secure 
+communication is insufficient: as demonstrated, albeit negatively, in 
+spades by Snowden’s insider leak of one of the world’s most powerful 
+organizations of secret keepers, information organization is a norm- 
+governed social relationship between secret keepers and their secret 
+that prevents this secret from escaping their agreed-upon bounds and 
+so falling into the hands of the adversary. In the traditional model of 
+Shannon, using conventions developed in the original treatment of 
+R S A [ 29 ], there is only one channel of communication between two 
+agents Alice and Bob, with a single malicious adversary—known as 
+Eve or Mallory—who is attempting to maliciously disrupt or eaves- 
+drop upon the communication, with some perhaps backup cast of 
+trusted third parties or other infrastructure so that this model would 
+hold by induction to any number of channels. 
+This is an admirable strategy at a relatively high-level of abstrac- 
+tion, but in order to further reconcile cryptography with the messy 
+details of real-world attacks, the simplified structure of communica- 
+Downloaded from academic.oup.com/cybersecurity/article/11/1/tyaf006/8097877 by guest on 01 October 2026
+
+
+=== PAGE 13 ===
+The philosophy of cryptography 
+13 
+tion should be extended to a heterogeneous techno–social network 
+of communication between a large cast of agents, where these agents 
+can have varying level of capabilities in terms of cryptosystems, key 
+storage, and so on. The agents are given as vertices (nodes) and the 
+channel as an edge (link) between them. The key would then be to 
+trace the flow of secret information between these various agents. 
+Whether or not a given network of secret keepers is successful in 
+their keeping a secret requires them to conform to a policy, which 
+is an implicit or explicit set of rules defining who is in the circle of 
+secret keepers versus who is not, as well as their norm-governed be- 
+havior. Whether or not this key invariant of secrecy is preserved over 
+various changes in the dynamics of network structure would then re- 
+quire either modeling or empirically inspecting the information flows 
+in different situations [ 120 ]. Although leaks in information flow are 
+self-evident in the case of the whistle-blower, there is also the case 
+of accidents and the like, so that the behavior of the adversary may 
+be properly considered a byzantine fault; in the real world it may 
+not be possible to distinguish between operational failures and mali- 
+cious behavior when a secret is leaked. By thinking security in terms 
+of the flow of secrets over real-world networks, real (or worse case, 
+synthetic) data can be attached to otherwise far too abstract crypto- 
+graphic protocols and access control systems. This allows research in 
+cryptography to go beyond simple maxims from philosophy and so- 
+cial science on adversarial behavior. Of course, this is often hampered 
+by the difficulty in getting data about attacks, as most organizations 
+are loathe to share potentially embarrassing data [ 121 ]. The collec- 
+tion of such data, when properly anonymized, should be considered a 
+common goal for all parties to increase their own security by learning 
+from the lessons of others. 
+Second, by incorporating real-world data, can new models of the 
+adv er sary tak e into account more accurate data about their capabili- 
+ties? One of the most pernicious problems facing cryptography is an 
+accurate description of the adversary. While the abstractions such as 
+the polynomial–time adversary and the Dolev–Yao adversary have 
+been historically useful, they are far too abstract for constructing re- 
+alistic adversarial models [ 34 ,52 ]. Adversaries are also not a simple 
+universal enemy, but may be constituted by real-world networks be- 
+tween humans and machines, and they may not be operating alone 
+but rather in coalition with other adversaries. Understanding these 
+adversaries in excruciating detail will require both new kinds of logic 
+and models that are informed by empirical data, which in turn will 
+require an incorporation of statistical methods. For an example in the 
+context of mix networking, statistical techniques like Monte–Carlo 
+simulation allow us to define the probability of an local adversary 
+linking a particular message to a sender or receiver even when the 
+adversary has only a partial view of an entire network [ 122 ]. In terms 
+of logic, more detailed logical models from distributed systems and 
+the semantics of information theory, which can potentially line up 
+with the behavior of these models as complex systems, have been un- 
+derexploited in cryptography [ 123 ,124 ]. What will be needed is not 
+less abstraction, but a greater variety of abstractions and mathemat- 
+ical tools to effectively deal with the real-world data of adversarial 
+communication. 
+The political economy of the surveillance powers of an adversary 
+should also be taken into account. For example, in the “Five Eyes”
+alliance as leaked by Snowden [ 125 ], the USA operates with alliance 
+with Canada, the UK, and other Anglophone countries by sharing 
+intelligence capabilities. Some parts of this coalition may have spe- 
+cialized capabilities, such as the tremendous computing facilities of 
+the USA, while others like the UK’s GCHQ may be capable of trap- 
+ping undersea cables in Europe, a task that was outside of the rules 
+of the USA at the time. Not all members of an adversarial coalition 
+are equal; coalitions may also have different levels of access to ca- 
+pabilities, such as the ability to ask others for surveillance capabili- 
+ties but not being able to autonomously deploy that capability: for 
+example, Saudi Arabia will be forced to choose between using Chi- 
+nese and American capabilities for surveillance, leading Saudi Ara- 
+bia’s infrastructure to be a large extent subject to a form of cyber- 
+colonialism [ 126 ]. However, other countries like Iran may chose to 
+obtain their surveillance capabilities from the Russia–China nexus. 
+These adversarial coalitions are not necessarily limited to nation- 
+states, but may be adversarial coalitions within nation-states: for ex- 
+ample, surveillance capabilities are typically not shared directly be- 
+tween the NSA and FBI in the USA, although the NSA needs to alert 
+the FBI if they encounter information relevant to a domestic inves- 
+tigation. More commonly, coalitions may be between superempow- 
+ered individuals and loose social networks with ever blurring bor- 
+ders, such as the hacking campaigns of Anonymous [ 127 ]. Adver- 
+sarial coalitions between nation-states and individuals allow them to 
+combine forces (as often is seen in Russian hacking) and state-level 
+capabilities may target individuals and other nonstate actors, as ex- 
+emplified by North Korean malicious malware to obtain financial re- 
+sources for their nuclear program [ 128 ]. These coalitions may have 
+vastly different access to inside information, cryptanalytic abilities, 
+computational power, and more. Therefore, in order to turn cyber- 
+security from an art to an empirically driven science, the first com- 
+mandment should be to know the adversary: to create as an effective 
+and complete model as possible of the real-world capabilities of the 
+adversary. 
+Third, can cryptography incorporate interdisciplinary methods 
+and insights that can capture the complexity of secure communica- 
+tion? Information flows between dynamic networks lend themselves 
+to the theory of complex systems [ 129 ]. With suitable fine-grained 
+descriptions of the communication channels between the secret keep- 
+ers and the adversaries, invariants may be observed and predictions 
+made while retaining fidelity to the underlying the subject matter. 
+For any given description of a dynamic communication network, 
+the behavior and evolution of this network can be described over 
+time at various scales, with possible trajectories outlined due to ad- 
+versarial attacks [ 120 ]. As is characteristic of complex systems, ex- 
+treme attacks by the adversary may result in entire phase shifts in 
+the structure of the communication network. Within this matrix of 
+interdisciplinary work around complex adaptive systems, the social 
+embedding of cryptography can be fruitfully studied [ 130 ]. In the 
+emerging fields of network dynamics and nonparametric statistics—
+as most of the statistics will be done over social structures that 
+infamously exhibit “power law” distributions—progress in model- 
+ing may be made, and research could profit from, similar work in 
+studying the dynamics of information flow in related fields like epi- 
+demics [ 121 ]. With enough data and rich-enough models, this work 
+could allow data-driven simulations to reveal possible invariants in 
+terms of the preservation of secrecy. Yet, simulation-driven work has 
+its own philosophical quandaries, particularly if the models reach 
+a level of such complexity that their results are epistemologically 
+opaque: a scientific invariant may be evident and have predictive 
+power, but the reasons for it may not be known [ 131 ]. Complex mod- 
+els should always then be simplified and pruned, and then refined 
+to not become too heavyweight. The theoretical apparatus of cryp- 
+tography will naturally need to expand by incorporating rigorous 
+approaches from economics, psychology, and philosophy that em- 
+brace complexity. This would transform cryptography into a general- 
+purpose science of adversarial behavior, which could be called a 
+science of information security, otherwise known as cybersecurity 
+[ 132 ]. 
+Downloaded from academic.oup.com/cybersecurity/article/11/1/tyaf006/8097877 by guest on 01 October 2026
+
+
+=== PAGE 14 ===
+14 
+Halpin 
+Lastly, will philosophy let us make explicit and then reformulate 
+the hidden assumptions of cryptographic communication, and vice 
+v er sa? We should go beyond the simplified network models and calls 
+for more data and complexity, to inspect the received wisdom of cryp- 
+tography via the universal solvent of philosophy. On a large scale, 
+our entire modern world is constructed from networks of commu- 
+nication in an adversarial environment. Even our own selves may be 
+constructed in such a dynamic manner with our environment, and the 
+simplified models that map humans to nodes and their communica- 
+tion to links in networks will steadily be overturned by careful philo- 
+sophical analysis, as sharp boundaries between agents and their en- 
+vironment find themselves increasingly difficult to hold. This should 
+lead to the questioning of Shannon’s foundational model of secrets 
+being sent over channels between discrete agents, as explored in our 
+own preliminary philosophical investigation into cryptography. As 
+shown by the Extended Mind Hypothesis, intelligence is distributed 
+between the cognizing agent and the environment, and so agents may 
+have fluid boundaries that dynamically integrate parts of their envi- 
+ronment, including their digital environment [ 133 ]. Still, rarely have 
+attacks on our increasingly vital digital infrastructure been taken as 
+seriously as physical attacks [ 134 ], despite our cognitive infrastruc- 
+ture and our social institutions being increasingly digital. There is 
+also much to be learned by philosophy from cryptography. Indeed, 
+all sorts of questions from ontology to epistemology can be recast in 
+explicit adversarial modes. It was such adversarial debate that gave 
+birth to philosophy via Socrates, and philosophy should revisit the 
+adversary as its foundational principle. 
+The philosophy of cryptography is the philosophical analysis 
+of increasingly rigorous abstract models of adversaries, where this 
+abstraction came at the cost of blinding cryptography to the very 
+real capabilities of the adversary that were outside these models. The 
+Snowden leaks brought some of the adversarial capabilities of the 
+NSA to popular attention, and today there are many adversaries with 
+diverse, if not even more powerful, adversarial powers due to the 
+progress of technology. For example, the utilization of the mass col- 
+lection of surveillance-based data by artificial intelligence is already 
+underway, which will lead to increasingly powerful adversaries that 
+can try to predict, control, and manipulate humans. A philosophical 
+analysis of cryptography can point to a research agenda to reconcile 
+these abstractions with the scientific, epistemological, and even 
+ontological concerns brought to the forefront by the metaphysical 
+richness of the world. It was a historic accident that the internet 
+was designed in a trusted academic environment, and yet today we 
+are not only universally connected, but universally vulnerable to 
+adversaries at a global scale. Historically, the presence of adversaries 
+has been a driver of biological evolution and social history, and 
+so it is through secure communication and the organization of 
+information that we as a species are likely to steer through global 
+crisis. A world without adversaries would be utopian, but also static. 
+A world inhabited by adversaries is not only a dangerous world, but 
+one of dynamism and growth. In this regard, philosophy should be 
+grateful for the adversary. 
+Funding 
+Three was no third party funding for this work. 
+Acknowledgments 
+This article is dedicated to the memory of Ross Anderson, whose discussions 
+with me inspired many of the philosophical arguments herein, even if I am sure 
+he would disagree with me. I would like to thank Ron Rivest for his comments 
+and corrections on the document. 
+Author’s contribution 
+Harry Halpin (Conceptualization, Investigation, Writing – original draft, Writ- 
+ing – review & editing). 
+Conflict of interest : There are no ‘conflicts of interest.’ 
+References 
+1.
+Dretske F. Knowledge and the Flow of Information . Cambridge, MA: 
+MIT Press, 1981.
+2.
+Floridi L. Outline of a theory of strongly semantic information. Mind 
+Mach 2004; 14 :197–221. https:// doi.org/ 10.1023/ B:MIND.000002168 
+4.50925.c9 .
+3.
+Shannon CE. A mathematical theory of cryptography. Murray Hill: Bell 
+Labor atories Memor andum MM 45-110-02 1945. https://www.iacr.o 
+rg/museum/ shannon/ shannon45.pdf (15 February 2025, date last ac- 
+cessed).
+4.
+Halpin H. The philosophy of secrecy: towards a historical analysis of 
+cryptography , privacy , and information organization. In: Proceedings of 
+the International Conference on Historical Cryptography (HistoCrypt) . 
+Stockholm: Linköping University Electronic Press, 2024.
+5.
+Smith BC. On the Origin of Objects . Cambridge, MA: MIT Press, 1996.
+6.
+Halpin H. Becoming digital: reconciling theories of digital representation 
+and embodiment. In: Philosophy and Theory of Artificial Intelligence . 
+Berlin: Springer, 2013, 199–213.
+7.
+Hutchins E. Cognition in the Wild . Cambridge, MA: MIT Press, 1995.
+8.
+Shannon CE. A mathematical theory of communication. Bell Syst Tech J 
+1948; 27 :379–423. https:// doi.org/ 10.1002/ j.1538-7305.1948.tb01338 
+.x .
+9.
+Rubenson S. The protectorate paragraph of the Wichal ¯e Treaty. J Afr 
+Hist 1964; 5 :243–83. https:// doi.org/ 10.1017/ S0021853700004837 .
+10.
+Kahn D. The Codebreak er s: The Comprehensiv e History of Secret Com- 
+munication from Ancient Times to the Internet . New York, NY: Simon 
+and Schuster, 1996.
+11.
+Lewis D. Convention: A Philosophical Study . Hoboken, NJ: John Wiley 
+and Sons, 2008.
+12.
+Shannon CE. Communication theory of secrecy systems. Bell Syst Tech J 
+1949; 28 :656–715. https:// doi.org/ 10.1002/ j.1538-7305.1949.tb00928 
+.x .
+13.
+Bar-Hillel Y, Carnap R. Semantic information. Brit J Philos Sci 
+1953; 4 :147–57. https:// doi.org/ 10.1093/ bjps/IV.14.147 .
+14.
+Kerckhoffs A. La cryptographie militaire. Journal des Sciences Militaires 
+1883; 5 :161–91.
+15.
+Diffie W, Landau S. Privacy on the Line: The Politics of Wiretapping 
+and Encryption . Cambridge, MA: MIT Press, 1998.
+16.
+Clark DD, Wilson DR. A comparison of commercial and military com- 
+puter security policies. In: Proceedings of the 1987 IEEE Symposium on 
+Security and Privacy . Piscataway, NJ IEEE, 1987, 184–4.
+17.
+Ware WH. Security and privacy in computer systems. In: Proceedings 
+of the Spring Joint Computer Conference . New York, NY: ACM, 1967, 
+279–282.
+18.
+Corbató FJ, Saltzer JH, Clingen CT. Multics: the first seven years. In: 
+Proceedings of the Spring Joint Computer Conference . New York, NY: 
+ACM, 1972, 571–83.
+19.
+Anderson R. Security Engineering: A Guide to Building Dependable Dis- 
+tributed Systems . Hoboken, NJ: John Wiley and Sons, 2020.
+20.
+Bell D, La Padula L. Secure computer system: unified exposition and 
+multics interpretation. Bedford, MA: Mitre Corporation, 1976.
+21.
+Biba K. Integrity considerations for secure computer systems. Bedford, 
+MA: Mitre Corporation, 1977.
+22.
+Feiertag RJ, Neumann PG. The foundations of a provably secure 
+operating system (PSOS). In: International Workshop on Manag- 
+Downloaded from academic.oup.com/cybersecurity/article/11/1/tyaf006/8097877 by guest on 01 October 2026
+
+
+=== PAGE 15 ===
+The philosophy of cryptography 
+15 
+ing Requirements Knowledge (MARK) . Piscataway, NJ: IEEE, 1979, 
+329–34.
+23.
+Levy S. Crypto: How the Code Rebels Beat the Government Saving Pri- 
+vacy in the Digital Age . New York, NY: Penguin, 2002.
+24.
+Diffie W, Hellman ME. Multiuser cryptographic techniques. In: Pro- 
+ceedings of the National Computer Conference and Exposition . New 
+York, NY: ACM, 1976, 109–12.
+25.
+Diffie W, Hellman M. New directions in cryptography. IEEE T 
+Inform Theor 1976; 22 :644–54. https:// doi.org/ 10.1109/ TIT.1976.105 
+5638 .
+26.
+Stern J. Why provable security matters?. In: Proceedings of the Inter- 
+national Conference on the Theory and Applications of Cryptographic 
+Techniques (EUROCRYPT) . Berlin: Springer, 2003, 449–61.
+27.
+Merkle R, Hellman M. Hiding information and signatures in trapdoor 
+knapsacks. IEEE Trans Inform Theor 1978; 24 :525–30. https://doi.org/ 
+10.1109/TIT.1978.1055927 .
+28.
+Adleman LM. On breaking generalized knapsack public key cryptosys- 
+tems. In: Proceedings of the Annual ACM Symposium on Theory of 
+Computing . New York, NY: ACM, 1983, 402–12.
+29.
+Rivest RL, Shamir A, Adleman L. A method for obtaining digital sig- 
+natures and public-key cryptosystems. Commun ACM 1978; 21 :120–6. 
+https:// doi.org/ 10.1145/ 359340.359342 .
+30.
+Rabin MO. Digitalized signatures and public-key functions as in- 
+tractable as factorization. MIT Technical Report LCS/TR-212. Cam- 
+bridge, MA: Massachusetts Institute of Technology, 1979.
+31.
+Williams H. A modification of the R S A public-key encryption procedure. 
+IEEE T Inform Theor 1980; 26 :726–9. https:// doi.org/ 10.1109/ TIT.19 
+80.1056264 .
+32.
+Bellare M, Rogaway P. Optimal asymmetric encryption. In: Proceedings 
+of the International Conference on the Theory and Application of Cryp- 
+tographic Techniques (EUROCRYPT) . Berlin: Springer, 1995, 92–111.
+33.
+Goldwasser S, Micali S. Probabilistic encryption and how to play mental 
+poker keeping secret all partial information. In: Proceedings of the An- 
+nual ACM Symposium on Theory of Computing . New York, NY: ACM, 
+1982, 365–77.
+34.
+Goldwasser S, Micali S. Probabilistic encryption. J Comput System Sci 
+1984; 28 :270–99. https:// doi.org/ 10.1016/ 0022- 0000(84)90070- 9 .
+35.
+Goldwasser S, Micali S, Rackoff C. The knowledge complexity of 
+interactive proof systems. SIAM J Comput 1989; 18 :186–208. https: 
+// doi.org/ 10.1137/ 0218012 .
+36.
+Bleichenbacher D. Chosen ciphertext attacks against protocols based on 
+the R S A encryption standard PKCS# 1. In: Proceedings of the Annual In- 
+ternational Cryptology Conference (CRYPTO) . Berlin: Springer, 1998, 
+1–12.
+37.
+Bellare M. Practice-oriented provable-security. In: International Work- 
+shop on information Security . Berlin: Springer, 1997, 221–31.
+38.
+Cramer R, Shoup V. A practical public key cryptosystem provably 
+secure against adaptive chosen ciphertext attack. In: Proceedings of 
+the Annual International Cryptology Conference (CRYPTO) . Berlin: 
+Springer, 1998, 13–25.
+39.
+Boneh D, Venkatesan R. Breaking R S A may not be equivalent to fac- 
+toring. In: Proceedings of the International Conference on the Theory 
+and Application of Cryptographic Techniques (EUROCRYPT) . Berlin: 
+Springer, 1998, 59–71.
+40.
+Bellare M, Rogaway P. Random oracles are practical: a paradigm for 
+designing efficient protocols. In: Proceedings of the ACM Conference on 
+Computer and Communications Security . New York, NY: ACM, 1993, 
+62–73.
+41.
+Shoup V. Lower bounds for discrete logarithms and related problems. In: 
+Proceedings of the International Conference on the Theory and Appli- 
+cation of Cryptographic Techniques (EUROCRYPT) . Berlin: Springer, 
+1997, 256–66.
+42.
+Groth J. On the size of pairing-based non-interactive arguments. In: 
+Proceedings of the Annual International Conference on the Theory 
+and Applications of Cryptographic Techniques (EUROCRYPT) . Berlin: 
+Springer, 2016, 305–26.
+43.
+Canetti R. Universally composable security: a new paradigm for crypto- 
+graphic protocols. In: Proceedings of the IEEE Symposium on Founda- 
+tions of Computer Science . Piscataway, NJ: IEEE, 2001, 136–45.
+44.
+Barak B, Goldreich O, Impagliazzo R,. et al. On the (im) possibility 
+of obfuscating programs. In: Proceedings of the Annual International 
+Cryptology Conference (CRYPTO) . Berlin: Springer, 2001, 1–18.
+45.
+Goldreich O. Foundations of Cryptography: Volume 1 Basic Tools . Cam- 
+bridge: Cambridge University Press, 2001.
+46.
+Katz J, Lindell Y. Introduction to Modern Cryptography: Principles and 
+Protocols . Boca Raton, FL: CRC Press, 2007.
+47.
+Needham RM, Schroeder MD. Using encryption for authentication in 
+large networks of computers. Commun ACM 1978; 21 :993–9. https://do 
+i.org/ 10.1145/ 359657.359659 .
+48.
+Steiner JG, Neuman BC, Schiller JI. Kerberos: An Authentication Service 
+for Open Netw or k Systems . Berkeley, CA: USENIX, 1988, 191–202.
+49.
+Denning DE, Sacco GM. Timestamps in key distribution protocols. 
+Commun ACM 1981; 24 :533–36. https:// doi.org/ 10.1145/ 358722.358 
+740 .
+50.
+Abadi M, Rogaway P. Reconciling two views of cryptography (the com- 
+putational soundness of formal encryption). J Cryptol 2002; 15 :103–27. 
+https:// doi.org/ 10.1007/ s00145- 001- 0014- 7 .
+51.
+von Wright GH. An Essay in Modal Logic (Studies in Logic and the 
+Foundations of Mathematics) . Amsterdam: Elsevier Science, 1951.
+52.
+Dolev D, Yao A. On the security of public key protocols. IEEE Trans 
+Inform Theor 1983; 29 :198–208. https:// doi.org/ 10.1109/ TIT.1983.105 
+6650 .
+53.
+Burrows M, Abadi M, Needham R. A logic of authentication. ACM 
+Trans Comput Syst 1990; 8 :18–36. https:// doi.org/ 10.1145/ 77648.7764 
+9 .
+54.
+Lowe G. Breaking and fixing the Needham–Schroeder public-key pro- 
+tocol using FDR. In: International Workshop on Tools and Algorithms 
+for the Construction and Analysis of Systems . Berlin: Springer, 1996, 
+147–66.
+55.
+Syverson PF, van Oorschot PC. On unifying some cryptographic proto- 
+col logics. In: Proceedings of the IEEE Computer Society Symposium on 
+Research in Security and Privacy . Piscataway, NJ: IEEE, 1994, 14–28.
+56.
+Abadi M, Gordon AD. A calculus for cryptographic protocols: the spi 
+calculus. In: Proceedings of the ACM Conference on Computer and 
+Communications Security . New York, NY: A CM, 1997, 36–47. 
+57.
+Fábrega FJT, Herzog JC, Guttman JD. Strand spaces: why is a security 
+protocol correct?. In: Proceedings of IEEE Symposium on Security and 
+Privacy (SP) . Piscataway, NJ: IEEE, 1998, 160–71.
+58.
+Halpern JY, O’Neill KR. Secrecy in multiagent systems. ACM Trans Inf 
+Syst Secur 2008; 12 :1–47. https:// doi.org/ 10.1145/ 1410234.1410239 .
+59.
+Herzog J. A computational interpretation of Dolev–Yao adversaries. 
+Theor Comput Sci 2005; 340 :57–81. https:// doi.org/ 10.1016/ j.tcs.2005 
+.03.003 .
+60.
+Blanchet B. An efficient cryptographic protocol verifier based on pro- 
+log rules. In: IEEE Computer Security Foundations Workshop (CSFW) . 
+Piscataway, NJ: IEEE, 2001, 82–96.
+61.
+Lowe G. Some new attacks upon security protocols. In: Proceedings of 
+IEEE Computer Security Foundations Workshop . Piscataway, NJ: IEEE, 
+1996, 162–9.
+62.
+Paulson L. Isabelle: the next 700 theorem provers. In: Logic and Com- 
+puter Science . Vol. 31 . Singapore: Springer, 1990, 361–86.
+63.
+Paulson L. Inductive analysis of the internet protocol TLS. ACM Trans 
+Inform Syst Secur 1999; 2 :332–51. https:// doi.org/ 10.1145/ 322510.322 
+530 .
+64.
+Anderson R, Boucher N. If it’s provably secure, it probably isn’t: why 
+learning from proof failure is hard. In: Cambridge International Work- 
+shop on Security Protocols . Berlin: Springer, 2023, 199–204.
+65.
+Shoup V. OAEP reconsidered. J Cryptol 2002; 15 :223–49. https://doi.or 
+g/ 10.1007/ s00145- 002- 0133- 9 .
+66.
+Canetti R, Goldreich O, Halevi S. The random oracle methodology, 
+revisited. J ACM 2004; 51 :557–94. https:// doi.org/ 10.1145/ 1008731.10 
+08734 .
+Downloaded from academic.oup.com/cybersecurity/article/11/1/tyaf006/8097877 by guest on 01 October 2026
+
+
+=== PAGE 16 ===
+16 
+Halpin 
+67.
+Koblitz AH, Koblitz N, Menezes A. Elliptic curve cryptography: the 
+serpentine course of a paradigm shift. J Numb Theory 2011; 131 :781–
+814. https:// doi.org/ 10.1016/ j.jnt.2009.01.006 .
+68.
+Koblitz N. Elliptic curve cryptosystems. Math Comput 1987; 48 :203–9. 
+https:// doi.org/ 10.1090/ S0025- 5718- 1987- 0866109- 5 .
+69.
+Koblitz N, Menezes A. Another look at “provable security”. II. In: Pro- 
+ceedings of the International Conference on Cryptology in India (IN- 
+DOCRYPT) . Berlin: Springer, 2006, 148–75.
+70.
+Tymoczko T. The four-color problem and its philosophical significance. 
+J Philos 1979; 76 :57–83. https:// doi.org/ 10.2307/ 2025976 .
+71.
+Koblitz N. Another look at automated theorem-proving II. J Math Cryp- 
+tol 2012; 5 :205–224. https:// doi.org/ 10.1515/ jmc- 2011- 0014 .
+72.
+Koblitz N, Menezes A. Critical perspectives on provable security: fifteen 
+years of “another look” papers. Cryptology 2019; 13 :517–58.
+73.
+Goldreich O. On post-modern cryptography. Carson city: IACR Cryptol. 
+ePrint Arch, 2006. https:// eprint.iacr.org/ 2006/461 . (15 February 2025, 
+date last accessed).
+74.
+Whitehead AN, Russell B. Principia Mathematica . Cambridge: Cam- 
+bridge University Press, 1927.
+75.
+Hilbert D, Bernays P. Grundlagen der Mathematik . Berlin: Springer, 
+1934.
+76.
+Heyting A. Mathematisc he Grundlagenfor sc hung Intuitionismus Be- 
+weistheorie . Berlin: Springer, 1934.
+77.
+Dummett M. Elements of Intuitionism . Oxford: Oxford University 
+Press, 2000.
+78.
+Feyerabend PK. Against Method: Outline of an Anarchistic Theory of 
+Knowledge . London: Humanities Press, 1978.
+79.
+Shapiro S. Philosophy of Mathematics: Structure and Ontology . Oxford: 
+Oxford University Press, 1997.
+80.
+Rogaway P. Practice-oriented provable security and the social construc- 
+tion of cryptography. IEEE Secur Priv 2016; 14 :10–17. https://doi.org/ 
+10.1109/MSP.2016.122 .
+81.
+Ernest P, Social Constructivism as a Philosophy of Mathematics: Radi- 
+cal Constructivism Rehabilitated . Albany, NY: State University of New 
+York Press, 1999. http:// webdoc.sub.gwdg.de/edoc/ e/ pome/soccon.htm . 
+(15 February 2025, date last accessed).
+82.
+Lakatos I. Proofs and Refutations: The Logic of Mathematical Discov- 
+ery . Cambridge: Cambridge University Press, 2015.
+83.
+Dennett DC. Real patterns. J Philos 1991; 88 :27–51. https:// doi.org/ 10 
+.2307/2027085 .
+84.
+Dennett DC. Intuition Pumps and Other Tools for Thinking . New York, 
+NY: WW Norton and Company, 2013.
+85.
+Antonutti Marfori M. Informal proofs and mathematical rigour. 
+Studia Logica 2010; 96 :261–72. https:// doi.org/ 10.1007/ s11225- 010- 9 
+280-4 .
+86.
+Avigad 
+J. 
+Reliability 
+of 
+mathematical 
+inference. 
+Synthese 
+2021; 198 :7377–99. https:// doi.org/ 10.1007/ s11229- 019- 02524- y .
+87.
+Bunge M. Technology as applied science. In: Contributions to a Philos- 
+ophy of Technology: Studies in the Structure of Thinking in the Techno- 
+logical Sciences . Berlin: Springer, 1966, 19–39.
+88.
+Halpin H, Monnin A. Philosophical Engineering: Toward a Philosophy 
+of the Web . Hoboken, NJ: John Wiley and Sons, 2013.
+89.
+Smith BC. The limits of correctness. ACM Comput Soc 1985; 14,15 :18–
+26. https:// doi.org/ 10.1145/ 379486.379512 .
+90.
+Gluck Y, Harris N, Prado A, BREACH: Reviving the CRIME at- 
+tack. 2013. https://breachattack.com/resources/BREACH%20-%20SS 
+L,%20gone%20in%2030%20seconds.pdf. (15 February 2025, date 
+last accessed).
+91.
+Anderson R. Why cryptosystems fail. In: Proceedings of the ACM Con- 
+ference on Computer and Communications Security . New York, NY: 
+ACM, 1993, 215–27.
+92.
+Bamford J, The NSA is building the country’s biggest spy center (watch 
+what you say. San Francisco, CA: Wired, 2012.
+93.
+Greenwald G, MacAskill E, NSA Prism program taps into user data of 
+Apple, Google and others. London: The Guardian, 2013. https://www.th 
+eguardian.com/ world/ 2013/jun/06/ us- tech- giants- nsa- data . (15 Febru- 
+ary 2025, date last accessed).
+94.
+Coppersmith D. The Data Encryption Standard (DES) and its strength 
+against attacks. IBM J Res Dev 1994; 38 :243–50. https:// doi.org/ 10.114 
+7/rd.383.0243 .
+95.
+Schneier B, Attacking Tor: how the NSA targets users’ online anonymity. 
+London: The Guardian, 2013. https:// www.theguardian.com/ world/ 20 
+13/oct/04/tor- attacks- nsa- users- online- anonymity . (15 February 2025, 
+date last accessed).
+96.
+Ball J, 
+Borger J, 
+Greenwald G, Revealed: how US and UK 
+spy agencies defeat internet privacy and security. London: The 
+Guardian, 2013. https:// www.theguardian.com/ world/ 2013/sep/05/ nsa- 
+gchq- encryption- codes- security . (15 February 2025, date last accessed).
+97.
+Bernstein DJ, Lange T, Niederhagen R. Dual EC: a standardized 
+back door. In: The New Codebreak er s: Essays Dedicated to David 
+Kahn on the Occasion of His 85th Birthday . Berlin: Springer, 2016, 
+256–81.
+98.
+Menn J, Secret contract tied NSA and security industry pioneer. London: 
+Reuters, 2013. https:// www.reuters.com/ article/ world/ exclusive- secret- c 
+ontract- tied- nsa- and- security- industry- pioneer- idUSBRE9BJ1C5/. (15 
+February 2025, date last accessed).
+99.
+Zetter K, Researchers solve Juniper backdoor mystery; signs point to 
+NS A. San Francisco, C A: Wired, 2015. https:// www.wired.com/ 2015/1 
+2/researchers- solve- the- juniper- mystery- and- they- say- its- partially- the 
+- nsas- fault/. (15 February 2025, date last accessed).
+100. Pfitzmann A, 
+Köhntopp M. Anonymity , unobservability , and 
+pseudonymity—a proposal for terminology. In: Designing Privacy 
+Enhancing Tec hnologies: International Wor kshop on Design Issues in 
+Anonymity and Unobservability . Berlin: Springer, 2001, 1–9.
+101. Greenwald G, XKeyscore: NSA tool collects’ nearly everything a user 
+does on the internet. London: The Guardian, 2013. https://www.thegua 
+rdian.com/ world/ 2013/jul/31/ nsa- top- secret- program- online- data . (15 
+February 2025, date last accessed).
+102. Dingledine R, Mathewson N, Syverson P,. et al. Tor: The second- 
+generation onion router. In: Proceedings of the USENIX Security Sym- 
+posium . Vol. 4 . Berkeley, CA: USENIX, 2004, 303–20.
+103. Murdoch SJ, Danezis G. Low-cost traffic analysis of Tor. In: Proceedings 
+of the IEEE Symposium on Security and Privacy (SP) . Piscataway, NJ: 
+IEEE, 2005, 183–95.
+104. Rogaway P. The moral character of cryptographic work. IACR Cryptol. 
+ePrint Arch 2015. https:// eprint.iacr.org/ 2015/1162 . (15 February 2025, 
+date last accessed).
+105. Kuhn TS. The Structure of Scientific Revolutions . Vol. 962 . Chicago, IL: 
+University of Chicago Press, 1962.
+106. Cohn-Gordon K, Cremers C, Dowling B,. et al. A formal security 
+analysis of the Signal messaging protocol. J Cryptol 2020; 33 :1914–83. 
+https:// doi.org/ 10.1007/ s00145- 020- 09360- 1 .
+107. Bhargavan K, Blanchet B, Kobeissi N. Verified models and reference 
+implementations for the TLS 1.3 standard candidate. In: Proceedings 
+of the IEEE Symposium on Security and Privacy (SP) . Piscataway, NJ: 
+IEEE, 2017, 483–502.
+108. Costan V, Lebedev I, Devadas S,. et al. Secure processors part I: back- 
+ground, taxonomy for secure enclaves and Intel SGX architecture. Found 
+Trends Electr Des Autom 2017; 11 :1–248. https:// doi.org/ 10.1561/ 1000 
+000051 .
+109. Laurie B. Certificate transparency. Commun ACM 2014; 57 :40–6. https: 
+// doi.org/ 10.1145/ 2659897 .
+110. Troncoso C, Isaakidis M, Danezis G,. et al. Systematizing decentral- 
+ization and privacy: lessons from 15 years of research and deployments. 
+Proc Priv Enhan Technol 2017; 4 :307–29.
+111. Bernstein DJ. Curve25519: new Diffie–Hellman speed records. In: 
+Proceedings of the International Conference on Theory and Prac- 
+tice in Public-K e y Cryptography (PKC) . Berlin: Springer, 2006, 
+207–28.
+112. Young A, Yung M. Malicious Cryptography: Exposing Cryptovirology . 
+Hoboken, NJ: John Wiley and Sons, 2004.
+113. Tang Q, Yung M. Cliptography: post-Snowden cryptography. In: Pro- 
+ceedings of the A CM SIGSA C Conference on Computer and Communi- 
+cations Security . New York, NY: A CM, 2017, 2615–6. 
+Downloaded from academic.oup.com/cybersecurity/article/11/1/tyaf006/8097877 by guest on 01 October 2026
+
+
+=== PAGE 17 ===
+The philosophy of cryptography 
+17 
+114. Chaum DL. Untraceable electronic mail, return addresses, and digital 
+pseudonyms. Commun ACM 1981; 24 :84–90. https:// doi.org/ 10.1145/ 
+358549.358563 .
+115. Garcia FD, Hasuo I, Pieters W,. et al. Provable anonymity. In: Proceed- 
+ings of the ACM Workshop on Formal Methods in Security Engineering . 
+New York, NY: A CM, 2005, 63–72. 
+116. Diaz C, Halpin H, Kiayias A, The Nym Network. Neuchâtel: 
+Nym Technologies SA, 2021. https:// nym.com/ nym-whitepaper.pdf. (15 
+February 2024, date last accessed).
+117. Shor PW. Algorithms for quantum computation: discrete logarithms and 
+factoring. In: Proceedings of the Annual Symposium on the Foundations 
+of Computer Science . Piscataway, NJ: IEEE, 1994, 124–34.
+118. Bernstein DJ, 
+Lange T. Post-quantum cryptography. Nature 
+2017; 549 :188–94. https:// doi.org/ 10.1038/ nature23461 .
+119. Anderson R, Needham R. Programming Satan’s computer. In: Computer 
+Science Today . Berlin: Springer, 1995, 426–440. https:// doi.org/ 10.100 
+7/BFb0015258 .
+120. Bar-Yam Y. Multiscale variety in complex systems. Complexity 
+2004; 9 :37–45. https:// doi.org/ 10.1002/ cplx.20014 .
+121. Baldwin A, Gheyas I, Ioannidis C,. et al. Contagion in cyber security 
+attacks. J Oper Res Soc 2017; 68 :780–91. https:// doi.org/ 10.1057/ jors.2 
+016.37 .
+122. Guirat IB, Diaz C, Eldefrawy K,. et al. Traffic analysis by adver- 
+saries with partial visibility. In: Proceedings of the European Symposium 
+on Research in Computer Security (ESORICS) . Berlin: Springer, 2023, 
+338–58.
+123. Pym D, Spring JM, O’Hearn P. Why separation logic works. Philos 
+Tech 2019; 32 :483–516. https:// doi.org/ 10.1007/ s13347- 018- 0312- 8 .
+124. Barwise J, Perry J. Situations and attitudes. J Philos 1981; 78 :668–91. 
+https:// doi.org/ 10.2307/ 2026578 .
+125. Nick H, Nick D, Ewen M. et al. GCHQ taps fibre-optic ca- 
+bles for secret access to world’s communications. London: The 
+Guardian, 2013. https:// www.theguardian.com/ uk/2013/ jun/ 21/gchq-ca 
+bles- secret- world- communications- nsa . (15 February 2024, date last 
+accessed).
+126. Danezis G, The dawn of cyber-colonialism. London: Conspicuous 
+Chatter Blog, 2014. https://conspicuouschatter.wordpress.com/2014/ 
+06/21/the- dawn- of- cyber- colonialism/. (15 February 2025, date last 
+accessed).
+127. Coleman G. Hac k er, Hoax er, Whistleblow er, Spy: The Man y F aces of 
+Anonymous . London: Verso, 2015.
+128. Wright S. The evolution of sanctions evasion: how cryptocurrency is the 
+new game in evading sanction and how to stop it. Int J Law Ethics Tech 
+2023; 1 :1–25.
+129. Albert R, Barabási AL. Statistical mechanics of complex networks. Rev 
+Mod Phys 2002; 74 :47. https:// doi.org/ 10.1103/ RevModPhys.74.47 .
+130. Spring J, Moore T, Pym D. Practicing a science of security: a philosophy 
+of science perspective. In: Proceedings of the New Security Paradigms 
+Workshop . New York, NY: ACM, 2017, 1–18.
+131. Humphreys P. The philosophical novelty of computer simulation meth- 
+ods. Synthese 2009; 169 :615–26. https:// doi.org/ 10.1007/ s11229- 008- 9 
+435-2 .
+132. Anderson R. Why information security is hard-an economic perspective. 
+In: Proceedings of the Annual Computer Security Applications Confer- 
+ence . New York, NY: ACM, 2001, 358–65.
+133. Clark A, Chalmers D. The extended mind. Analysis 1998; 58 :7–19. http 
+s:// doi.org/ 10.1093/ analys/58.1.7 .
+134. Palermos SO. Data, metadata, mental data? Privacy and the extended 
+mind. AJOB Neurosci 2023; 14 :84–96. https:// doi.org/ 10.1080/ 215077 
+40.2022.2148772 .
+© The Author(s) 2025. Published by Oxford University Press. This is an Open Access article distributed under the terms of the Creative Commons 
+Attribution-NonCommercial-NoDerivs licence ( https://creativecommons.org/licenses/by- nc- nd/4.0/ ), which permits non-commercial reproduction and distribution of the work, 
+in any medium, provided the original work is not altered or transformed in any way, and that the work is properly cited. For commercial re-use, please contact 
+journals.permissions@oup.com 
+Downloaded from academic.oup.com/cybersecurity/article/11/1/tyaf006/8097877 by guest on 01 October 2026
+
+
