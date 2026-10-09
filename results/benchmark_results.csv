@@ -1,0 +1,21 @@
+Model,Metric,Mean (ms),Std Dev (ms),Min (ms),Max (ms),Storage (Bytes),Proof Size (Bytes)
+Flat SHA-256 Manifest,build_time,62.576,3.5554,57.4401,66.6878,113802,113802
+Flat SHA-256 Manifest,verify_single,0.1676,0.009,0.153,0.1767,113802,113802
+Flat SHA-256 Manifest,update_modify,3.0918,3.1542,1.3908,8.7242,113802,113802
+Flat SHA-256 Manifest,update_add,2.4965,2.0313,1.3028,6.0818,113802,113802
+Flat SHA-256 Manifest,update_delete,0.3213,0.011,0.3052,0.3309,113802,113802
+HMAC-SHA256 Manifest,build_time,60.6462,2.1707,57.304,62.3597,113807,113807
+HMAC-SHA256 Manifest,verify_single,0.07,0.0028,0.068,0.075,113807,113807
+HMAC-SHA256 Manifest,update_modify,0.5732,0.0465,0.5261,0.6344,113807,113807
+HMAC-SHA256 Manifest,update_add,0.6682,0.3356,0.5025,1.2677,113807,113807
+HMAC-SHA256 Manifest,update_delete,0.4143,0.0137,0.3949,0.4336,113807,113807
+Standard Merkle Tree,build_time,60.724,3.8755,57.027,65.2901,45839,990
+Standard Merkle Tree,verify_single,0.0163,0.0018,0.0148,0.0183,45839,990
+Standard Merkle Tree,update_modify,0.1378,0.0332,0.106,0.184,45839,990
+Standard Merkle Tree,update_add,73.4173,5.3548,68.2743,82.3384,45839,990
+Standard Merkle Tree,update_delete,70.8103,1.9854,68.3933,73.5634,45839,990
+HD-MerkleTree (Proposed),build_time,89.9088,4.5206,83.0849,94.8805,113820,1369
+HD-MerkleTree (Proposed),verify_single,0.017,0.0015,0.0155,0.0194,113820,1369
+HD-MerkleTree (Proposed),update_modify,0.1443,0.0135,0.1312,0.1635,113820,1369
+HD-MerkleTree (Proposed),update_add,0.1608,0.0083,0.15,0.1691,113820,1369
+HD-MerkleTree (Proposed),update_delete,0.0979,0.0141,0.0835,0.1153,113820,1369

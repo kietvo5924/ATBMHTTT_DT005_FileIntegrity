@@ -11,7 +11,12 @@ import time
 import hashlib
 import hmac
 from typing import Dict, List, Tuple, Optional, Any
-from .sha256_manifest import hash_file_sha256
+try:
+    from .sha256_manifest import hash_file_sha256
+except (ImportError, ValueError):
+    import sys
+    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+    from src.baselines.sha256_manifest import hash_file_sha256
 
 
 def sha256_combine(left: bytes, right: bytes) -> bytes:
@@ -193,3 +198,62 @@ class StandardMerkleTree:
         with open(target, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
         return target
+
+
+if __name__ == "__main__":
+    import argparse
+    import sys
+
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
+    parser = argparse.ArgumentParser(description="Baseline 3: Standard Binary Merkle Tree")
+    parser.add_argument("--dir", default="realistic_dataset", help="Target directory to scan (default: realistic_dataset)")
+    parser.add_argument("--output", default=None, help="Optional output JSON path for tree data")
+    parser.add_argument("--proof", default=None, help="Generate and verify Merkle proof for specific relative file path")
+    args = parser.parse_args()
+
+    target_dir = os.path.abspath(args.dir)
+    if not os.path.isdir(target_dir):
+        print(f"[ERROR] Directory not found: {target_dir}")
+        sys.exit(1)
+
+    print("=" * 75)
+    print("   BASELINE 3: STANDARD BINARY MERKLE TREE - KIỂM TRA TOÀN VẸN")
+    print("=" * 75)
+    print(f"[*] Scanning target directory: {os.path.basename(target_dir)} ({target_dir})")
+
+    tree = StandardMerkleTree(target_dir)
+    build_time, storage_bytes = tree.build_tree()
+    file_count = len(tree.files_list)
+
+    print(f"[+] Total files in tree: {file_count} files")
+    print(f"[+] Tree height / levels: {len(tree.levels)} levels")
+    print(f"[+] Build Time: {build_time:.4f} s ({build_time * 1000:.2f} ms)")
+    print(f"[+] Storage Overhead: {storage_bytes} Bytes ({storage_bytes / 1024:.2f} KB)")
+    print(f"[+] Merkle Root Hash: {tree.root_hash}")
+
+    target_file = args.proof
+    if not target_file and tree.files_list:
+        target_file = tree.files_list[0]
+        print(f"[*] Auto-selected file for proof demo: {target_file}")
+
+    if target_file and target_file in tree.files_list:
+        proof = tree.get_proof(target_file)
+        if proof is not None:
+            full_target = os.path.join(target_dir, target_file)
+            f_hash = hash_file_sha256(full_target)
+            is_valid = StandardMerkleTree.verify_proof(target_file, f_hash, proof, tree.root_hash)
+            proof_size = len(json.dumps(proof).encode("utf-8"))
+            print(f"[+] Merkle Proof for '{target_file}':")
+            print(f"    - Proof steps: {len(proof)} sibling hashes (O(log N))")
+            print(f"    - Proof size: {proof_size} Bytes ({proof_size / 1024:.2f} KB)")
+            print(f"    - Independent Verification: {'PASS (HỢP LỆ)' if is_valid else 'FAIL'}")
+
+    if args.output:
+        saved_path = tree.save_to_file(args.output)
+        print(f"[+] Tree metadata saved to: {saved_path}")
+

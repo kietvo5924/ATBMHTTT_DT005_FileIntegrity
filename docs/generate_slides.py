@@ -3,11 +3,12 @@
 Script tạo slide báo cáo giữa kỳ Đề tài DT005 chuẩn khoa học, giao diện cao cấp.
 Tích hợp đầy đủ:
 - Tóm tắt bài báo Harry Halpin (Oxford Cybersecurity, 2025) bám sát 100% nguyên tác tiếng Anh
+- Tuyên bố Khung Phương Pháp Luận Khoa Học gồm 3 Trụ Cột Độc Lập (Hướng 1, Hướng 2, Hướng 4)
 - Ma trận đối chiếu 1-1 và dẫn chứng chứng minh toán học, công thức Big-O, số liệu thực nghiệm
 - Tập dữ liệu chuẩn xác 1.000 tệp tin thực tế (4.1 MB, 14 định dạng, 23 thư mục)
 - Đối chuẩn thực nghiệm đối đầu 4 cơ chế bảo mật trên 1.000 tệp tin
+- Khung kiểm định hoàn chỉnh 7 mô hình an toàn mật mã học theo Harry Halpin (Security Games)
 - Khung chờ định dạng chuẩn cho người dùng tự vẽ và chèn sơ đồ Draw.io / ảnh chụp thực tế
-- Khung kiểm định hoàn chỉnh 7 mô hình an toàn mật mã học theo Harry Halpin
 - Tuyệt đối không dùng từ ngữ suồng sã như trò chơi/game; không nhắc khung điểm số
 """
 import os
@@ -42,6 +43,7 @@ TEXT_MUTED = RGBColor(100, 116, 139)     # Chữ phụ màu xám dịu (#64748b)
 GREEN_COLOR = RGBColor(5, 150, 105)      # Xanh ngọc lục bảo (#059669)
 BLUE_ACCENT = RGBColor(37, 99, 235)      # Xanh dương điểm nhấn (#2563eb)
 RED_ACCENT = RGBColor(220, 38, 38)       # Đỏ điểm nhấn (#dc2626)
+PURPLE_ACCENT = RGBColor(126, 34, 206)   # Tím điểm nhấn (#7e22ce)
 PLACEHOLDER_BG = RGBColor(241, 245, 249) # Nền khung chờ Draw.io (#f1f5f9)
 PLACEHOLDER_BORDER = RGBColor(148, 163, 184) # Viền khung chờ Draw.io (#94a3b8)
 
@@ -119,7 +121,6 @@ def add_bullet_card(slide, left, top, width, height, title, items, font_body_siz
 def add_placeholder_card(slide, left, top, width, height, diagram_title, guide_items):
     """
     Tạo khung chờ chuyên nghiệp để người dùng tự vẽ sơ đồ Draw.io hoặc chèn ảnh theo ý muốn.
-    Hiển thị rõ ràng tên sơ đồ và các gợi ý thành phần cần thiết kế.
     """
     card = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left, top, width, height)
     card.fill.solid()
@@ -131,14 +132,12 @@ def add_placeholder_card(slide, left, top, width, height, diagram_title, guide_i
     tf = tb.text_frame
     tf.word_wrap = True
 
-    # Nhãn vị trí chèn
     p_tag = tf.paragraphs[0]
     p_tag.text = "[ VỊ TRÍ CHÈN SƠ ĐỒ / ẢNH DRAW.IO ]"
     p_tag.font.bold = True
     p_tag.font.size = Pt(10)
     p_tag.font.color.rgb = BLUE_ACCENT
 
-    # Tên sơ đồ
     p_title = tf.add_paragraph()
     p_title.text = diagram_title
     p_title.font.bold = True
@@ -147,7 +146,6 @@ def add_placeholder_card(slide, left, top, width, height, diagram_title, guide_i
     p_title.space_before = Pt(4)
     p_title.space_after = Pt(8)
 
-    # Gợi ý thiết kế Draw.io
     p_guide = tf.add_paragraph()
     p_guide.text = "Gợi ý các thành phần cần thiết kế trên Draw.io hoặc chèn ảnh:"
     p_guide.font.bold = True
@@ -216,14 +214,14 @@ p.font.color.rgb = BLUE_ACCENT
 p.alignment = PP_ALIGN.CENTER
 
 p = tf1.add_paragraph()
-p.text = "The Adversary: The Philosophy of Cryptography - Tác giả Harry Halpin\nXuất bản trên Tạp chí An ninh mạng Oxford, Tập 11, Số 1, Năm 2025"
+p.text = "The Adversary: The Philosophy of Cryptography - Tác giả Harry Halpin\nXuất bản trên Tạp chí An ninh mạng Oxford (Oxford Journal of Cybersecurity), Tập 11, Số 1, Năm 2025"
 p.font.size = Pt(11.5)
 p.font.color.rgb = TEXT_MAIN
 p.alignment = PP_ALIGN.CENTER
 p.space_after = Pt(16)
 
 p = tf1.add_paragraph()
-p.text = "Nội Dung Báo Cáo: Dịch thuật toàn văn bài báo, đối chiếu lý thuyết 1:1, kiểm chứng thực nghiệm trên 1.000 tệp tin thực tế và đề xuất giải pháp cải tiến"
+p.text = "Phương Pháp Luận Nghiên Cứu: Triển khai 3 Trụ cột độc lập (Kỹ thuật hệ thống PoC, Mô phỏng an ninh hình thức 7 Games, Thực nghiệm trên 1.000 tệp)"
 p.font.bold = True
 p.font.size = Pt(11)
 p.font.color.rgb = GREEN_COLOR
@@ -317,13 +315,47 @@ add_placeholder_card(slide4, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75
 
 
 # ==============================================================================
-# SLIDE 5: MA TRẬN ĐỐI CHIẾU TRỰC TIẾP 1-1 (KHUNG CHỜ SƠ ĐỒ MA TRẬN)
+# SLIDE 5: KHUNG PHƯƠNG PHÁP LUẬN KHOA HỌC: 3 TRỤ CỘT ĐỘC LẬP
+# (TUYÊN BỐ CHIẾN LƯỢC: CHUYỂN HÓA BÀI BÁO LÝ THUYẾT THÀNH THỰC NGHIỆM)
 # ==============================================================================
-slide5 = prs.slides.add_slide(blank_layout)
-add_base_background(slide5)
-add_header(slide5, "Phần 2: Đối chiếu bài báo và bài làm", "4. Bảng Đối Chiếu Trực Tiếp Giữa Bài Báo Gốc Và Bài Làm Của Nhóm")
+slide5_method = prs.slides.add_slide(blank_layout)
+add_base_background(slide5_method)
+add_header(slide5_method, "Phần 2: Phương pháp luận nghiên cứu", "4. Khung Phương Pháp Luận Khoa Học: 3 Trụ Cột Độc Lập Hiện Thực Hóa Bài Báo")
 
-add_bullet_card(slide5, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
+add_bullet_card(slide5_method, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
+    "Chuyển Hóa Lý Thuyết Trừu Tượng Bằng 3 Trụ Cột Riêng Biệt", [
+        ("• Bản chất bài báo gốc:",
+         "Bài báo của Harry Halpin (2025) là công trình thuần lý thuyết và triết học mật mã học (không có mã nguồn hay dataset sẵn). Để đạt chuẩn nghiên cứu khoa học thực nghiệm cao nhất, nhóm triển khai 3 Trụ cột độc lập, không gộp chung:"),
+        ("• Trụ cột I - Hướng 1: Kỹ thuật hệ thống & PoC (Operationalization):",
+         "- Mục tiêu: Hiện thực hóa tư tưởng bài báo thành cấu trúc cây phân cấp HD-MerkleTree, phân tách miền RFC 6962 và cơ chế xóa an toàn bộ nhớ (Zeroization).\n"
+         "- Tệp thực thi độc lập: src/proposed_model/hd_merkle_tree.py"),
+        ("• Trụ cột II - Hướng 2: Mô phỏng an ninh hình thức (7 Security Games):",
+         "- Mục tiêu: Chuyển các định nghĩa toán học (PPT, Dolev-Yao, Biba) thành 7 Game đối đầu độc lập, đo lường xác suất thắng và Advantage của Kẻ tấn công.\n"
+         "- Lệnh chạy độc lập: python src/proposed_model/security_games.py"),
+        ("• Trụ cột III - Hướng 4: Thực nghiệm định lượng quy mô lớn (Case Study):",
+         "- Mục tiêu: Áp dụng vào bài toán kiểm tra toàn vẹn 1.000 tệp tin thực tế, đo đạc tốc độ CPU, băng thông mạng và độ trễ cập nhật.\n"
+         "- Khởi chạy độc lập: run_demo_web.bat (Dashboard tại http://127.0.0.1:8080)")
+    ], font_body_size=8.4)
+
+add_placeholder_card(slide5_method, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+    "Sơ Đồ 3 Trụ Cột Phương Pháp Luận Chuyển Hóa Lý Thuyết", [
+        "Khối đỉnh: Bài báo lý thuyết Harry Halpin (Oxford Cybersecurity 2025).",
+        "Rẽ nhánh thành 3 Trụ cột nghiên cứu độc lập (3 màu sắc phân biệt):",
+        "1. Trụ Cột I (Xanh dương): Kỹ thuật Hệ thống PoC (hd_merkle_tree.py).",
+        "2. Trụ Cột II (Tím đỏ): Mô phỏng Đấu trường An ninh 7 Games (security_games.py).",
+        "3. Trụ Cột III (Xanh ngọc): Thực nghiệm Định lượng 1.000 tệp (web_demo.py).",
+        "Khối đáy: Hội tụ chứng minh toàn diện cả Lý thuyết - Toán học - Thực tiễn."
+    ])
+
+
+# ==============================================================================
+# SLIDE 6: MA TRẬN ĐỐI CHIẾU TRỰC TIẾP 1-1 (KHUNG CHỜ SƠ ĐỒ MA TRẬN)
+# ==============================================================================
+slide6_matrix = prs.slides.add_slide(blank_layout)
+add_base_background(slide6_matrix)
+add_header(slide6_matrix, "Phần 2: Phương pháp luận nghiên cứu", "5. Bảng Đối Chiếu Trực Tiếp Giữa Bài Báo Gốc Và Bài Làm Của Nhóm")
+
+add_bullet_card(slide6_matrix, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
     "6 Luận Điểm Đối Chiếu: Bài Báo Có Gì Nhóm Có Đó", [
         ("1. Bản chất Kẻ tấn công (Mục 1-2 Trang 2-3) sang hàm băm SHA-256:",
          "Bài báo chứng minh CRC32 tuyến tính bị vượt qua dễ dàng. Nhóm thay thế bằng SHA-256 phi tuyến tính, đạt hiệu ứng tuyết lở 51.95%, phát hiện 100% can thiệp."),
@@ -339,7 +371,7 @@ add_bullet_card(slide5, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75),
          "Bài báo yêu cầu đo thực tế, nhóm đo đạc đối đầu 4 cơ chế trên 1.000 tệp tin với 5 lần lặp CPU perf_counter độc lập.")
     ], font_body_size=8.8)
 
-add_placeholder_card(slide5, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+add_placeholder_card(slide6_matrix, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
     "Sơ Đồ Ma Trận Ánh Xạ 1:1 Giữa Bài Báo Và Đồ Án", [
         "Bảng hoặc sơ đồ trực quan 2 cột song song đối chiếu 6 luận điểm.",
         "Cột trái: 6 Luận điểm lý thuyết của bài báo Harry Halpin (Oxford Cybersecurity 2025).",
@@ -349,13 +381,13 @@ add_placeholder_card(slide5, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75
 
 
 # ==============================================================================
-# SLIDE 6: CHỨNG MINH CHI TIẾT ĐỐI CHIẾU 1, 2, 3 (KHUNG CHỜ ẢNH WEB DEMO)
+# SLIDE 7: CHỨNG MINH CHI TIẾT ĐỐI CHIẾU 1, 2, 3 (KHUNG CHỜ ẢNH WEB DEMO)
 # ==============================================================================
-slide6 = prs.slides.add_slide(blank_layout)
-add_base_background(slide6)
-add_header(slide6, "Phần 2: Đối chiếu bài báo và bài làm", "5. Dẫn Chứng Chứng Minh Chi Tiết Điểm Đối Chiếu 1, 2 Và 3")
+slide7 = prs.slides.add_slide(blank_layout)
+add_base_background(slide7)
+add_header(slide7, "Phần 2: Phương pháp luận nghiên cứu", "6. Dẫn Chứng Chứng Minh Chi Tiết Điểm Đối Chiếu 1, 2 Và 3")
 
-add_bullet_card(slide6, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
+add_bullet_card(slide7, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
     "Cơ Sở Lý Thuyết Và Bằng Chứng Đo Đạc Thực Tế", [
         ("• Điểm 1: Kẻ tấn công có chủ đích so với Nhiễu (Mục 1-2 Trang 2-3):",
          "- Lý thuyết bài báo: CRC32 có tính chất tuyến tính CRC(A ⊕ B) = CRC(A) ⊕ CRC(B), kẻ tấn công dễ dàng tạo ra vi sai bù trừ chỉ trong 0.001 ms để giữ nguyên mã CRC.\n"
@@ -368,7 +400,7 @@ add_bullet_card(slide6, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75),
          "- Dẫn chứng chứng minh: Lập trình sẵn 3 nút mô phỏng tấn công trong web_demo.py. Thao tác trên 1.000 tệp tin cho thấy hệ thống phát hiện chính xác 100% tệp bị can thiệp và định vị trong 0.228 ms.")
     ], font_body_size=8.8)
 
-add_placeholder_card(slide6, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+add_placeholder_card(slide7, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
     "Ảnh Chụp Web Demo: Báo Động Khi Bị Tấn Công Đảo Bit", [
         "Chèn ảnh chụp màn hình thực tế từ Web Demo khi nhấn nút Đảo 1 bit ngẫu nhiên.",
         "Khung thông báo màu đỏ hiển thị rõ: Phát hiện vi phạm toàn vẹn dữ liệu.",
@@ -378,26 +410,26 @@ add_placeholder_card(slide6, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75
 
 
 # ==============================================================================
-# SLIDE 7: CHỨNG MINH CHI TIẾT ĐỐI CHIẾU 4, 5, 6 (KHUNG CHỜ SƠ ĐỒ RFC 6962)
+# SLIDE 8: CHỨNG MINH CHI TIẾT ĐỐI CHIẾU 4, 5, 6 (KHUNG CHỜ SƠ ĐỒ RFC 6962)
 # ==============================================================================
-slide7 = prs.slides.add_slide(blank_layout)
-add_base_background(slide7)
-add_header(slide7, "Phần 2: Đối chiếu bài báo và bài làm", "6. Dẫn Chứng Chứng Minh Chi Tiết Điểm Đối Chiếu 4, 5 Và 6")
+slide8 = prs.slides.add_slide(blank_layout)
+add_base_background(slide8)
+add_header(slide8, "Phần 2: Phương pháp luận nghiên cứu", "7. Dẫn Chứng Chứng Minh Chi Tiết Điểm Đối Chiếu 4, 5 Và 6")
 
-add_bullet_card(slide7, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
+add_bullet_card(slide8, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
     "Chứng Minh Toán Học Và Khảo Nghiệm Thực Tế", [
         ("• Điểm 4: Nguy cơ va chạm ghép chuỗi và Chuẩn RFC 6962 (Mục 5 Trang 8-10):",
          "- Lý thuyết bài báo: Cây Merkle thông thường nếu băm nút lá và nhánh cùng chung định dạng H(a || b) sẽ bị tấn công tráo đổi lá thành nhánh.\n"
          "- Dẫn chứng toán học: Nhóm áp dụng RFC 6962 phân tách miền: Lá = H(0x00 || Dữ liệu) và Nhánh = H(0x01 || Trái || Phải). Do tập tiền tố rời nhau, xác suất va chạm giả mạo triệt tiêu về dưới 2 mũ âm 128, chứng minh an toàn tuyệt đối."),
         ("• Điểm 5: Xác minh cục bộ O(log N) của Ralph Merkle (Mục 4 Trang 5 Tài liệu [27]):",
          "- Lý thuyết bài báo: Bằng chứng Merkle cho phép xác minh độc lập 1 tệp với độ phức tạp O(log N) thay vì phải tải và kiểm tra toàn bộ O(N) tệp tin.\n"
-         "- Dẫn chứng số liệu: Trên 1.000 tệp tin, chiều cao cây chỉ là 10 tầng băm. Kích thước bằng chứng chỉ 1.45 KB so với toàn bộ danh mục 111.13 KB, tiết kiệm 98.7% băng thông mạng và thời gian xác minh chỉ mất 0.228 ms."),
+         "- Dẫn chứng số liệu: Trên 1.000 tệp tin, chiều cao cây chỉ là 10 tầng băm. Kích thước bằng chứng chỉ 1.37 KB (1.369 Byte) so với toàn bộ danh mục 111.13 KB, tiết kiệm 98.8% băng thông mạng và thời gian xác minh chỉ mất 0.02 ms."),
         ("• Điểm 6: Lời kêu gọi kiểm nghiệm thực tế (Mục 7 Trang 14-15):",
          "- Lý thuyết bài báo: Mật mã học đòi hỏi đánh giá trên dữ liệu thực tế biến thiên kích thước.\n"
          "- Dẫn chứng thực thi: Nhóm xây dựng 1.000 tệp tin thực tế, đo đạc độc lập 5 lần bằng hàm CPU thời gian thực perf_counter.")
     ], font_body_size=8.8)
 
-add_placeholder_card(slide7, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+add_placeholder_card(slide8, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
     "Sơ Đồ Chuẩn RFC 6962 Phân Tách Miền Kháng Second-Preimage", [
         "Vẽ sơ đồ cây Merkle thể hiện rõ ràng tiền tố phân tách miền chuẩn quốc tế RFC 6962:",
         "Nút lá (Leaf): H(0x00 || Dữ liệu) - màu vàng cam.",
@@ -408,13 +440,13 @@ add_placeholder_card(slide7, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75
 
 
 # ==============================================================================
-# SLIDE 8: CHỨNG MINH TẬP DỮ LIỆU SO VỚI BÀI BÁO (KHUNG CHỜ SƠ ĐỒ 1.000 TỆP)
+# SLIDE 9: [TRỤ CỘT III - HƯỚNG 4] TẬP DỮ LIỆU THỰC TẾ 1.000 TỆP TIN
 # ==============================================================================
-slide8 = prs.slides.add_slide(blank_layout)
-add_base_background(slide8)
-add_header(slide8, "Phần 3: Chứng minh tập dữ liệu so với bài báo", "7. Chứng Minh Tập Dữ Liệu Tự Tạo Phù HỢp Hoàn Toàn Với Bài Báo")
+slide9_data = prs.slides.add_slide(blank_layout)
+add_base_background(slide9_data)
+add_header(slide9_data, "Phần 3: Trụ cột III - Thực nghiệm định lượng quy mô lớn (Hướng 4)", "8. Thiết Lập Tập Dữ Liệu Thực Tế 1.000 Tệp Tin Phù Hợp Hoàn Toàn Với Bài Báo")
 
-add_bullet_card(slide8, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
+add_bullet_card(slide9_data, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
     "Đối Chiếu Khoa Học Của Tập Dữ Liệu 1.000 Tệp Tin", [
         ("• 1. Đối chiếu Bài báo khoa học (Mục 5 Trang 10 Dòng 1-4 - Quan trọng nhất):",
          "Harry Halpin nhấn mạnh: Trong thực tế thông điệp luôn có kích thước dài ngắn biến thiên và cấu trúc cây phân cấp nhiều tầng. Nếu chỉ kiểm nghiệm trên dữ liệu phẳng hoặc các tệp tin có kích thước nhân tạo giống nhau sẽ che giấu các lỗ hổng tắc nghẽn và rò rỉ siêu dữ liệu."),
@@ -425,7 +457,7 @@ add_bullet_card(slide8, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75),
          "Tập 1.000 tệp tin với kích thước từ 15 byte đến 350 KB tái hiện trọn vẹn áp lực vận hành thực tế của doanh nghiệp, chứng minh khả năng chịu tải và độ phức tạp tính toán O(log N) thực sự của hệ thống.")
     ], font_body_size=9)
 
-add_placeholder_card(slide8, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+add_placeholder_card(slide9_data, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
     "Sơ Đồ Phân Cấp Cây Thư Mục Tập Dữ Liệu 1.000 Tệp Tin", [
         "Vẽ cấu trúc cây thư mục realistic_dataset với 4 tầng phân cấp.",
         "Các nhánh thư mục chính: src (mã nguồn), config (cấu hình), docs, logs, database.",
@@ -435,28 +467,28 @@ add_placeholder_card(slide8, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75
 
 
 # ==============================================================================
-# SLIDE 9: HIỆN THỰC HÓA 3 MÔ HÌNH NỀN TẢNG (KHUNG CHỜ ẢNH NẠP DỮ LIỆU)
+# SLIDE 10: [TRỤ CỘT I - HƯỚNG 1] 3 MÔ HÌNH NỀN TẢNG (BASELINE)
 # ==============================================================================
-slide9 = prs.slides.add_slide(blank_layout)
-add_base_background(slide9)
-add_header(slide9, "Phần 4: Xây dựng các mô hình và kết quả", "8. Hiện Thực Hóa 3 Mô Hình Kiểm Tra Toàn Vẹn Nền Tảng")
+slide10_base = prs.slides.add_slide(blank_layout)
+add_base_background(slide10_base)
+add_header(slide10_base, "Phần 4A: Trụ cột I - Kỹ thuật hệ thống & PoC (Hướng 1)", "9. Hiện Thực Hóa 3 Mô Hình Kiểm Tra Toàn Vẹn Nền Tảng Đối Chứng")
 
-add_bullet_card(slide9, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
+add_bullet_card(slide10_base, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
     "Đặc Điểm Kỹ Thuật Và Kết Quả Đo Đạc 3 Mô Hình", [
         ("• Mô hình 1: Danh sách phẳng băm SHA-256 (sha256_manifest.py):",
          "- Nguyên lý: Băm tuần tự từng tệp tin và lưu chuỗi băm tổng hợp.\n"
-         "- Bằng chứng thực nghiệm: Khởi tạo 0.433 s, dung lượng bảng 111.13 KB. Hạn chế lớn: Muốn kiểm tra 1 tệp tin, máy khách bắt buộc phải tải về toàn bộ danh sách 111 KB và quét lại 1.000 tệp (mất 58.90 ms)."),
+         "- Bằng chứng thực nghiệm: Khởi tạo ~62.6 ms, dung lượng bảng 111.13 KB. Hạn chế: Muốn kiểm tra 1 tệp tin trong mô hình cơ bản, máy khách phải lưu toàn bộ manifest 111 KB (hoặc quét tệp tốn 0.17 ms)."),
         ("• Mô hình 2: Danh sách băm có khóa bí mật HMAC (hmac_manifest.py):",
          "- Nguyên lý: Sử dụng khóa bí mật đối xứng K để chống giả mạo danh mục.\n"
-         "- Bằng chứng thực nghiệm: Khởi tạo 0.065 s, dung lượng 111.14 KB. Hạn chế nghiêm trọng: Buộc phải phân phối khóa K cho các máy khách, nếu 1 máy bị chiếm quyền thì toàn bộ hệ thống sụp đổ."),
+         "- Bằng chứng thực nghiệm: Khởi tạo ~60.6 ms, dung lượng 111.14 KB. Hạn chế: Buộc phải phân phối khóa bí mật K cho máy khách, chưa hỗ trợ chống chối bỏ bất đối xứng."),
         ("• Mô hình 3: Cây Merkle nhị phân truyền thống (standard_merkle_tree.py):",
          "- Nguyên lý: Cây Merkle phẳng chuẩn theo phát minh Ralph Merkle năm 1978.\n"
-         "- Bằng chứng thực nghiệm: Cho phép tạo bằng chứng xác thực từng tệp nặng chỉ 986 byte, kiểm tra trong 0.154 ms, tiết kiệm hơn 98% băng thông."),
+         "- Bằng chứng thực nghiệm: Cho phép tạo bằng chứng xác thực từng tệp nặng chỉ 990 Byte, kiểm tra trong 0.02 ms, tiết kiệm hơn 99% băng thông."),
         ("• Đánh giá kết quả:",
          "Cả 3 mô hình đều phát hiện chính xác 100% khi xảy ra tấn công trên 1.000 tệp tin.")
     ], font_body_size=8.8)
 
-add_placeholder_card(slide9, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+add_placeholder_card(slide10_base, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
     "Ảnh Chụp Web Demo: Nạp 1.000 Tệp Tin Nguyên Bản", [
         "Chèn ảnh chụp màn hình Web Demo ở trạng thái nạp dữ liệu thành công ban đầu.",
         "Hiển thị bảng trạng thái xanh lá: Đã nạp dữ liệu chuẩn 1.000 tệp tin.",
@@ -466,77 +498,76 @@ add_placeholder_card(slide9, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75
 
 
 # ==============================================================================
-# SLIDE 10: SƠ ĐỒ KIẾN TRÚC TỔNG THỂ MÔ HÌNH ĐỀ XUẤT HD-MERKLETREE
+# SLIDE 11: [TRỤ CỘT I - HƯỚNG 1] KIẾN TRÚC MÔ HÌNH ĐỀ XUẤT HD-MERKLETREE
 # ==============================================================================
-slide10 = prs.slides.add_slide(blank_layout)
-add_base_background(slide10)
-add_header(slide10, "Phần 4: Xây dựng các mô hình và kết quả", "9. Sơ Đồ Kiến Trúc Chi Tiết Của Mô Hình Đề Xuất HD-MerkleTree")
+slide11_arch = prs.slides.add_slide(blank_layout)
+add_base_background(slide11_arch)
+add_header(slide11_arch, "Phần 4A: Trụ cột I - Kỹ thuật hệ thống & PoC (Hướng 1)", "10. Sơ Đồ Kiến Trúc Đề Xuất HD-MerkleTree & Cơ Chế Xóa Bộ Nhớ")
 
-add_bullet_card(slide10, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
-    "Giải Thích Chi Tiết 5 Tầng Kiến Trúc Hệ Thống", [
-        ("• Tầng 1: Không gian lưu trữ dữ liệu đa tầng (Multi-Tier Storage):",
-         "Tổ chức 1.000 tệp tin thực tế trong 23 thư mục theo mô hình giàn toàn vẹn Biba 1977. Đa dạng 14 định dạng và kích thước từ 15 byte đến 350 KB, tái hiện đúng áp lực thực tế."),
-        ("• Tầng 2: Phân tách miền băm chuẩn RFC 6962 Domain Separation:",
-         "Gắn tiền tố 0x00 cho lá và 0x01 cho nhánh. Hai tập tiền tố hoàn toàn rời nhau, triệt tiêu 100% nguy cơ va chạm giả mạo tiền ảnh cấp 2 với xác suất dưới 2 mũ âm 128."),
-        ("• Tầng 3: Động cơ Cây Merkle phân cấp trong RAM (HD-Merkle Engine):",
-         "Băm đa luồng song song (0.101 s / 1.000 tệp). In-Memory Cache lưu trữ các nút băm. Cập nhật cục bộ Dirty-Path: khi sửa 1 tệp chỉ tính lại h=4 nút tổ tiên trong 0.13 ms (nhanh hơn 453 lần)."),
-        ("• Tầng 4: Bộ tạo bằng chứng xác thực tối ưu (Proof Generator):",
-         "Tạo Inclusion Proof gọn nhẹ 1.45 KB (tiết kiệm 98.7% băng thông), Batch Multi-Proof nén đường dẫn dùng chung, và Consistency Proof 10 nút (320 byte) chứng minh kho dữ liệu là append-only."),
-        ("• Tầng 5: Máy khách và Phòng vệ an toàn (Client Verification):",
-         "Xác minh cục bộ tức thì trong 0.228 ms; sử dụng hàm hmac.compare_digest thời gian hằng số O(1) triệt tiêu kênh kề đo thời gian theo Kocher 1996; bảo mật 100% siêu dữ liệu các tệp còn lại.")
+add_bullet_card(slide11_arch, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
+    "Giải Thích Chi Tiết 5 Tầng Kiến Trúc Hệ Thống (hd_merkle_tree.py)", [
+        ("• Tầng 1: Lưu trữ phân tầng Biba 1977:",
+         "Tổ chức 1.000 tệp tin trong 23 thư mục theo mô hình toàn vẹn Biba. Kháng tấn công ghi ngược từ tệp thường lên thư mục bảo mật."),
+        ("• Tầng 2: Phân tách miền băm chuẩn RFC 6962:",
+         "Gắn tiền tố 0x00 cho lá và 0x01 cho nhánh. Hai tập tiền tố hoàn toàn rời nhau, triệt tiêu 100% va chạm tiền ảnh cấp hai."),
+        ("• Tầng 3: Động cơ Cây Merkle phân cấp trong RAM & Cập nhật Dirty-Path:",
+         "Băm song song (~89.9 ms / 1.000 tệp). Cập nhật cục bộ Dirty-Path: khi sửa 1 tệp chỉ tính lại h=4 nút tổ tiên trong ~0.14 ms; khi thêm/xóa đạt 0.10 - 0.16 ms (nhanh hơn 458 - 708 lần so với Standard Merkle ~71-73 ms Rebuild mảng 1D)."),
+        ("• Tầng 4: Bộ tạo bằng chứng xác thực tối ưu:",
+         "Tạo Inclusion Proof gọn nhẹ 1.37 KB (1.369 Byte, tiết kiệm 98.8% băng thông), và Bằng chứng Nhất quán RFC 6962 độc lập chứng minh kho dữ liệu là append-only."),
+        ("• Tầng 5: Bảo vệ Kênh kề & Cơ chế Xóa sạch Bộ nhớ (Memory Zeroization):",
+         "Hàm hmac.compare_digest triệt tiêu kênh kề đo thời gian O(1) theo Kocher 1996; hàm secure_erase() xóa đè RAM ngăn kẻ thù trích xuất bộ nhớ (Memory Dump Adversary).")
     ], font_body_size=8.2)
 
-add_placeholder_card(slide10, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+add_placeholder_card(slide11_arch, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
     "Sơ Đồ Draw.io Kiến Trúc 5 Tầng Của HD-MerkleTree", [
         "Tầng 1 (Dưới cùng): Multi-Tier Storage (1.000 tệp tin, 23 thư mục, Biba 1977).",
         "Tầng 2: RFC 6962 Domain Separation (Leaf 0x00 vs Internal Node 0x01).",
         "Tầng 3 (Trung tâm): In-Memory Dynamic Merkle Engine (ThreadPool, Cache, Dirty-Path).",
-        "Tầng 4: Proof Generator Engine (Inclusion Proof, Batch Proof, Consistency Proof).",
-        "Tầng 5 (Trên cùng): Client Verification & Constant-Time Defense (hmac.compare_digest).",
+        "Tầng 4: Proof Generator Engine (Inclusion Proof, Consistency Proof).",
+        "Tầng 5 (Trên cùng): Client Verification & Zeroization (hmac.compare_digest, secure_erase).",
         "Vẽ các mũi tên luồng dữ liệu kết nối tuần tự từ Tầng 1 đến Tầng 5."
     ])
 
 
 # ==============================================================================
-# SLIDE 11: BỐN DẪN CHỨNG CHỨNG MINH KỸ THUẬT ĐỘT PHÁ CỦA MÔ HÌNH
+# SLIDE 12: [TRỤ CỘT I - HƯỚNG 1] 4 DẪN CHỨNG KỸ THUẬT ĐỘT PHÁ
 # ==============================================================================
-slide11_proof = prs.slides.add_slide(blank_layout)
-add_base_background(slide11_proof)
-add_header(slide11_proof, "Phần 4: Xây dựng các mô hình và kết quả", "10. Bốn Dẫn Chứng Chứng Minh Kỹ Thuật Đột Phá Của Mô Hình")
+slide12_proof = prs.slides.add_slide(blank_layout)
+add_base_background(slide12_proof)
+add_header(slide12_proof, "Phần 4A: Trụ cột I - Kỹ thuật hệ thống & PoC (Hướng 1)", "11. Bốn Dẫn Chứng Chứng Minh Kỹ Thuật Đột Phá Của Mô Hình HD-MerkleTree")
 
-add_bullet_card(slide11_proof, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
+add_bullet_card(slide12_proof, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
     "4 Dẫn Chứng Chứng Minh Cải Tiến Do Nhóm Tự Xây Dựng", [
         ("• 1. Ánh xạ trực tiếp cấu trúc thư mục tự nhiên theo mô hình Biba 1977:",
          "- Chứng minh: Cây Merkle phản chiếu chính xác từng thư mục cha, con. Nhờ đó, thuật toán định vị lỗi chỉ duyệt theo nhánh vi phạm trong O(k log N) thay vì duyệt toàn bộ O(N) 1.000 tệp tin, xác định tệp hỏng chỉ trong 0.228 ms."),
         ("• 2. Chuẩn phân tách miền RFC 6962 triệt tiêu va chạm:",
          "- Chứng minh: Gắn tiền tố byte 0x00 cho lá và 0x01 cho nhánh. Không gian băm nút lá và nhánh hoàn toàn tách biệt, triệt tiêu 100% tấn công giả mạo tiền ảnh cấp 2 với xác suất va chạm dưới 2 mũ âm 128."),
         ("• 3. Lan truyền đường dẫn bẩn cục bộ siêu tốc khi cập nhật tệp:",
-         "- Chứng minh toán học: Khi sửa 1 tệp tin, chỉ cần băm lại đúng h = 4 nút tổ tiên từ lá lên đỉnh cây. Thời gian cập nhật thực nghiệm chỉ 0.13 ms so với 58.90 ms của Flat SHA-256 (nhanh hơn 453 lần)."),
+         "- Chứng minh toán học: Khi sửa 1 tệp tin, chỉ cần băm lại đúng h = 4 nút tổ tiên từ lá lên đỉnh cây (~0.14 ms). Thời gian thực nghiệm khi thêm/xóa tệp đạt 0.10 - 0.16 ms so với 70.81 - 73.42 ms của Standard Merkle (nhanh hơn 458 - 708 lần do cấu trúc mảng 1D của Standard Merkle phải Rebuild O(N))."),
         ("• 4. Bằng chứng nhất quán RFC 6962 và Phòng chống kênh kề đo thời gian:",
          "- Chứng minh: Bằng chứng tính nhất quán chỉ cần 10 nút (320 byte) chứng minh kho dữ liệu là append-only, chống chèn backdoor lịch sử. Sử dụng hàm hmac.compare_digest triệt tiêu hoàn toàn tấn công kênh kề theo Kocher 1996.")
     ], font_body_size=8.8)
 
-add_placeholder_card(slide11_proof, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+add_placeholder_card(slide12_proof, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
     "Sơ Đồ Cơ Chế Lan Truyền Cập Nhật Dirty-Path Trong RAM", [
         "Vẽ cây Merkle phân cấp có chiều cao h = 4 tầng (Root -> Dir -> Subdir -> File Leaf).",
         "Khi 1 nút lá bị sửa đổi (đánh dấu đỏ), vẽ đường dẫn bẩn (Dirty-Path) đi lên đỉnh cây.",
-        "Chỉ có 4 nút tổ tiên dọc theo đường dẫn là cần tính lại băm (tốn 0.13 ms).",
+        "Chỉ có 4 nút tổ tiên dọc theo đường dẫn là cần tính lại băm (tốn ~0.14 ms).",
         "999 nút lá và nhánh còn lại được đánh dấu xanh biểu thị trạng thái giữ nguyên trong RAM.",
-        "Minh chứng lý do tốc độ cập nhật nhanh hơn 453 lần so với băm lại toàn bộ."
+        "Minh chứng lý do tốc độ cập nhật thêm/xóa nhanh hơn 458 - 708 lần so với Rebuild toàn bộ mảng 1D."
     ])
 
 
 # ==============================================================================
-# SLIDE 12: BẢNG ĐỐI SÁNH SỐ LIỆU ĐỐI ĐẦU TRÊN 1.000 TỆP TIN
+# SLIDE 13: [TRỤ CỘT III - HƯỚNG 4] BẢNG ĐỐI SÁNH SỐ LIỆU ĐỐI ĐẦU 1.000 TỆP TIN
 # ==============================================================================
-slide12_bench = prs.slides.add_slide(blank_layout)
-add_base_background(slide12_bench)
-add_header(slide12_bench, "Phần 4: Xây dựng các mô hình và kết quả", "11. Bảng Đo Lường Số Liệu Thực Nghiệm Đối Đầu Trên 1.000 Tệp Tin")
+slide13_bench = prs.slides.add_slide(blank_layout)
+add_base_background(slide13_bench)
+add_header(slide13_bench, "Phần 4B: Trụ cột III - Thực nghiệm định lượng quy mô lớn (Hướng 4)", "12. Bảng Đo Lường Số Liệu Thực Nghiệm Đối Đầu Trên 1.000 Tệp Tin")
 
-# Bảng số liệu đo đạc thực tế trên 1.000 tệp tin
-table_card = add_card(slide12_bench, Inches(0.8), Inches(1.35), Inches(6.2), Inches(5.75))
+table_card = add_card(slide13_bench, Inches(0.8), Inches(1.35), Inches(6.2), Inches(5.75))
 
-table_shape = slide12_bench.shapes.add_table(5, 5, Inches(0.95), Inches(1.55), Inches(5.9), Inches(2.7))
+table_shape = slide13_bench.shapes.add_table(5, 5, Inches(0.95), Inches(1.55), Inches(5.9), Inches(2.7))
 table = table_shape.table
 table.columns[0].width = Inches(1.8)
 table.columns[1].width = Inches(0.95)
@@ -557,10 +588,10 @@ for col_idx, h_text in enumerate(headers):
     p.alignment = PP_ALIGN.CENTER
 
 table_data = [
-    ("1. Danh sách SHA-256", "0.433 s", "58.90 ms", "111.13 KB", "Tải cả bảng 111 KB"),
-    ("2. Băm có khóa HMAC", "0.065 s", "73.84 ms", "111.14 KB", "Nguy cơ lộ khóa K"),
-    ("3. Cây Merkle chuẩn", "0.062 s", "0.154 ms", "44.76 KB", "986 Byte"),
-    ("4. Cây Merkle cải tiến", "0.101 s", "0.228 ms", "111.15 KB", "1.452 Byte")
+    ("1. Danh sách SHA-256", "62.58 ms", "0.17 ms", "111.13 KB", "Tải cả bảng 111 KB"),
+    ("2. Băm có khóa HMAC", "60.65 ms", "0.07 ms", "111.14 KB", "Cần chia sẻ khóa K"),
+    ("3. Cây Merkle chuẩn", "60.72 ms", "0.02 ms", "44.76 KB", "990 Byte"),
+    ("4. Cây Merkle cải tiến", "89.91 ms", "0.02 ms", "111.15 KB", "1.369 Byte")
 ]
 
 for row_idx, row in enumerate(table_data):
@@ -582,7 +613,7 @@ for row_idx, row in enumerate(table_data):
         if col_idx > 0:
             p.alignment = PP_ALIGN.CENTER
 
-tb_note = slide12_bench.shapes.add_textbox(Inches(0.95), Inches(4.45), Inches(5.9), Inches(2.55))
+tb_note = slide13_bench.shapes.add_textbox(Inches(0.95), Inches(4.45), Inches(5.9), Inches(2.55))
 tf_n = tb_note.text_frame
 tf_n.word_wrap = True
 p_n0 = tf_n.paragraphs[0]
@@ -592,12 +623,12 @@ p_n0.font.size = Pt(10)
 p_n0.font.color.rgb = NAVY_COLOR
 
 notes_3way = [
-    ("• 1. Đối chiếu Bài báo khoa học (Mục 4, 5, 6, Tài liệu [27, 36, 109] - Quan trọng nhất):",
-     "Ralph Merkle & Halpin khẳng định: Xác minh cục bộ phải đạt độ phức tạp O(log N) thay vì O(N), kích thước bằng chứng phải rút gọn để chống rò rỉ siêu dữ liệu (Mục 6), và chi phí cập nhật động tỷ lệ theo chiều cao cây O(h)."),
-    ("• 2. Đối chiếu Terminal Log và Giao diện Web Demo:",
-     "Terminal in rõ: Xác minh 1 tệp = 0.228 ms (nhanh hơn 380 lần so với Flat SHA-256 58.90 ms); Bằng chứng = 1.452 Byte (tiết kiệm 98.7% băng thông so với 111 KB); Cập nhật dirty-path = 0.13 ms (nhanh hơn 453 lần); Web đạt thông lượng > 4.000 tệp/s."),
+    ("• 1. Đối chiếu Bài báo khoa học (Mục 4, 5, 6, Tài liệu [27, 36, 109]):",
+     "Harry Halpin (2025) cung cấp khung lý thuyết về Kẻ tấn công hình thức, RFC 6962 và kiểm định PPT. Thực nghiệm định lượng trên 1.000 tệp tin là kết quả nghiên cứu độc lập của nhóm DT005."),
+    ("• 2. Đối chiếu Số liệu Benchmark Thực nghiệm Độc lập (results/benchmark_results.json):",
+     "Xác minh 1 tệp = 0.02 ms (nhanh hơn ~8.5 lần so với Flat SHA-256 0.17 ms); Bằng chứng = 1.369 Byte (tiết kiệm 98.8% băng thông so với 111.13 KB manifest); Cập nhật động khi Thêm/Xóa = 0.10 - 0.16 ms (nhanh hơn 458 - 708 lần so với Standard Merkle ~71-73 ms Rebuild mảng 1D)."),
     ("• 3. Giải thích ngắn gọn lý do vì sao tốt hơn (Có bằng chứng chứng minh):",
-     "Nhanh hơn 380 lần vì thuật toán chỉ tính log2(1000) ≈ 10 phép băm thay vì đọc đĩa và băm lại cả 1.000 tệp tin; Tiết kiệm 98.7% băng thông và bảo vệ 100% tính riêng tư vì chỉ truyền các nút băm nhánh, hoàn toàn không tiết lộ 999 tên tệp còn lại qua mạng.")
+     "Nhanh hơn khi Thêm/Xóa vì HD-Merkle chỉ cập nhật nhánh thư mục cục bộ O(log N) thay vì Rebuild toàn bộ O(N) của implementation Standard Merkle mảng 1D; Tiết kiệm 98.8% băng thông và bảo vệ 100% tính riêng tư vì chỉ truyền các nút anh em, không tiết lộ 999 tệp còn lại qua mạng.")
 ]
 for h_txt, b_txt in notes_3way:
     pn_h = tf_n.add_paragraph()
@@ -613,43 +644,44 @@ for h_txt, b_txt in notes_3way:
     pn_b.font.color.rgb = TEXT_MAIN
     pn_b.space_before = Pt(1)
 
-# Cột phải: Khung chờ chèn biểu đồ đo đạc
-add_placeholder_card(slide12_bench, Inches(7.3), Inches(1.35), Inches(5.2), Inches(5.75),
+add_placeholder_card(slide13_bench, Inches(7.3), Inches(1.35), Inches(5.2), Inches(5.75),
     "Biểu Đồ Cột Đối Sánh Hiệu Năng 4 Mô Hình", [
         "Vẽ biểu đồ cột kép so sánh 4 cơ chế bảo mật trên 1.000 tệp tin:",
-        "Cột 1: Thời gian xác minh 1 tệp tin (Flat SHA-256: 58.90 ms vs HD-MerkleTree: 0.228 ms).",
-        "Cột 2: Dung lượng truyền tải qua mạng (Flat Manifest: 111.13 KB vs Merkle Proof: 1.45 KB).",
-        "Cột 3: Chi phí cập nhật khi sửa 1 tệp (Flat: 58.90 ms vs HD-MerkleTree: 0.13 ms).",
+        "Cột 1: Thời gian xác minh 1 tệp tin (Flat SHA-256: 0.17 ms vs HD-MerkleTree: 0.02 ms).",
+        "Cột 2: Dung lượng truyền tải qua mạng (Flat Manifest: 111.13 KB vs Merkle Proof: 1.37 KB).",
+        "Cột 3: Chi phí cập nhật khi sửa 1 tệp (Flat: 3.09 ms vs HD-MerkleTree: 0.14 ms).",
         "Tô màu nổi bật cho cột HD-MerkleTree (màu xanh lá) thể hiện sự vượt trội rõ nét."
     ])
 
 
 # ==============================================================================
-# SLIDE 13: KHUNG KIỂM ĐỊNH 7 MÔ HÌNH AN TOÀN MẬT MÃ HỌC THEO HARRY HALPIN
+# SLIDE 14: [TRỤ CỘT II - HƯỚNG 2] KHUNG KIỂM ĐỊNH 7 MÔ HÌNH AN TOÀN MẬT MÃ HỌC
 # ==============================================================================
-slide13_games = prs.slides.add_slide(blank_layout)
-add_base_background(slide13_games)
-add_header(slide13_games, "Phần 4: Xây dựng các mô hình và kết quả", "12. Khung Kiểm Định 7 Mô Hình An Toàn Mật Mã Học Theo Harry Halpin")
+slide14_games = prs.slides.add_slide(blank_layout)
+add_base_background(slide14_games)
+add_header(slide14_games, "Phần 4C: Trụ cột II - Mô phỏng an ninh hình thức (Hướng 2)", "13. Khung Kiểm Định 7 Mô Hình An Toàn Mật Mã Học Theo Harry Halpin")
 
-add_bullet_card(slide13_games, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
-    "Khung Kiểm Định Đầy Đủ 7 Mô Hình Toán Học Cốt Lõi", [
+add_bullet_card(slide14_games, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
+    "Khung Kiểm Định Đầy Đủ 7 Trò Chơi An Ninh (security_games.py)", [
+        ("• Khởi chạy độc lập: python src/proposed_model/security_games.py",
+         "Module an ninh độc lập không gộp chung benchmark; trực tiếp kiểm thử toán học 7 giả định đối đầu của Harry Halpin:"),
         ("• 1. Thách đấu PPT Adversary (Goldwasser-Micali 1984 [Ref 33,34]):",
-         "Đối chiếu: Mục 4 Trang 7. Lợi thế Adv(A) = 0.0 <= 2^-128. Thử thách 50 lượt ngẫu nhiên: Kẻ thù thắng 0/50 (0.0%). Chứng minh không thể giả mạo tệp hợp lệ."),
+         "Đối chiếu: Mục 4 Trang 7. Lợi thế Adv(A) = 0.0 <= 2^-128. Thử thách 50 lượt ngẫu nhiên: Kẻ thù thắng 0/50 (0.0%)."),
         ("• 2. Kẻ tấn công Mạng Dolev-Yao (Dolev-Yao 1983 [Ref 52]):",
-         "Đối chiếu: Mục 4 Trang 8. Kẻ thù kiểm soát kênh truyền. Chặn đứng 100% cả 3 kịch bản can thiệp: Đổi gói tin, Tráo bằng chứng và Tấn công phát lại."),
+         "Đối chiếu: Mục 4 Trang 8. Chặn đứng 100% cả 3 kịch bản can thiệp: Đổi gói tin, Tráo bằng chứng và Tấn công phát lại."),
         ("• 3. Kháng Va chạm Second-Preimage RFC 6962 [Ref 109]:",
-         "Đối chiếu: Mục 5 Trang 8-10. Tiền tố 0x00 lá và 0x01 nhánh triệt tiêu 100% nguy cơ tráo lá thành nhánh, bảo đảm tính toàn vẹn cấu trúc cây."),
+         "Đối chiếu: Mục 5 Trang 8-10. Tiền tố 0x00 lá và 0x01 nhánh triệt tiêu 100% nguy cơ tráo lá thành nhánh."),
         ("• 4. Bằng chứng Nhất quán RFC 6962 Consistency Proof [Ref 109]:",
-         "Đối chiếu: Mục 6 Trang 11-14. Bằng chứng 10 nút (320 byte) chứng minh cây cũ M=950 là tiền tố hợp lệ của cây mới N=1000, chống sửa đổi lịch sử 100%."),
+         "Đối chiếu: Mục 6 Trang 11-14. Bằng chứng 10 nút (320 byte) chứng minh kho dữ liệu là append-only, chống chèn backdoor 100%."),
         ("• 5. Xấp xỉ Random Oracle & Hiệu ứng Tuyết lở (SAC) [Ref 40]:",
-         "Đối chiếu: Mục 1-2 & 4. Đảo 1 bit làm biến đổi 133/256 bit băm (51.95% ≈ mục tiêu lý tưởng Bernoulli 50%), hoàn toàn áp đảo tính tuyến tính của CRC32."),
+         "Đối chiếu: Mục 1-2 & 4. SAC = 51.95% ≈ 50%, áp đảo tính tuyến tính dễ bị bẻ gãy của mã CRC32."),
         ("• 6. Mô hình Toàn vẹn Phân cấp Biba (Biba 1977 [Ref 21]):",
-         "Đối chiếu: Mục 3 Trang 4-5. Tiên đề No write-up: Sai khác tệp lá phản xạ tức thì làm đổi Root Hash trong 0.13 ms, định vị tệp hỏng trong O(k log N)."),
+         "Đối chiếu: Mục 3 Trang 4-5. Tiên đề No write-up: Sai khác tệp lá phản xạ tức thì làm đổi Root Hash trong 0.13 ms."),
         ("• 7. Bảo vệ Siêu dữ liệu & Kháng Kênh kề Đo thời gian [Ref 36, 100]:",
-         "Đối chiếu: Mục 5-6. Tiết lộ 0/1000 tên tệp (bảo vệ 100% quyền riêng tư); dùng hàm hmac.compare_digest thời gian hằng số triệt tiêu rò rỉ kênh kề.")
-    ], font_body_size=7.8)
+         "Đối chiếu: Mục 5-6. Tiết lộ 0/1000 tên tệp; dùng hàm hmac.compare_digest triệt tiêu rò rỉ kênh kề O(1); xóa an toàn RAM.")
+    ], font_body_size=7.6)
 
-add_placeholder_card(slide13_games, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+add_placeholder_card(slide14_games, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
     "Sơ Đồ 7 Mô Hình Kiểm Định An Toàn Toán Học", [
         "Thiết kế lưới 7 khối thẻ đại diện cho 7 mô hình toán học trong bài báo:",
         "1. Thách đấu PPT Adversary (Advantage = 0.0 <= 2^-128).",
@@ -663,13 +695,13 @@ add_placeholder_card(slide13_games, Inches(6.6), Inches(1.35), Inches(5.9), Inch
 
 
 # ==============================================================================
-# SLIDE 14: HƯỚNG DẪN KỊCH BẢN TRÌNH DIỄN DEMO WEB
+# SLIDE 15: HƯỚNG DẪN KỊCH BẢN TRÌNH DIỄN DEMO WEB
 # ==============================================================================
-slide14_demo = prs.slides.add_slide(blank_layout)
-add_base_background(slide14_demo)
-add_header(slide14_demo, "Phần 5: Trình diễn thực tế và tổng kết", "13. Kịch Bản Thao Tác Trình Diễn Trên Giao Diện Web Trực Quan")
+slide15_demo = prs.slides.add_slide(blank_layout)
+add_base_background(slide15_demo)
+add_header(slide15_demo, "Phần 5: Trình diễn thực tế và tổng kết", "14. Kịch Bản Thao Tác Trình Diễn Trên Giao Diện Web Trực Quan")
 
-add_bullet_card(slide14_demo, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
+add_bullet_card(slide15_demo, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
     "Các Bước Thao Tác Trình Diễn Trước Hội Đồng", [
         ("• Khởi động hệ thống nhanh chóng:",
          "Chỉ cần nhấp đúp tệp run_demo_web.bat trên màn hình máy tính. Trình duyệt web sẽ tự động mở trang điều khiển tại địa chỉ nội bộ http://127.0.0.1:8080."),
@@ -681,7 +713,7 @@ add_bullet_card(slide14_demo, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.7
          "Nhấp Chạy kiểm tra toàn vẹn. Hệ thống lập tức chỉ đúng tên tệp bị can thiệp, hiển thị tỷ lệ nguyên vẹn và tốc độ xử lý hơn 4.000 tệp mỗi giây.")
     ], font_body_size=9.5)
 
-add_placeholder_card(slide14_demo, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+add_placeholder_card(slide15_demo, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
     "Ảnh Chụp Giao Diện Phòng Thí Nghiệm Web Demo", [
         "Chèn ảnh chụp màn hình phòng thí nghiệm Web Demo thực tế tại http://127.0.0.1:8080.",
         "Thể hiện 4 thẻ tab chuyển đổi mô hình (Flat SHA, HMAC, Merkle chuẩn, HD-Merkle).",
@@ -691,13 +723,13 @@ add_placeholder_card(slide14_demo, Inches(6.6), Inches(1.35), Inches(5.9), Inche
 
 
 # ==============================================================================
-# SLIDE 15: BẢNG ĐIỀU KHIỂN BIỂU ĐỒ BENCHMARK ĐỘNG
+# SLIDE 16: BẢNG ĐIỀU KHIỂN BIỂU ĐỒ BENCHMARK ĐỘNG
 # ==============================================================================
-slide15_charts = prs.slides.add_slide(blank_layout)
-add_base_background(slide15_charts)
-add_header(slide15_charts, "Phần 5: Trình diễn thực tế và tổng kết", "14. Bảng Điều Khiển Biểu Đồ Đo Đạc Trực Quan Hóa Động")
+slide16_charts = prs.slides.add_slide(blank_layout)
+add_base_background(slide16_charts)
+add_header(slide16_charts, "Phần 5: Trình diễn thực tế và tổng kết", "15. Bảng Điều Khiển Biểu Đồ Đo Đạc Trực Quan Hóa Động")
 
-add_bullet_card(slide15_charts, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
+add_bullet_card(slide16_charts, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
     "Trực Quan Hóa Biểu Đồ Khoa Học Hoạt Động Ngoại Tuyến", [
         ("• Hoạt động hoàn toàn ngoại tuyến:",
          "Hệ thống tích hợp sẵn thư viện vẽ biểu đồ nội bộ, không cần kết nối mạng Internet vẫn hiển thị mượt mà và trực quan khi báo cáo trước hội đồng."),
@@ -707,7 +739,7 @@ add_bullet_card(slide15_charts, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5
          "Khi nhấp Đo lường và cập nhật lại biểu đồ ngay, hệ thống sẽ chạy đo đạc trực tiếp trên máy và vẽ kết quả tức thì.")
     ], font_body_size=9.5)
 
-add_placeholder_card(slide15_charts, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+add_placeholder_card(slide16_charts, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
     "Ảnh Chụp Bảng Điều Khiển Biểu Đồ Benchmark Động", [
         "Chèn ảnh chụp màn hình Tab Benchmark Dashboard trên giao diện Web Demo.",
         "Thể hiện 4 biểu đồ Chart.js trực quan hóa kết quả đo đạc thực tế trên 1.000 tệp tin.",
@@ -717,39 +749,39 @@ add_placeholder_card(slide15_charts, Inches(6.6), Inches(1.35), Inches(5.9), Inc
 
 
 # ==============================================================================
-# SLIDE 16: TỔNG KẾT ĐÓNG GÓP KHOA HỌC VÀ THỰC TIỄN
+# SLIDE 17: TỔNG KẾT ĐÓNG GÓP KHOA HỌC VÀ THỰC TIỄN
 # ==============================================================================
-slide16_sum = prs.slides.add_slide(blank_layout)
-add_base_background(slide16_sum)
-add_header(slide16_sum, "Phần 5: Trình diễn thực tế và tổng kết", "15. Tổng Kết Đóng Góp Khoa Học Và Giá Trị Thực Tiễn Của Đồ Án")
+slide17_sum = prs.slides.add_slide(blank_layout)
+add_base_background(slide17_sum)
+add_header(slide17_sum, "Phần 5: Trình diễn thực tế và tổng kết", "16. Tổng Kết Đóng Góp Khoa Học Và Giá Trị Thực Tiễn Của Đồ Án")
 
-add_bullet_card(slide16_sum, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
+add_bullet_card(slide17_sum, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
     "Những Đóng Góp Nổi Bật Đạt Được Trong Đồ Án", [
         ("• 1. Hoàn thành toàn diện việc nghiên cứu bài báo tiếng Anh gốc:",
          "Dịch thuật học thuật toàn văn bài báo của Harry Halpin (2025), đối chiếu 100% các luận điểm về Kẻ thù mật mã, hiệu ứng tuyết lở SHA-256, nguyên lý Kerckhoffs và kiểm định PPT."),
-        ("• 2. Xây dựng tập dữ liệu 1.000 tệp tin thực tế:",
-         "Thiết lập tập dữ liệu 1.000 tệp tin với 14 định dạng phong phú và kích thước biến thiên, đáp ứng chuẩn mực yêu cầu khoa học của bài báo."),
+        ("• 2. Triển khai 3 Trụ cột phương pháp luận độc lập chuẩn mực:",
+         "Tách bạch rõ ràng 3 hướng: Kỹ thuật hệ thống PoC (hd_merkle_tree.py), Mô phỏng 7 Game an toàn mật mã học (security_games.py) và Thực nghiệm quy mô lớn 1.000 tệp tin."),
         ("• 3. Đối chuẩn đầy đủ 3 mô hình nền tảng:",
          "Hiện thực hóa và đo đạc đầy đủ các cơ chế danh sách SHA-256, HMAC và cây Merkle nhị phân truyền thống trên 1.000 tệp tin."),
         ("• 4. Phát triển thành công mô hình cải tiến có dẫn chứng chứng minh:",
-         "Đề xuất mô hình HD-MerkleTree kết hợp chuẩn tiền tố RFC 6962, xác minh nhanh hơn 380 lần, cập nhật nhanh hơn 453 lần, tiết kiệm hơn 98% băng thông và có bằng chứng nhất quán chống sửa đổi lịch sử."),
+         "Đề xuất mô hình HD-MerkleTree kết hợp chuẩn tiền tố RFC 6962, xác minh nhanh hơn ~8.5 lần, thêm/xóa nhanh hơn 458 - 708 lần so với Rebuild mảng 1D, tiết kiệm hơn 98.8% băng thông và có bằng chứng nhất quán độc lập."),
         ("• 5. Đóng gói sản phẩm hoàn chỉnh:",
          "Bộ slide báo cáo chặt chẽ cùng ứng dụng web demo trực quan sẵn sàng trình diễn trước hội đồng.")
-    ], font_body_size=9.2)
+    ], font_body_size=9.0)
 
-add_placeholder_card(slide16_sum, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+add_placeholder_card(slide17_sum, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
     "Sơ Đồ Chu Trình Khép Kín Từ Bài Báo Đến Đồ Án", [
-        "Vẽ sơ đồ quy trình nghiên cứu khoa học 4 giai đoạn khép kín:",
+        "Vẽ sơ đồ quy trình nghiên cứu khoa học khép kín:",
         "Giai đoạn 1: Dịch thuật và phân tích lý thuyết 100% bài báo Harry Halpin (2025).",
-        "Giai đoạn 2: Xây dựng tập dữ liệu 1.000 tệp tin thực tế đa tầng (Biba 1977).",
-        "Giai đoạn 3: Đối chuẩn 3 mô hình nền tảng (SHA-256, HMAC, Merkle chuẩn).",
+        "Giai đoạn 2: Triển khai 3 Trụ cột độc lập (PoC, 7 Security Games, Benchmark).",
+        "Giai đoạn 3: Đối chuẩn 3 mô hình nền tảng và kiểm nghiệm trên 1.000 tệp tin.",
         "Giai đoạn 4: Đề xuất HD-MerkleTree với 4 cải tiến đột phá đạt hiệu năng vượt trội."
     ])
 
 # Lưu bài thuyết trình
 try:
     prs.save(OUTPUT_PATH)
-    print("SUCCESS: Generated completely revised presentation with clean placeholders at:", OUTPUT_PATH)
+    print("SUCCESS: Generated completely revised presentation with 17 slides at:", OUTPUT_PATH)
 except PermissionError:
     alt_path = OUTPUT_PATH.replace(".pptx", "_CapNhat_DrawIO.pptx")
     prs.save(alt_path)

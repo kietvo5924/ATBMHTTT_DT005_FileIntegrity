@@ -149,3 +149,54 @@ class SHA256Manifest:
         with open(target, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
         return target
+
+
+if __name__ == "__main__":
+    import argparse
+    import sys
+
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
+    parser = argparse.ArgumentParser(description="Baseline 1: Flat SHA-256 Manifest File Integrity Verification")
+    parser.add_argument("--dir", default="realistic_dataset", help="Target directory to scan (default: realistic_dataset)")
+    parser.add_argument("--output", default=None, help="Optional output JSON path for manifest")
+    parser.add_argument("--verify", action="store_true", help="Verify directory against existing manifest")
+    args = parser.parse_args()
+
+    target_dir = os.path.abspath(args.dir)
+    if not os.path.isdir(target_dir):
+        print(f"[ERROR] Directory not found: {target_dir}")
+        sys.exit(1)
+
+    print("=" * 75)
+    print("   BASELINE 1: FLAT SHA-256 MANIFEST - KIỂM TRA TOÀN VẸN TỆP")
+    print("=" * 75)
+    print(f"[*] Scanning target directory: {os.path.basename(target_dir)} ({target_dir})")
+    print(f"[*] Read buffer size: 65,536 Bytes (64 KB Streaming chunks)")
+
+    manifest_tool = SHA256Manifest(target_dir)
+    build_time, storage_bytes = manifest_tool.build_manifest()
+    file_count = len(manifest_tool.manifest)
+
+    print(f"[+] Total files registered: {file_count} files")
+    print(f"[+] Verification / Build Time: {build_time:.4f} s ({build_time * 1000:.2f} ms)")
+    print(f"[+] Metadata Storage Overhead: {storage_bytes} Bytes ({storage_bytes / 1024:.2f} KB)")
+    print(f"[+] Aggregate Root Hash: {manifest_tool.root_hash}")
+    print(f"[+] Light Client Proof Support: KHÔNG HỖ TRỢ (Buộc phải tải toàn bộ {storage_bytes / 1024:.2f} KB manifest)")
+
+    if args.output:
+        saved_path = manifest_tool.save_to_file(args.output)
+        print(f"[+] Manifest saved to: {saved_path}")
+
+    if args.verify:
+        print("[*] Running full integrity verification...")
+        is_valid, violations, v_time = manifest_tool.verify_all()
+        print(f"[+] Verification Status: {'TOÀN VẸN 100%' if is_valid else 'PHÁT HIỆN VI PHẠM'}")
+        print(f"[+] Verification Elapsed: {v_time:.4f} s")
+        if violations:
+            print(f"[-] Vi phạm ({len(violations)}): {violations[:5]}")
+

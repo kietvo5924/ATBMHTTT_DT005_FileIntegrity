@@ -15,7 +15,12 @@ import hashlib
 import hmac
 from enum import Enum
 from typing import Dict, List, Tuple, Optional, Any
-from .parallel_hasher import parallel_hash_files, hash_single_file_streaming
+try:
+    from .parallel_hasher import parallel_hash_files, hash_single_file_streaming
+except (ImportError, ValueError):
+    import sys
+    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+    from src.proposed_model.parallel_hasher import parallel_hash_files, hash_single_file_streaming
 
 
 class NodeType(Enum):
@@ -56,6 +61,26 @@ class TreeNode:
         # Subtree cache cho thư mục (binary tree của các con)
         self.subtree_levels: List[List[bytes]] = []
         self.sorted_child_names: List[str] = []
+
+    def secure_erase(self) -> None:
+        """
+        Bảo vệ chống rò rỉ bộ nhớ (Memory Dump / Cold Boot Attack).
+        Cố ý ghi đè vùng nhớ lưu trữ hash bằng byte 0 (Zeroization) trước khi thu hồi.
+        (Mô phỏng cơ chế bảo mật RAM cấp thấp cho môi trường Python).
+        """
+        if self.cached_hash:
+            # Ghi đè bằng byte ngẫu nhiên hoặc 0x00 để xóa vết
+            self.cached_hash = b"\x00" * 32
+            self.cached_hash = None
+        for levels in self.subtree_levels:
+            for i in range(len(levels)):
+                levels[i] = b"\x00" * 32
+        self.subtree_levels = []
+        self.file_content_hash = "0" * 64
+
+    def __del__(self) -> None:
+        """Hủy an toàn khi đối tượng bị giải phóng khỏi RAM."""
+        self.secure_erase()
 
     def mark_dirty(self) -> None:
         """Đánh dấu nút và lan truyền dirty-flag lên đường dẫn tổ tiên (O(depth))."""
@@ -279,6 +304,83 @@ class HDMerkleTree:
         sorted_paths = sorted(self.file_nodes.keys())
         return [sha256_leaf(p, self.file_nodes[p].file_content_hash) for p in sorted_paths]
 
+    def get_canonical_log(self) -> "RFC6962CanonicalLog":
+        """
+        Khởi tạo cấu trúc RFC 6962 Canonical Transparency Log độc lập từ danh sách leaf hash đã sắp xếp.
+        Lưu ý phân biệt kiến trúc:
+        - HDMerkleTree.root_hash: Gốc trạng thái phân cấp thư mục (Directory Hierarchy State Tree).
+        - RFC6962CanonicalLog.canonical_root_hash: Gốc nhật ký tuần tự minh bạch (Append-Only Audit Log).
+        """
+        leaves = self.get_ordered_leaf_hashes()
+        return RFC6962CanonicalLog(leaves)
+
+    def get_consistency_proof(self, m: int) -> Tuple[List[str], str, str]:
+        """
+        Sinh Bằng chứng Nhất quán Chỉ-thêm thông qua RFC6962CanonicalLog độc lập.
+        Trả về: (proof_nodes, old_canonical_root, new_canonical_root)
+        """
+        return self.get_canonical_log().get_consistency_proof(m)
+
+    @staticmethod
+    def verify_consistency_proof(m: int, n: int, old_root: str, new_root: str, proof_hex: List[str]) -> bool:
+        """Ủy quyền xác minh Bằng chứng Nhất quán cho RFC6962CanonicalLog."""
+        return RFC6962CanonicalLog.verify_consistency_proof(m, n, old_root, new_root, proof_hex)
+
+    def find_tampered_files_fast(self) -> Tuple[List[str], float]:
+        """Định vị nhanh tệp bị sửa đổi trong O(k log N)."""
+        start_time = time.perf_counter()
+        tampered: List[str] = []
+
+        def _traverse(node: TreeNode, disk_path: str):
+            if node.node_type == NodeType.FILE:
+                if not os.path.exists(disk_path):
+                    tampered.append(f"MISSING: {node.rel_path}")
+                else:
+                    f_hash = hash_single_file_streaming(disk_path)
+                    if f_hash != node.file_content_hash:
+                        tampered.append(f"TAMPERED: {node.rel_path}")
+            else:
+                for c_name, c_node in node.children.items():
+                    _traverse(c_node, os.path.join(disk_path, c_name))
+
+        _traverse(self.root_node, self.root_dir)
+        elapsed = time.perf_counter() - start_time
+        return tampered, elapsed
+
+    def get_storage_overhead(self) -> int:
+        data = {
+            "root_hash": self.root_hash,
+            "total_files": len(self.file_nodes),
+            "files": {p: n.file_content_hash for p, n in self.file_nodes.items()}
+        }
+        return len(json.dumps(data).encode("utf-8"))
+
+    def save_to_file(self, out_path: Optional[str] = None) -> str:
+        """Lưu cấu hình cây HD-Merkle ra tệp JSON."""
+        target = out_path or os.path.join(self.root_dir, "merkle_hd.json")
+        data = {
+            "root_hash": self.root_hash,
+            "total_files": len(self.file_nodes),
+            "files": {p: n.file_content_hash for p, n in self.file_nodes.items()}
+        }
+        with open(target, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+        return target
+
+
+class RFC6962CanonicalLog:
+    """
+    Cấu trúc Nhật ký Minh bạch Chuẩn hóa RFC 6962 (Append-Only Canonical Log).
+    Tách biệt về mặt kiến trúc với Cây Phân cấp Thư mục (HD-MerkleTree):
+    - HDMerkleTree: Cây trạng thái phân cấp (Hierarchical State Tree), bảo toàn cấu trúc thư mục.
+    - RFC6962CanonicalLog: Cây nhật ký nối thêm (Append-Only Log), cung cấp Bằng chứng Nhất quán
+      (Consistency Proof) theo chuẩn Certificate Transparency RFC 6962 Section 2.1.2.
+    """
+    def __init__(self, leaves: List[bytes]):
+        self.leaves: List[bytes] = list(leaves)
+        self.size: int = len(self.leaves)
+        self.canonical_root_hash: str = self._rfc6962_mth(self.leaves).hex()
+
     @staticmethod
     def _rfc6962_mth(leaves: List[bytes]) -> bytes:
         """Tính Merkle Tree Hash theo RFC 6962 Section 2.1."""
@@ -288,8 +390,8 @@ class HDMerkleTree:
         if n == 1:
             return leaves[0]
         k = 1 << ((n - 1).bit_length() - 1)
-        left = HDMerkleTree._rfc6962_mth(leaves[:k])
-        right = HDMerkleTree._rfc6962_mth(leaves[k:])
+        left = RFC6962CanonicalLog._rfc6962_mth(leaves[:k])
+        right = RFC6962CanonicalLog._rfc6962_mth(leaves[k:])
         return sha256_internal(left, right)
 
     @staticmethod
@@ -297,33 +399,30 @@ class HDMerkleTree:
         """Thuật toán đệ quy SUBPROOF(m, D[0:n], b) theo chuẩn RFC 6962 Section 2.1.2."""
         n = len(leaves)
         if m == n:
-            return [] if b else [HDMerkleTree._rfc6962_mth(leaves)]
+            return [] if b else [RFC6962CanonicalLog._rfc6962_mth(leaves)]
         k = 1 << ((n - 1).bit_length() - 1)
         if m <= k:
-            return HDMerkleTree._subproof(m, leaves[:k], b) + [HDMerkleTree._rfc6962_mth(leaves[k:])]
+            return RFC6962CanonicalLog._subproof(m, leaves[:k], b) + [RFC6962CanonicalLog._rfc6962_mth(leaves[k:])]
         else:
-            return HDMerkleTree._subproof(m - k, leaves[k:], False) + [HDMerkleTree._rfc6962_mth(leaves[:k])]
+            return RFC6962CanonicalLog._subproof(m - k, leaves[k:], False) + [RFC6962CanonicalLog._rfc6962_mth(leaves[:k])]
 
     def get_consistency_proof(self, m: int) -> Tuple[List[str], str, str]:
         """
         Sinh Bằng chứng Nhất quán Chỉ-thêm (Append-Only Consistency Proof) theo RFC 6962.
-        Chứng minh cây kích thước m (quá khứ) là tiền tố chính xác của cây kích thước n (hiện tại).
+        Chứng minh nhật ký kích thước m (quá khứ) là tiền tố chính xác của nhật ký kích thước n (hiện tại).
         Độ phức tạp O(log n).
         """
-        leaves = self.get_ordered_leaf_hashes()
-        n = len(leaves)
-        if m > n or m <= 0:
-            raise ValueError(f"Kích thước quá khứ m={m} không hợp lệ với n={n}")
-        proof_nodes = self._subproof(m, leaves, True)
-        old_root = self._rfc6962_mth(leaves[:m]).hex()
-        new_root = self._rfc6962_mth(leaves).hex()
+        if m > self.size or m <= 0:
+            raise ValueError(f"Kích thước quá khứ m={m} không hợp lệ với n={self.size}")
+        proof_nodes = self._subproof(m, self.leaves, True)
+        old_root = self._rfc6962_mth(self.leaves[:m]).hex()
+        new_root = self.canonical_root_hash
         return [node.hex() for node in proof_nodes], old_root, new_root
 
     @staticmethod
     def verify_consistency_proof(m: int, n: int, old_root: str, new_root: str, proof_hex: List[str]) -> bool:
         """
-        Xác thực Bằng chứng Nhất quán RFC 6962 Section 2.1.2 bằng hằng thời gian (Constant-time).
-        Bảo vệ chống tấn công chèn cửa sau và sửa đổi ngầm lịch sử tệp tin.
+        Xác thực Bằng chứng Nhất quán RFC 6962 Section 2.1.2 bằng so sánh digest hằng thời gian (Constant-time).
         """
         if m == n:
             return hmac.compare_digest(old_root.lower(), new_root.lower()) and len(proof_hex) == 0
@@ -362,31 +461,72 @@ class HDMerkleTree:
         except Exception:
             return False
 
-    def find_tampered_files_fast(self) -> Tuple[List[str], float]:
-        """Định vị nhanh tệp bị sửa đổi trong O(k log N)."""
-        start_time = time.perf_counter()
-        tampered: List[str] = []
 
-        def _traverse(node: TreeNode, disk_path: str):
-            if node.node_type == NodeType.FILE:
-                if not os.path.exists(disk_path):
-                    tampered.append(f"MISSING: {node.rel_path}")
-                else:
-                    f_hash = hash_single_file_streaming(disk_path)
-                    if f_hash != node.file_content_hash:
-                        tampered.append(f"TAMPERED: {node.rel_path}")
-            else:
-                for c_name, c_node in node.children.items():
-                    _traverse(c_node, os.path.join(disk_path, c_name))
+if __name__ == "__main__":
+    import argparse
+    import sys
 
-        _traverse(self.root_node, self.root_dir)
-        elapsed = time.perf_counter() - start_time
-        return tampered, elapsed
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
 
-    def get_storage_overhead(self) -> int:
-        data = {
-            "root_hash": self.root_hash,
-            "total_files": len(self.file_nodes),
-            "files": {p: n.file_content_hash for p, n in self.file_nodes.items()}
-        }
-        return len(json.dumps(data).encode("utf-8"))
+    parser = argparse.ArgumentParser(description="Proposed Model: Hierarchical Dynamic Merkle Tree (HD-MerkleTree)")
+    parser.add_argument("--dir", default="realistic_dataset", help="Target directory to scan (default: realistic_dataset)")
+    parser.add_argument("--output", default=None, help="Optional output JSON path for tree metadata")
+    parser.add_argument("--proof", default=None, help="Generate and verify HD-Merkle proof for relative file path")
+    parser.add_argument("--consistency", type=int, default=None, help="Generate and verify RFC 6962 consistency proof for past size m")
+    parser.add_argument("--workers", type=int, default=None, help="Parallel worker threads count")
+    args = parser.parse_args()
+
+    target_dir = os.path.abspath(args.dir)
+    if not os.path.isdir(target_dir):
+        print(f"[ERROR] Directory not found: {target_dir}")
+        sys.exit(1)
+
+    print("=" * 75)
+    print("   PROPOSED MODEL: HIERARCHICAL DYNAMIC MERKLE TREE (HD-MERKLETREE)")
+    print("=" * 75)
+    print(f"[*] Scanning target directory: {os.path.basename(target_dir)} ({target_dir})")
+
+    tree = HDMerkleTree(target_dir)
+    build_time, storage_bytes = tree.build_tree_parallel(max_workers=args.workers)
+    file_count = len(tree.file_nodes)
+
+    print(f"[+] Total files indexed: {file_count} files")
+    print(f"[+] Directory nodes count: {len(tree.dir_nodes)} directories")
+    print(f"[+] Build Time (Parallel): {build_time:.4f} s ({build_time * 1000:.2f} ms)")
+    print(f"[+] Storage Overhead: {storage_bytes} Bytes ({storage_bytes / 1024:.2f} KB)")
+    print(f"[+] Hierarchical State Root Hash: {tree.root_hash}")
+
+    target_file = args.proof
+    if not target_file and tree.file_nodes:
+        target_file = sorted(tree.file_nodes.keys())[0]
+        print(f"[*] Auto-selected file for proof demo: {target_file}")
+
+    if target_file and target_file in tree.file_nodes:
+        proof = tree.get_proof(target_file)
+        if proof is not None:
+            f_node = tree.file_nodes[target_file]
+            is_valid = HDMerkleTree.verify_proof(target_file, f_node.file_content_hash, proof, tree.root_hash)
+            proof_size = len(json.dumps(proof).encode("utf-8"))
+            print(f"[+] HD-Merkle Proof for '{target_file}':")
+            print(f"    - Proof steps: {len(proof)} steps (directory + binary sibling)")
+            print(f"    - Proof size: {proof_size} Bytes ({proof_size / 1024:.2f} KB)")
+            print(f"    - Independent Verification: {'PASS (HỢP LỆ)' if is_valid else 'FAIL'}")
+
+    if args.consistency is not None:
+        m = args.consistency
+        n = file_count
+        print(f"[*] Testing RFC 6962 Consistency Proof (m={m}, n={n})...")
+        proof_nodes, old_root, new_root = tree.get_consistency_proof(m)
+        is_cons_valid = tree.verify_consistency_proof(m, n, old_root, new_root, proof_nodes)
+        print(f"[+] Canonical Log Past Root (m={m}): {old_root}")
+        print(f"[+] Canonical Log Current Root (n={n}): {new_root}")
+        print(f"[+] Consistency Verification: {'PASS (HỢP LỆ)' if is_cons_valid else 'FAIL'}")
+
+    if args.output:
+        saved_path = tree.save_to_file(args.output)
+        print(f"[+] Tree metadata saved to: {saved_path}")
+

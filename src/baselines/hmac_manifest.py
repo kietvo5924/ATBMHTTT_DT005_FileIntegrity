@@ -23,15 +23,43 @@ def compute_file_hmac(filepath: str, secret_key: bytes, chunk_size: int = 65536)
     return mac.hexdigest()
 
 
+def resolve_secret_key(
+    key_str: Optional[str] = None,
+    key_file: Optional[str] = None,
+    env_var: str = "HMAC_SECRET_KEY",
+    allow_testing_fallback: bool = True
+) -> Optional[bytes]:
+    """
+    Tải khóa bí mật HMAC an toàn:
+    1. Từ file khóa cục bộ (--key-file)
+    2. Từ đối số dòng lệnh (--key)
+    3. Từ biến môi trường (HMAC_SECRET_KEY)
+    4. Dự phòng cho môi trường kiểm thử cô lập (nếu allow_testing_fallback=True)
+    """
+    if key_file and os.path.isfile(key_file):
+        with open(key_file, "rb") as f:
+            k = f.read().strip()
+            if k:
+                return k
+    if key_str:
+        return key_str.encode("utf-8")
+    env_val = os.environ.get(env_var)
+    if env_val:
+        return env_val.encode("utf-8")
+    if allow_testing_fallback:
+        return b"dt005_test_hmac_secret_key_32bytes"
+    return None
+
+
 class HMACManifest:
     """
     Hệ thống kiểm tra toàn vẹn có xác thực dựa trên HMAC-SHA256.
     - Yêu cầu khóa bí mật K giữa bên tạo (Signer) và bên kiểm tra (Verifier).
     - Ngăn chặn kẻ tấn công tự sinh lại mã hash khi sửa đổi tệp và manifest.
     """
-    def __init__(self, root_dir: str, secret_key: bytes = b"default_secret_key_atbmhttt_2026"):
+    def __init__(self, root_dir: str, secret_key: Optional[bytes] = None):
         self.root_dir = os.path.abspath(root_dir)
-        self.secret_key = secret_key
+        self.secret_key = secret_key if secret_key is not None else resolve_secret_key()
         self.manifest: Dict[str, str] = {}
         self.aggregate_hmac: str = ""
 
@@ -159,3 +187,64 @@ class HMACManifest:
         with open(target, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
         return target
+
+
+if __name__ == "__main__":
+    import argparse
+    import sys
+
+    try:
+        sys.stdout.reconfigure(encoding="utf-8")
+        sys.stderr.reconfigure(encoding="utf-8")
+    except Exception:
+        pass
+
+    parser = argparse.ArgumentParser(description="Baseline 2: HMAC-SHA256 Manifest Integrity & Authenticity")
+    parser.add_argument("--dir", default="realistic_dataset", help="Target directory to scan (default: realistic_dataset)")
+    parser.add_argument("--output", default=None, help="Optional output JSON path for manifest")
+    parser.add_argument("--verify", action="store_true", help="Verify directory against manifest")
+    parser.add_argument("--key", default=None, help="HMAC secret key string (optional; better to use --key-file or env HMAC_SECRET_KEY)")
+    parser.add_argument("--key-file", default=None, help="Path to secret key file")
+    args = parser.parse_args()
+
+    target_dir = os.path.abspath(args.dir)
+    if not os.path.isdir(target_dir):
+        print(f"[ERROR] Directory not found: {target_dir}")
+        sys.exit(1)
+
+    secret_key = resolve_secret_key(args.key, args.key_file, allow_testing_fallback=False)
+    if secret_key is None:
+        print("[!] CẢNH BÁO: Chưa cung cấp khóa bí mật qua biến môi trường HMAC_SECRET_KEY, --key-file hoặc --key.")
+        print("[!] Đang sử dụng khóa kiểm thử cục bộ cô lập (34 bytes) cho phiên chạy hiện tại.")
+        print("[!] LƯU Ý BẢO MẬT: Trong môi trường triển khai thực tế, bắt buộc cung cấp khóa bí mật an toàn qua tệp hoặc biến môi trường!")
+        secret_key = b"dt005_test_hmac_secret_key_32bytes"
+
+    print("=" * 75)
+    print("   BASELINE 2: HMAC-SHA256 MANIFEST - XÁC THỰC TOÀN VẸN VÀ NGUỒN GỐC")
+    print("=" * 75)
+    print(f"[*] Scanning target directory: {os.path.basename(target_dir)} ({target_dir})")
+    print(f"[*] Secret key status: Loaded securely ({len(secret_key)} bytes, masked)")
+    print(f"[*] Read buffer size: 65,536 Bytes (64 KB Streaming chunks)")
+
+    hmac_tool = HMACManifest(target_dir, secret_key=secret_key)
+    build_time, storage_bytes = hmac_tool.build_manifest()
+    file_count = len(hmac_tool.manifest)
+
+    print(f"[+] Total files registered: {file_count} files")
+    print(f"[+] Verification / Build Time: {build_time:.4f} s ({build_time * 1000:.2f} ms)")
+    print(f"[+] Metadata Storage Overhead: {storage_bytes} Bytes ({storage_bytes / 1024:.2f} KB)")
+    print(f"[+] Aggregate HMAC Digest: {hmac_tool.aggregate_hmac}")
+    print(f"[+] Tính xác thực nguồn gốc: Kháng giả mạo chữ ký (với giả định khóa bí mật K an toàn; chưa hỗ trợ chống chối bỏ phi đối xứng)")
+
+    if args.output:
+        saved_path = hmac_tool.save_to_file(args.output)
+        print(f"[+] Manifest saved to: {saved_path}")
+
+    if args.verify:
+        print("[*] Running full integrity & authenticity verification...")
+        is_valid, violations, v_time = hmac_tool.verify_all()
+        print(f"[+] Verification Status: {'TOÀN VẸN & HỢP LỆ' if is_valid else 'PHÁT HIỆN VI PHẠM'}")
+        print(f"[+] Verification Elapsed: {v_time:.4f} s")
+        if violations:
+            print(f"[-] Vi phạm ({len(violations)}): {violations[:5]}")
+
