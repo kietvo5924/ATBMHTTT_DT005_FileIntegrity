@@ -178,18 +178,19 @@ tf1 = tb1.text_frame
 tf1.word_wrap = True
 
 p = tf1.paragraphs[0]
-p.text = "TRƯỜNG ĐẠI HỌC KHOA HỌC TỰ NHIÊN - ĐẠI HỌC QUỐC GIA TP. HỒ CHÍ MINH"
+p.text = "TRƯỜNG ĐẠI HỌC TÀI NGUYÊN VÀ MÔI TRƯỜNG TP. HỒ CHÍ MINH"
 p.font.bold = True
 p.font.size = Pt(13.5)
 p.font.color.rgb = NAVY_COLOR
 p.alignment = PP_ALIGN.CENTER
 
 p = tf1.add_paragraph()
-p.text = "KHOA CÔNG NGHỆ THÔNG TIN - BỘ MÔN AN TOÀN VÀ BẢO MẬT HỆ THỐNG THÔNG TIN"
-p.font.size = Pt(11.5)
-p.font.color.rgb = TEXT_MUTED
+p.text = "KHOA CÔNG NGHỆ THÔNG TIN"
+p.font.bold = True
+p.font.size = Pt(12)
+p.font.color.rgb = BLUE_ACCENT
 p.alignment = PP_ALIGN.CENTER
-p.space_after = Pt(18)
+p.space_after = Pt(14)
 
 p = tf1.add_paragraph()
 p.text = "BÁO CÁO THUYẾT TRÌNH ĐỒ ÁN GIỮA KỲ"
@@ -201,29 +202,37 @@ p.alignment = PP_ALIGN.CENTER
 p = tf1.add_paragraph()
 p.text = "ĐỀ TÀI DT005: HỆ THỐNG KIỂM TRA TOÀN VẸN TỆP BẰNG SHA-256, HMAC VÀ CÂY MERKLE"
 p.font.bold = True
-p.font.size = Pt(16.5)
+p.font.size = Pt(15.5)
 p.font.color.rgb = NAVY_COLOR
 p.alignment = PP_ALIGN.CENTER
-p.space_after = Pt(14)
+p.space_after = Pt(10)
 
 p = tf1.add_paragraph()
-p.text = "Nghiên Cứu Và Tái Lập Dựa Trên Bài Báo Khoa Học Quốc Tế Gốc Tiếng Anh:"
+p.text = "Học phần: An Toàn và Bảo Mật Hệ Thống Thông Tin"
 p.font.bold = True
 p.font.size = Pt(12)
-p.font.color.rgb = BLUE_ACCENT
-p.alignment = PP_ALIGN.CENTER
-
-p = tf1.add_paragraph()
-p.text = "The Adversary: The Philosophy of Cryptography - Tác giả Harry Halpin\nXuất bản trên Tạp chí An ninh mạng Oxford (Oxford Journal of Cybersecurity), Tập 11, Số 1, Năm 2025"
-p.font.size = Pt(11.5)
 p.font.color.rgb = TEXT_MAIN
 p.alignment = PP_ALIGN.CENTER
-p.space_after = Pt(16)
 
 p = tf1.add_paragraph()
-p.text = "Phương Pháp Luận Nghiên Cứu: Triển khai 3 Trụ cột độc lập (Kỹ thuật hệ thống PoC, Mô phỏng an ninh hình thức 7 Games, Thực nghiệm trên 1.000 tệp)"
+p.text = "Giảng viên hướng dẫn: ThS. Phạm Trọng Huynh\nSinh viên thực hiện: Võ Anh Kiệt  —  MSSV: 1150080143  —  Lớp: 11_CNPM2"
 p.font.bold = True
-p.font.size = Pt(11)
+p.font.size = Pt(12.5)
+p.font.color.rgb = NAVY_COLOR
+p.alignment = PP_ALIGN.CENTER
+p.space_after = Pt(12)
+
+p = tf1.add_paragraph()
+p.text = "Nghiên Cứu Và Phát Triển Dựa Trên Bài Báo Khoa Học Gốc: The Adversary: The Philosophy of Cryptography\nTác giả: Harry Halpin — Xuất bản trên Tạp chí An ninh mạng Oxford (Oxford Journal of Cybersecurity, 2025)"
+p.font.size = Pt(10)
+p.font.color.rgb = TEXT_MUTED
+p.alignment = PP_ALIGN.CENTER
+p.space_after = Pt(8)
+
+p = tf1.add_paragraph()
+p.text = "Phương Pháp Luận Nghiên Cứu: Triển khai 3 Trụ cột độc lập (Kỹ thuật PoC, Mô phỏng an ninh 7 Games, Thực nghiệm trên 1.000 tệp)"
+p.font.bold = True
+p.font.size = Pt(10.5)
 p.font.color.rgb = GREEN_COLOR
 p.alignment = PP_ALIGN.CENTER
 
@@ -655,53 +664,150 @@ add_placeholder_card(slide13_bench, Inches(7.3), Inches(1.35), Inches(5.2), Inch
 
 
 # ==============================================================================
-# SLIDE 14: [TRỤ CỘT II - HƯỚNG 2] KHUNG KIỂM ĐỊNH 7 MÔ HÌNH AN TOÀN MẬT MÃ HỌC
+# SLIDE 14: [TRỤ CỘT II - HƯỚNG 2] KHUNG KIỂM ĐỊNH 7 TRÒ CHƠI AN NINH (GAMES 1 - 4)
 # ==============================================================================
 slide14_games = prs.slides.add_slide(blank_layout)
 add_base_background(slide14_games)
-add_header(slide14_games, "Phần 4C: Trụ cột II - Mô phỏng an ninh hình thức (Hướng 2)", "13. Khung Kiểm Định 7 Mô Hình An Toàn Mật Mã Học Theo Harry Halpin")
+add_header(slide14_games, "Phần 4C: Trụ cột II - Mô phỏng an ninh hình thức (Hướng 2)", "13. Khung 7 Trò Chơi An Ninh Mật Mã Học (Games 1 – 4: Va Chạm, Mạng, Nút & Tuyết Lở)")
 
-add_bullet_card(slide14_games, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
-    "Khung Kiểm Định Đầy Đủ 7 Trò Chơi An Ninh (security_games.py)", [
-        ("• Khởi chạy độc lập: python src/proposed_model/security_games.py",
-         "Module an ninh độc lập không gộp chung benchmark; trực tiếp kiểm thử toán học 7 giả định đối đầu của Harry Halpin:"),
-        ("• 1. Thách đấu PPT Adversary (Goldwasser-Micali 1984 [Ref 33,34]):",
-         "Đối chiếu: Mục 4 Trang 7. Lợi thế Adv(A) = 0.0 <= 2^-128. Thử thách 50 lượt ngẫu nhiên: Kẻ thù thắng 0/50 (0.0%)."),
-        ("• 2. Kẻ tấn công Mạng Dolev-Yao (Dolev-Yao 1983 [Ref 52]):",
-         "Đối chiếu: Mục 4 Trang 8. Chặn đứng 100% cả 3 kịch bản can thiệp: Đổi gói tin, Tráo bằng chứng và Tấn công phát lại."),
-        ("• 3. Kháng Va chạm Second-Preimage RFC 6962 [Ref 109]:",
-         "Đối chiếu: Mục 5 Trang 8-10. Tiền tố 0x00 lá và 0x01 nhánh triệt tiêu 100% nguy cơ tráo lá thành nhánh."),
-        ("• 4. Bằng chứng Nhất quán RFC 6962 Consistency Proof [Ref 109]:",
-         "Đối chiếu: Mục 6 Trang 11-14. Bằng chứng 10 nút (320 byte) chứng minh kho dữ liệu là append-only, chống chèn backdoor 100%."),
-        ("• 5. Xấp xỉ Random Oracle & Hiệu ứng Tuyết lở (SAC) [Ref 40]:",
-         "Đối chiếu: Mục 1-2 & 4. SAC = 51.95% ≈ 50%, áp đảo tính tuyến tính dễ bị bẻ gãy của mã CRC32."),
-        ("• 6. Mô hình Toàn vẹn Phân cấp Biba (Biba 1977 [Ref 21]):",
-         "Đối chiếu: Mục 3 Trang 4-5. Tiên đề No write-up: Sai khác tệp lá phản xạ tức thì làm đổi Root Hash trong 0.13 ms."),
-        ("• 7. Bảo vệ Siêu dữ liệu & Kháng Kênh kề Đo thời gian [Ref 36, 100]:",
-         "Đối chiếu: Mục 5-6. Tiết lộ 0/1000 tên tệp; dùng hàm hmac.compare_digest triệt tiêu rò rỉ kênh kề O(1); xóa an toàn RAM.")
-    ], font_body_size=7.6)
+add_bullet_card(slide14_games, Inches(0.8), Inches(1.35), Inches(5.8), Inches(5.75), 
+    "Bốn Mô Hình Kiểm Định Toán Học Đối Kháng (Games 1 – 4)", [
+        ("• Game 1: Chống tấn công tìm va chạm mã băm (PPT Adversary):",
+         "1. Ý nghĩa: Kẻ tấn công có năng lực tính toán ngẫu nhiên nhưng bị giới hạn về thời gian và tài nguyên (đa thức).\n"
+         "2. Cách tấn công: Cố tìm 2 tệp khác nhau A != B sao cho SHA256(A) = SHA256(B) để đánh lừa hệ thống.\n"
+         "3. Cách phòng thủ: SHA-256 (256-bit). Tìm va chạm ngẫu nhiên đòi hỏi ~2^128 phép băm theo Birthday bound.\n"
+         "4. Kết quả: Thử nghiệm 50 lượt ngẫu nhiên: Kẻ thù thắng 0/50 (0.0%), lợi thế đối thủ Adv <= 2^-128."),
+        ("• Game 2: Chống kẻ tấn công đường truyền mạng (Dolev–Yao Adversary):",
+         "1. Ý nghĩa: Kẻ tấn công có quyền nghe lén, chặn, sửa đổi hoặc thay thế gói tin truyền giữa Server và Client.\n"
+         "2. Cách tấn công: (1) Sửa nội dung tệp; (2) Thay đổi mã băm trong Proof; (3) Tráo đường dẫn tệp.\n"
+         "3. Cách phòng thủ: Client lưu Root Hash tin cậy; tự băm tệp và lần ngược lên Root Hash theo chuỗi Proof.\n"
+         "4. Kết quả: Phát hiện chính xác 100% mọi hành vi can thiệp làm sai lệch Root Hash."),
+        ("• Game 3: Chống giả mạo nút lá và nút nhánh (Second-Preimage & Domain Separation):",
+         "1. Ý nghĩa: Merkle Tree gồm nút lá (tệp dữ liệu) và nút nhánh (ghép băm); nếu không tách biệt sẽ bị đánh tráo.\n"
+         "2. Cách tấn công: Tạo tệp chứa chuỗi ghép Left || Right nhằm lừa hệ thống coi tệp rác là một nút lá.\n"
+         "3. Cách phòng thủ: Chuẩn RFC 6962: H_leaf = SHA256(0x00 || Data), H_branch = SHA256(0x01 || L || R).\n"
+         "4. Kết quả: Hai miền tiền tố độc lập hoàn toàn, triệt tiêu 100% việc nhầm lẫn giữa lá và nhánh."),
+        ("• Game 4: Kiểm tra hiệu ứng tuyết lở (Avalanche Effect):",
+         "1. Ý nghĩa: Thay đổi một phần rất nhỏ đầu vào thì mã băm đầu ra phải biến đổi ngẫu nhiên rất mạnh.\n"
+         "2. Cách tấn công: Đảo 1 bit trong tệp rồi so sánh mã băm trước và sau để dò tìm quy luật tương quan.\n"
+         "3. Cách phòng thủ: Đo khoảng cách Hamming; tỷ lệ bit thay đổi kỳ vọng xấp xỉ 50% (Shannon Diffusion).\n"
+         "4. Kết quả: Thực nghiệm đo được 50.39% ≈ 50%, phù hợp hoàn hảo với đặc tính khuếch tán của SHA-256.")
+    ], font_body_size=7.4)
 
-add_placeholder_card(slide14_games, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
-    "Sơ Đồ 7 Mô Hình Kiểm Định An Toàn Toán Học", [
-        "Thiết kế lưới 7 khối thẻ đại diện cho 7 mô hình toán học trong bài báo:",
-        "1. Thách đấu PPT Adversary (Advantage = 0.0 <= 2^-128).",
-        "2. Kẻ tấn công mạng Dolev-Yao (Chặn 100% Tamper, Swap, Replay).",
-        "3. Kháng Second-Preimage RFC 6962 (Domain Separation).",
-        "4. Bằng chứng nhất quán RFC 6962 (Append-Only Consistency Proof).",
-        "5. Xấp xỉ Random Oracle & Hiệu ứng tuyết lở SHA-256 (SAC 51.95%).",
-        "6. Toàn vẹn phân cấp Biba (Biba Integrity Model 1977).",
-        "7. Kháng rò rỉ siêu dữ liệu & Kháng kênh kề đo thời gian (Kocher 1996)."
+add_placeholder_card(slide14_games, Inches(6.8), Inches(1.35), Inches(5.7), Inches(5.75),
+    "Sơ Đồ Mô Phỏng 4 Trò Chơi An Ninh Toán Học (Games 1 – 4)", [
+        "Khối 1 (PPT Adversary): Không gian băm 2^256, Birthday Bound 2^128 triệt tiêu va chạm.",
+        "Khối 2 (Dolev-Yao Network): Luồng Server -> Mạng (Bị can thiệp) -> Client đối chiếu Root Hash tin cậy.",
+        "Khối 3 (Domain Separation): Minh họa nút lá tiền tố 0x00 (màu cam) vs nút nhánh 0x01 (màu xanh).",
+        "Khối 4 (Avalanche Effect): Đồ thị phân phối 1 bit đảo -> 129/256 bit đầu ra biến đổi ngẫu nhiên (50.39%).",
+        "Vẽ các mũi tên trạng thái kiểm định toán học chuyển tiếp tuần tự từ Game 1 đến Game 4."
     ])
 
 
 # ==============================================================================
-# SLIDE 15: HƯỚNG DẪN KỊCH BẢN TRÌNH DIỄN DEMO WEB
+# SLIDE 15: [TRỤ CỘT II - HƯỚNG 2] KHUNG KIỂM ĐỊNH 7 TRÒ CHƠI AN NINH (GAMES 5 - 7 & TỔNG KẾT)
 # ==============================================================================
-slide15_demo = prs.slides.add_slide(blank_layout)
-add_base_background(slide15_demo)
-add_header(slide15_demo, "Phần 5: Trình diễn thực tế và tổng kết", "14. Kịch Bản Thao Tác Trình Diễn Trên Giao Diện Web Trực Quan")
+slide15_games = prs.slides.add_slide(blank_layout)
+add_base_background(slide15_games)
+add_header(slide15_games, "Phần 4C: Trụ cột II - Mô phỏng an ninh hình thức (Hướng 2)", "14. Khung 7 Trò Chơi An Ninh Mật Mã Học (Games 5 – 7 & Bảng Tổng Kết)")
 
-add_bullet_card(slide15_demo, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
+add_bullet_card(slide15_games, Inches(0.8), Inches(1.35), Inches(5.5), Inches(5.75), 
+    "Ba Mô Hình Kiểm Định Nâng Cao (Games 5 – 7)", [
+        ("• Game 5: Bảo vệ tính nhất quán lịch sử (Append-Only Consistency Proof):",
+         "1. Ý nghĩa: Kiểm tra dữ liệu cũ có được giữ nguyên khi hệ thống bổ sung dữ liệu mới hay không.\n"
+         "2. Cách tấn công: Server sửa 1 tệp cũ trong 950 tệp, thêm 50 tệp mới thành 1.000 tệp rồi tuyên bố lịch sử nguyên vẹn.\n"
+         "3. Cách phòng thủ: Consistency Proof RFC 6962 chứng minh cây cũ m=950 là tiền tố bất biến của cây mới n=1.000.\n"
+         "4. Kết quả: Nếu dữ liệu cũ bị sửa, bằng chứng nhất quán bị từ chối ngay lập tức."),
+        ("• Game 6: Chống trích xuất dữ liệu nhạy cảm từ RAM (Memory-Dump Adversary):",
+         "1. Ý nghĩa: Kẻ tấn công đọc trộm RAM sau khi chương trình chạy để tìm khóa bí mật hoặc dữ liệu nhạy cảm.\n"
+         "2. Cách tấn công: Dump bộ nhớ tiến trình và tìm kiếm khóa còn vương lại trong bộ nhớ đệm.\n"
+         "3. Cách phòng thủ: Memory Zeroization: lưu khóa trong bytearray, chủ động ghi đè bằng 0x00 qua secure_erase().\n"
+         "4. Lưu ý Python: gc.collect() thu hồi biến nhưng trong runtime không bảo đảm xóa sạch tuyệt đối mọi bản sao."),
+        ("• Game 7: Chống tấn công đo thời gian & Giảm rò rỉ siêu dữ liệu:",
+         "Phần A (Timing Side-Channel): Không dùng toán tử == (dừng sớm theo ký tự sai). Sử dụng hmac.compare_digest() để thời gian so sánh chuỗi là hằng số O(1).\n"
+         "Phần B (Metadata Leakage): Thay vì tải toàn bộ 111 KB manifest chứa tên 1.000 tệp, Merkle Proof chỉ gửi mã băm anh em cần thiết, bảo vệ tính riêng tư của 999 tệp còn lại.")
+    ], font_body_size=7.4)
+
+# Bảng Tổng Kết 7 Trò Chơi
+table_card15 = add_card(slide15_games, Inches(6.5), Inches(1.35), Inches(6.0), Inches(3.6))
+table_shape15 = slide15_games.shapes.add_table(8, 3, Inches(6.6), Inches(1.45), Inches(5.8), Inches(3.4))
+table15 = table_shape15.table
+table15.columns[0].width = Inches(0.95)
+table15.columns[1].width = Inches(2.55)
+table15.columns[2].width = Inches(2.3)
+
+headers15 = ["Game", "Mục Tiêu Bảo Mật", "Cơ Chế Chính Triển Khai"]
+for col_idx, h_text in enumerate(headers15):
+    cell = table15.cell(0, col_idx)
+    cell.fill.solid()
+    cell.fill.fore_color.rgb = NAVY_COLOR
+    cell.text = h_text
+    p = cell.text_frame.paragraphs[0]
+    p.font.bold = True
+    p.font.size = Pt(9.2)
+    p.font.color.rgb = RGBColor(255, 255, 255)
+    p.alignment = PP_ALIGN.CENTER
+
+table_data15 = [
+    ("Game 1", "Chống tìm hai dữ liệu cùng mã băm", "SHA-256 (Adv <= 2^-128)"),
+    ("Game 2", "Phát hiện dữ liệu bị sửa khi truyền", "Merkle Proof + Root Hash tin cậy"),
+    ("Game 3", "Phân biệt nút lá và nút nhánh", "Domain Separation (0x00 / 0x01)"),
+    ("Game 4", "Kiểm tra mức độ thay đổi mã băm", "Avalanche Effect (50.39% ≈ 50%)"),
+    ("Game 5", "Kiểm tra nhất quán qua các lần cập nhật", "Consistency Proof RFC 6962"),
+    ("Game 6", "Hạn chế dữ liệu nhạy cảm trong RAM", "Memory Zeroization (secure_erase)"),
+    ("Game 7", "Giảm rò rỉ thời gian & siêu dữ liệu", "hmac.compare_digest() + Merkle Proof")
+]
+
+for row_idx, row in enumerate(table_data15):
+    for col_idx, val in enumerate(row):
+        cell = table15.cell(row_idx + 1, col_idx)
+        cell.fill.solid()
+        if (row_idx + 1) % 2 == 1:
+            cell.fill.fore_color.rgb = RGBColor(248, 250, 252)
+        else:
+            cell.fill.fore_color.rgb = RGBColor(255, 255, 255)
+        cell.text = val
+        p = cell.text_frame.paragraphs[0]
+        p.font.size = Pt(8.2)
+        p.font.color.rgb = TEXT_MAIN
+        if col_idx == 0:
+            p.font.bold = True
+            p.alignment = PP_ALIGN.CENTER
+            p.font.color.rgb = BLUE_ACCENT
+
+# Khung ghi chú phương pháp luận
+note_card15 = add_card(slide15_games, Inches(6.5), Inches(5.1), Inches(6.0), Inches(2.0))
+tb_nc15 = slide15_games.shapes.add_textbox(Inches(6.65), Inches(5.18), Inches(5.7), Inches(1.85))
+tf_nc15 = tb_nc15.text_frame
+tf_nc15.word_wrap = True
+
+p_hnc = tf_nc15.paragraphs[0]
+p_hnc.text = "Lưu Ý Phương Pháp Luận Khi Báo Cáo:"
+p_hnc.font.bold = True
+p_hnc.font.size = Pt(9.5)
+p_hnc.font.color.rgb = NAVY_COLOR
+
+bullets_nc15 = [
+    "• Mục đích: 7 mô hình được xây dựng để kiểm thử các khía cạnh bảo mật đối kháng khác nhau theo luận điểm của Harry Halpin (2025).",
+    "• Đối chiếu mã nguồn: Được triển khai và chạy độc lập qua tệp src/proposed_model/security_games.py, không gộp chung benchmark.",
+    "• Đánh giá khách quan: Phân biệt rõ giữa cơ chế lý thuyết toán học và kết quả đo đạc thực nghiệm cụ thể trên môi trường Python."
+]
+for b_text in bullets_nc15:
+    p_b = tf_nc15.add_paragraph()
+    p_b.text = b_text
+    p_b.font.size = Pt(7.8)
+    p_b.font.color.rgb = TEXT_MAIN
+    p_b.space_before = Pt(2.5)
+
+
+# ==============================================================================
+# SLIDE 16: HƯỚNG DẪN KỊCH BẢN TRÌNH DIỄN DEMO WEB
+# ==============================================================================
+slide16_demo = prs.slides.add_slide(blank_layout)
+add_base_background(slide16_demo)
+add_header(slide16_demo, "Phần 5: Trình diễn thực tế và tổng kết", "15. Kịch Bản Thao Tác Trình Diễn Trên Giao Diện Web Trực Quan")
+
+add_bullet_card(slide16_demo, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
     "Các Bước Thao Tác Trình Diễn Trước Hội Đồng", [
         ("• Khởi động hệ thống nhanh chóng:",
          "Chỉ cần nhấp đúp tệp run_demo_web.bat trên màn hình máy tính. Trình duyệt web sẽ tự động mở trang điều khiển tại địa chỉ nội bộ http://127.0.0.1:8080."),
@@ -713,7 +819,7 @@ add_bullet_card(slide15_demo, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.7
          "Nhấp Chạy kiểm tra toàn vẹn. Hệ thống lập tức chỉ đúng tên tệp bị can thiệp, hiển thị tỷ lệ nguyên vẹn và tốc độ xử lý hơn 4.000 tệp mỗi giây.")
     ], font_body_size=9.5)
 
-add_placeholder_card(slide15_demo, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+add_placeholder_card(slide16_demo, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
     "Ảnh Chụp Giao Diện Phòng Thí Nghiệm Web Demo", [
         "Chèn ảnh chụp màn hình phòng thí nghiệm Web Demo thực tế tại http://127.0.0.1:8080.",
         "Thể hiện 4 thẻ tab chuyển đổi mô hình (Flat SHA, HMAC, Merkle chuẩn, HD-Merkle).",
@@ -723,13 +829,13 @@ add_placeholder_card(slide15_demo, Inches(6.6), Inches(1.35), Inches(5.9), Inche
 
 
 # ==============================================================================
-# SLIDE 16: BẢNG ĐIỀU KHIỂN BIỂU ĐỒ BENCHMARK ĐỘNG
+# SLIDE 17: BẢNG ĐIỀU KHIỂN BIỂU ĐỒ BENCHMARK ĐỘNG
 # ==============================================================================
-slide16_charts = prs.slides.add_slide(blank_layout)
-add_base_background(slide16_charts)
-add_header(slide16_charts, "Phần 5: Trình diễn thực tế và tổng kết", "15. Bảng Điều Khiển Biểu Đồ Đo Đạc Trực Quan Hóa Động")
+slide17_charts = prs.slides.add_slide(blank_layout)
+add_base_background(slide17_charts)
+add_header(slide17_charts, "Phần 5: Trình diễn thực tế và tổng kết", "16. Bảng Điều Khiển Biểu Đồ Đo Đạc Trực Quan Hóa Động")
 
-add_bullet_card(slide16_charts, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
+add_bullet_card(slide17_charts, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
     "Trực Quan Hóa Biểu Đồ Khoa Học Hoạt Động Ngoại Tuyến", [
         ("• Hoạt động hoàn toàn ngoại tuyến:",
          "Hệ thống tích hợp sẵn thư viện vẽ biểu đồ nội bộ, không cần kết nối mạng Internet vẫn hiển thị mượt mà và trực quan khi báo cáo trước hội đồng."),
@@ -739,7 +845,7 @@ add_bullet_card(slide16_charts, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5
          "Khi nhấp Đo lường và cập nhật lại biểu đồ ngay, hệ thống sẽ chạy đo đạc trực tiếp trên máy và vẽ kết quả tức thì.")
     ], font_body_size=9.5)
 
-add_placeholder_card(slide16_charts, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+add_placeholder_card(slide17_charts, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
     "Ảnh Chụp Bảng Điều Khiển Biểu Đồ Benchmark Động", [
         "Chèn ảnh chụp màn hình Tab Benchmark Dashboard trên giao diện Web Demo.",
         "Thể hiện 4 biểu đồ Chart.js trực quan hóa kết quả đo đạc thực tế trên 1.000 tệp tin.",
@@ -749,13 +855,13 @@ add_placeholder_card(slide16_charts, Inches(6.6), Inches(1.35), Inches(5.9), Inc
 
 
 # ==============================================================================
-# SLIDE 17: TỔNG KẾT ĐÓNG GÓP KHOA HỌC VÀ THỰC TIỄN
+# SLIDE 18: TỔNG KẾT ĐÓNG GÓP KHOA HỌC VÀ THỰC TIỄN
 # ==============================================================================
-slide17_sum = prs.slides.add_slide(blank_layout)
-add_base_background(slide17_sum)
-add_header(slide17_sum, "Phần 5: Trình diễn thực tế và tổng kết", "16. Tổng Kết Đóng Góp Khoa Học Và Giá Trị Thực Tiễn Của Đồ Án")
+slide18_sum = prs.slides.add_slide(blank_layout)
+add_base_background(slide18_sum)
+add_header(slide18_sum, "Phần 5: Trình diễn thực tế và tổng kết", "17. Tổng Kết Đóng Góp Khoa Học Và Giá Trị Thực Tiễn Của Đồ Án")
 
-add_bullet_card(slide17_sum, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
+add_bullet_card(slide18_sum, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
     "Những Đóng Góp Nổi Bật Đạt Được Trong Đồ Án", [
         ("• 1. Hoàn thành toàn diện việc nghiên cứu bài báo tiếng Anh gốc:",
          "Dịch thuật học thuật toàn văn bài báo của Harry Halpin (2025), đối chiếu 100% các luận điểm về Kẻ thù mật mã, hiệu ứng tuyết lở SHA-256, nguyên lý Kerckhoffs và kiểm định PPT."),
@@ -769,7 +875,7 @@ add_bullet_card(slide17_sum, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75
          "Bộ slide báo cáo chặt chẽ cùng ứng dụng web demo trực quan sẵn sàng trình diễn trước hội đồng.")
     ], font_body_size=9.0)
 
-add_placeholder_card(slide17_sum, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+add_placeholder_card(slide18_sum, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
     "Sơ Đồ Chu Trình Khép Kín Từ Bài Báo Đến Đồ Án", [
         "Vẽ sơ đồ quy trình nghiên cứu khoa học khép kín:",
         "Giai đoạn 1: Dịch thuật và phân tích lý thuyết 100% bài báo Harry Halpin (2025).",
@@ -781,7 +887,7 @@ add_placeholder_card(slide17_sum, Inches(6.6), Inches(1.35), Inches(5.9), Inches
 # Lưu bài thuyết trình
 try:
     prs.save(OUTPUT_PATH)
-    print("SUCCESS: Generated completely revised presentation with 17 slides at:", OUTPUT_PATH)
+    print("SUCCESS: Generated completely revised presentation with 18 slides at:", OUTPUT_PATH)
 except PermissionError:
     alt_path = OUTPUT_PATH.replace(".pptx", "_CapNhat_DrawIO.pptx")
     prs.save(alt_path)
