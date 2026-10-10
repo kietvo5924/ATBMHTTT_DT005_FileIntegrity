@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 """
 Script tạo slide báo cáo giữa kỳ Đề tài DT005 chuẩn khoa học, giao diện cao cấp.
-Tích hợp đầy đủ:
-- Tóm tắt bài báo Harry Halpin (Oxford Cybersecurity, 2025) bám sát 100% nguyên tác tiếng Anh
-- Tuyên bố Khung Phương Pháp Luận Khoa Học gồm 3 Trụ Cột Độc Lập
-- Ma trận đối chiếu 1-1 và dẫn chứng chứng minh toán học, công thức Big-O, số liệu thực nghiệm
-- Tập dữ liệu chuẩn xác 1.000 tệp tin thực tế (4.1 MB, 14 định dạng, 23 thư mục)
-- Đối chuẩn thực nghiệm đối đầu 4 cơ chế bảo mật trên 1.000 tệp tin
-- Khung kiểm định 7 mô hình an toàn mật mã học (Security Games) với ngôn từ trực quan, dễ hiểu
-- Biểu đồ PowerPoint thực (Clustered Column & Bar Charts) thay thế toàn bộ khung chờ
-- Giao diện Web Mockup trực quan (Browser window, Attack alert, Monitor, Console)
-- Chuẩn hóa thông tin sinh viên Võ Anh Kiệt, trường ĐH Tài Nguyên và Môi Trường TP.HCM
+Tích hợp đầy đủ theo đúng yêu cầu người dùng:
+1. Trang bìa chuẩn xác: Sinh viên Võ Anh Kiệt, MSSV: 1150080143, Lớp: 11_CNPM2, Trường ĐH Tài nguyên và Môi trường TP.HCM, GVHD: ThS. Phạm Trọng Huynh.
+2. Giữ nguyên các khung chờ Sơ đồ Draw.io chuyên nghiệp (Slides 3, 4, 5, 8, 9, 11, 18) để người dùng tự vẽ và dán vào theo ý muốn.
+3. Chèn ảnh chụp màn hình THỰC TẾ 100% từ hệ thống đang chạy thật (Web Demo & Terminal CLI), tuyệt đối KHÔNG dùng giao diện giả lập:
+   - Slide 7: Ảnh chụp Web Demo thật khi phát hiện tấn công đảo 1 bit (web_attack.png)
+   - Slide 10: Ảnh chụp Web Demo thật ở trạng thái an toàn 1.000 tệp tin (web_safe.png)
+   - Slide 16: Ảnh chụp Terminal thật khi chạy bộ kiểm thử 17 Unit Tests an ninh (terminal_cli.png)
+4. Tích hợp Biểu đồ PowerPoint Native thực tế (Slides 12, 13, 17) đối sánh trực quan các số liệu benchmark.
+5. Trình bày chi tiết Khung 7 Security Games với câu từ trực quan, dễ hiểu (Ý nghĩa, Cách tấn công, Cách phòng thủ, Kết quả).
 """
 import os
 import sys
@@ -30,6 +29,7 @@ from pptx.chart.data import CategoryChartData
 from pptx.enum.chart import XL_CHART_TYPE, XL_LEGEND_POSITION
 
 OUTPUT_PATH = r"d:\AnToanvaBaoMatHeThongThongTin\GK\docs\Bao_Cao_Giua_Ky_DT05.pptx"
+SCREENSHOTS_DIR = r"d:\AnToanvaBaoMatHeThongThongTin\GK\docs\screenshots"
 
 prs = pptx.Presentation()
 prs.slide_width = Inches(13.333)
@@ -53,9 +53,10 @@ PURPLE_ACCENT = RGBColor(126, 34, 206)      # Tím điểm nhấn (#7e22ce)
 PURPLE_BG = RGBColor(250, 245, 255)         # Tím nhạt (#faf5ff)
 AMBER_ACCENT = RGBColor(217, 119, 6)        # Vàng hổ phách (#d97706)
 AMBER_BG = RGBColor(254, 243, 199)          # Vàng nhạt (#fef3c7)
-DARK_CONSOLE = RGBColor(15, 23, 42)         # Nền console tối (#0f172a)
-CONSOLE_GREEN = RGBColor(74, 222, 128)      # Chữ console xanh sáng (#4ade80)
-CONSOLE_YELLOW = RGBColor(250, 204, 21)     # Chữ console vàng (#facc15)
+
+# Bảng màu cho Khung chờ Draw.io
+PLACEHOLDER_BG = RGBColor(241, 245, 249)      # Xám xanh nhạt (#f1f5f9)
+PLACEHOLDER_BORDER = RGBColor(148, 163, 184)  # Viền xám (#94a3b8)
 
 
 def add_base_background(slide):
@@ -133,40 +134,92 @@ def add_bullet_card(slide, left, top, width, height, card_title, bullets, font_t
         p_b.space_before = Pt(1.5)
 
 
+def add_placeholder_card(slide, left, top, width, height, diagram_title, guide_items):
+    """
+    Tạo khung chờ chuyên nghiệp để người dùng tự vẽ sơ đồ Draw.io hoặc chèn ảnh theo ý muốn.
+    """
+    card = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left, top, width, height)
+    card.fill.solid()
+    card.fill.fore_color.rgb = PLACEHOLDER_BG
+    card.line.color.rgb = PLACEHOLDER_BORDER
+    card.line.width = Pt(1.5)
+
+    tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(0.25), width - Inches(0.5), height - Inches(0.5))
+    tf = tb.text_frame
+    tf.word_wrap = True
+
+    p_tag = tf.paragraphs[0]
+    p_tag.text = "[ VỊ TRÍ CHÈN SƠ ĐỒ / ẢNH DRAW.IO ]"
+    p_tag.font.bold = True
+    p_tag.font.size = Pt(10)
+    p_tag.font.color.rgb = BLUE_ACCENT
+
+    p_title = tf.add_paragraph()
+    p_title.text = diagram_title
+    p_title.font.bold = True
+    p_title.font.size = Pt(12)
+    p_title.font.color.rgb = NAVY_COLOR
+    p_title.space_before = Pt(4)
+    p_title.space_after = Pt(8)
+
+    p_guide = tf.add_paragraph()
+    p_guide.text = "Gợi ý các thành phần cần thiết kế trên Draw.io:"
+    p_guide.font.bold = True
+    p_guide.font.size = Pt(9.5)
+    p_guide.font.color.rgb = TEXT_MUTED
+
+    for item in guide_items:
+        p_item = tf.add_paragraph()
+        p_item.text = f"• {item}"
+        p_item.font.size = Pt(8.8)
+        p_item.font.color.rgb = TEXT_MAIN
+        p_item.space_before = Pt(4)
+
+
+def add_real_screenshot(slide, left, top, width, height, image_path, caption_title, caption_desc):
+    """
+    Chèn ảnh chụp thực tế 100% từ hệ thống đang chạy thật (Web Demo / Terminal) vào slide.
+    """
+    card = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left, top, width, height)
+    card.fill.solid()
+    card.fill.fore_color.rgb = CARD_BG
+    card.line.color.rgb = BORDER_COLOR
+    card.line.width = Pt(1.5)
+
+    tb = slide.shapes.add_textbox(left + Inches(0.2), top + Inches(0.15), width - Inches(0.4), Inches(0.75))
+    tf = tb.text_frame
+    tf.word_wrap = True
+
+    p_tag = tf.paragraphs[0]
+    p_tag.text = "[ ẢNH CHỤP HỆ THỐNG THỰC TẾ ]"
+    p_tag.font.bold = True
+    p_tag.font.size = Pt(9.5)
+    p_tag.font.color.rgb = GREEN_COLOR
+
+    p_t = tf.add_paragraph()
+    p_t.text = caption_title
+    p_t.font.bold = True
+    p_t.font.size = Pt(11)
+    p_t.font.color.rgb = NAVY_COLOR
+    p_t.space_before = Pt(2)
+
+    p_d = tf.add_paragraph()
+    p_d.text = caption_desc
+    p_d.font.size = Pt(8.5)
+    p_d.font.color.rgb = TEXT_MUTED
+    p_d.space_before = Pt(2)
+
+    if os.path.exists(image_path):
+        img_left = left + Inches(0.2)
+        img_top = top + Inches(1.0)
+        img_width = width - Inches(0.4)
+        img_height = height - Inches(1.15)
+        slide.shapes.add_picture(image_path, img_left, img_top, width=img_width, height=img_height)
+
+
 # ==============================================================================
-# BỘ CÁC HÀM TẠO ĐỒ HỌA THỰC VÀ BIỂU ĐỒ NATIVE (THAY THẾ PLACEHOLDER)
+# BỘ CÁC HÀM TẠO ĐỒ HỌA THẺ VÀ BIỂU ĐỒ NATIVE POWERPOINT
 # ==============================================================================
-
-def add_browser_window_frame(slide, left, top, width, height, url_text):
-    """Vẽ khung cửa sổ trình duyệt Web chuyên nghiệp."""
-    card = add_card(slide, left, top, width, height)
-    bar = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left, top, width, Inches(0.48))
-    bar.fill.solid()
-    bar.fill.fore_color.rgb = RGBColor(241, 245, 249)
-    bar.line.color.rgb = BORDER_COLOR
-
-    # 3 nút tròn đỏ, vàng, xanh
-    colors = [RGBColor(239, 68, 68), RGBColor(245, 158, 11), RGBColor(16, 185, 129)]
-    for i, c in enumerate(colors):
-        dot = slide.shapes.add_shape(MSO_SHAPE.OVAL, left + Inches(0.18 + i * 0.16), top + Inches(0.16), Inches(0.11), Inches(0.11))
-        dot.fill.solid()
-        dot.fill.fore_color.rgb = c
-        dot.line.fill.background()
-
-    # Thanh URL
-    url_box = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.8), top + Inches(0.09), width - Inches(1.0), Inches(0.3))
-    url_box.fill.solid()
-    url_box.fill.fore_color.rgb = RGBColor(255, 255, 255)
-    url_box.line.color.rgb = BORDER_COLOR
-    tf_u = url_box.text_frame
-    tf_u.word_wrap = False
-    p_u = tf_u.paragraphs[0]
-    p_u.text = f"🔒 {url_text}"
-    p_u.font.size = Pt(8.5)
-    p_u.font.color.rgb = TEXT_MUTED
-    p_u.alignment = PP_ALIGN.LEFT
-    return card
-
 
 def add_academic_paper_card(slide, left, top, width, height):
     """Slide 2: Hộp đồ họa mô phỏng trang bìa bài báo Oxford Journal of Cybersecurity."""
@@ -245,465 +298,163 @@ def add_academic_paper_card(slide, left, top, width, height):
         p_b.alignment = PP_ALIGN.CENTER
 
 
-def add_knowledge_transfer_diagram(slide, left, top, width, height):
-    """Slide 3: Sơ đồ 3 bước chuyển giao tri thức từ lý thuyết đến thực nghiệm."""
-    add_card(slide, left, top, width, height)
-    tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(0.2), width - Inches(0.5), Inches(0.5))
-    tb.text_frame.word_wrap = True
-    p0 = tb.text_frame.paragraphs[0]
-    p0.text = "SƠ ĐỒ CHUYỂN GIAO TRI THỨC: TỪ BÀI BÁO ĐẾN ĐỒ ÁN"
-    p0.font.bold = True
-    p0.font.size = Pt(11)
-    p0.font.color.rgb = NAVY_COLOR
-
-    steps = [
-        ("BƯỚC 1: KHUNG LÝ THUYẾT GỐC (HARRY HALPIN 2025)",
-         "• Nền tảng triết học: Định nghĩa Kẻ thù mật mã học (The Adversary).\n• Đề xuất chuẩn RFC 6962 Certificate Transparency.\n• Hạn chế bài báo gốc: 0 dòng mã nguồn, 0 tập dữ liệu, 0 benchmark định lượng.",
-         NAVY_COLOR, RGBColor(241, 245, 249)),
-        ("BƯỚC 2: KHOẢNG TRỐNG KHOA HỌC CẦN KIỂM CHỨNG",
-         "• Bài báo kêu gọi: Cần kiểm nghiệm trên hệ thống thực tế biến thiên.\n• Thách thức: Xây dựng cấu trúc Merkle Tree thế nào để không bị Rebuild O(N) khi cập nhật?",
-         AMBER_ACCENT, AMBER_BG),
-        ("BƯỚC 3: ĐÓNG GÓP HIỆN THỰC HÓA CỦA ĐỒ ÁN DT005",
-         "• Xây dựng mô hình PoC HD-MerkleTree phân cấp Biba 1977.\n• Hiện thực hóa 7 Security Games đối kháng toán học độc lập.\n• Benchmark thực tế trên 1.000 tệp tin (4.1 MB) qua 5 vòng đo kiểm.",
-         GREEN_COLOR, GREEN_BG)
-    ]
-    cur_y = top + Inches(0.7)
-    for title, desc, col, bg_c in steps:
-        box = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.25), cur_y, width - Inches(0.5), Inches(1.4))
-        box.fill.solid()
-        box.fill.fore_color.rgb = bg_c
-        box.line.color.rgb = col
-        box.line.width = Pt(1.5)
-        tf = box.text_frame
-        tf.word_wrap = True
-        p_t = tf.paragraphs[0]
-        p_t.text = title
-        p_t.font.bold = True
-        p_t.font.size = Pt(9)
-        p_t.font.color.rgb = col
-        p_d = tf.add_paragraph()
-        p_d.text = desc
-        p_d.font.size = Pt(8)
-        p_d.font.color.rgb = TEXT_MAIN
-        p_d.space_before = Pt(3)
-        cur_y += Inches(1.55)
-
-
-def add_core_theses_grid(slide, left, top, width, height):
-    """Slide 4: Lưới 4 card trực quan hóa 4 luận điểm mật mã học."""
-    add_card(slide, left, top, width, height)
-    tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(0.2), width - Inches(0.5), Inches(0.5))
-    tb.text_frame.word_wrap = True
-    p0 = tb.text_frame.paragraphs[0]
-    p0.text = "BỐN TRỤ CỘT LUẬN ĐIỂM MẬT MÃ HỌC CỐT LÕI"
-    p0.font.bold = True
-    p0.font.size = Pt(11)
-    p0.font.color.rgb = NAVY_COLOR
-
-    cards_data = [
-        ("1. Kháng Va Chạm SHA-256", "Không gian tìm kiếm: 2^256 bit\nBirthday Bound: 2^128 phép toán\nKẻ thù PPT không thể tìm va chạm ngẫu nhiên (Adv <= 2^-128).", BLUE_ACCENT, BLUE_BG),
-        ("2. Phân Tách Miền RFC 6962", "Nút lá: H(0x00 || Dữ liệu)\nNút nhánh: H(0x01 || Trái || Phải)\nHai tập tiền tố rời nhau hoàn toàn, triệt tiêu va chạm tiền ảnh cấp 2.", GREEN_COLOR, GREEN_BG),
-        ("3. Xác Minh Cục Bộ O(log N)", "Chiều cao cây: h ≈ 10-13 tầng\nProof: 990 Byte - 1.369 Byte\nTiết kiệm 98.8% băng thông mạng và bảo vệ tính riêng tư 999 tệp còn lại.", PURPLE_ACCENT, PURPLE_BG),
-        ("4. Phòng Chống Kênh Kề", "Paul Kocher 1996: Đo thời gian so sánh\nGiải pháp: hmac.compare_digest() O(1)\nXóa đè vùng nhớ nhạy cảm RAM qua secure_erase().", AMBER_ACCENT, AMBER_BG)
-    ]
-    w_sub = (width - Inches(0.65)) / 2
-    h_sub = Inches(2.25)
-    for i, (t, b, c, bg) in enumerate(cards_data):
-        r = i // 2
-        col_idx = i % 2
-        x = left + Inches(0.25) + col_idx * (w_sub + Inches(0.15))
-        y = top + Inches(0.7) + r * (h_sub + Inches(0.15))
-        box = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, x, y, w_sub, h_sub)
-        box.fill.solid()
-        box.fill.fore_color.rgb = bg
-        box.line.color.rgb = c
-        tf = box.text_frame
-        tf.word_wrap = True
-        p_t = tf.paragraphs[0]
-        p_t.text = t
-        p_t.font.bold = True
-        p_t.font.size = Pt(9.5)
-        p_t.font.color.rgb = c
-        p_b = tf.add_paragraph()
-        p_b.text = b
-        p_b.font.size = Pt(8.2)
-        p_b.font.color.rgb = TEXT_MAIN
-        p_b.space_before = Pt(4)
-
-
-def add_three_pillars_visual(slide, left, top, width, height):
-    """Slide 5: Sơ đồ 3 trụ cột phương pháp luận đứng song song."""
-    add_card(slide, left, top, width, height)
-    tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(0.2), width - Inches(0.5), Inches(0.5))
-    p0 = tb.text_frame.paragraphs[0]
-    p0.text = "KIẾN TRÚC BA TRỤ CỘT ĐỘC LẬP CHUẨN MỰC"
-    p0.font.bold = True
-    p0.font.size = Pt(11)
-    p0.font.color.rgb = NAVY_COLOR
-
-    pillars = [
-        ("TRỤ CỘT I (HƯỚNG 1)\nKỸ THUẬT HỆ THỐNG PoC",
-         "• hd_merkle_tree.py\n• Cấu trúc Biba 1977\n• Cập nhật Dirty-Path RAM\n• 5 Tầng kiến trúc PoC\n• 17 Unit Tests tự động",
-         NAVY_COLOR, BLUE_BG),
-        ("TRỤ CỘT II (HƯỚNG 2)\nMÔ PHỎNG AN NINH HÌNH THỨC",
-         "• security_games.py\n• Khung 7 Trò chơi đối kháng\n• PPT, Dolev-Yao, Tuyết lở\n• Consistency Proof RFC 6962\n• Kháng kênh kề O(1)",
-         PURPLE_ACCENT, PURPLE_BG),
-        ("TRỤ CỘT III (HƯỚNG 4)\nTHỰC NGHIỆM ĐỊNH LƯỢNG",
-         "• run_benchmark.py\n• Quy mô: 1.000 tệp tin thật\n• 5 Vòng lặp đo lường CPU\n• 4 Mô hình so sánh đối đầu\n• Xuất dữ liệu JSON & CSV",
-         GREEN_COLOR, GREEN_BG)
-    ]
-    w_p = (width - Inches(0.7)) / 3
-    for i, (p_t, p_d, p_c, p_bg) in enumerate(pillars):
-        x = left + Inches(0.25) + i * (w_p + Inches(0.1))
-        box = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, x, top + Inches(0.75), w_p, height - Inches(1.0))
-        box.fill.solid()
-        box.fill.fore_color.rgb = p_bg
-        box.line.color.rgb = p_c
-        box.line.width = Pt(1.5)
-        tf = box.text_frame
-        tf.word_wrap = True
-        p_title = tf.paragraphs[0]
-        p_title.text = p_t
-        p_title.font.bold = True
-        p_title.font.size = Pt(9)
-        p_title.font.color.rgb = p_c
-        p_title.alignment = PP_ALIGN.CENTER
-        p_body = tf.add_paragraph()
-        p_body.text = p_d
-        p_body.font.size = Pt(8.2)
-        p_body.font.color.rgb = TEXT_MAIN
-        p_body.space_before = Pt(8)
-
-
 def add_audit_scorecard(slide, left, top, width, height):
-    """Slide 6: Bảng điểm kiểm định 4 tiêu chí cốt lõi."""
+    """Slide 6: Thẻ scorecard đánh giá mức độ đạt 100% của 6 tiêu chí đối chiếu."""
     add_card(slide, left, top, width, height)
     tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(0.2), width - Inches(0.5), Inches(0.5))
+    tb.text_frame.word_wrap = True
     p0 = tb.text_frame.paragraphs[0]
-    p0.text = "BẢNG ĐIỂM KIỂM ĐỊNH CHẤT LƯỢNG KHOA HỌC (SCORECARD)"
+    p0.text = "KẾT QUẢ KIỂM ĐỊNH ĐỐI CHIẾU 1-1 BÀI BÁO VS ĐỒ ÁN DT005"
     p0.font.bold = True
     p0.font.size = Pt(11)
     p0.font.color.rgb = NAVY_COLOR
 
     scores = [
-        ("100% ĐỐI CHIẾU BÀI BÁO", "Kế thừa trọn vẹn 6/6 luận điểm của Harry Halpin (2025)", NAVY_COLOR, BLUE_BG),
-        ("2.500+ DÒNG MÃ NGUỒN", "Hiện thực hóa 4 CLI độc lập bằng Python chuẩn, không gian lận thư viện ngoài", BLUE_ACCENT, BLUE_BG),
-        ("17/17 UNIT TESTS PASS", "Kiểm thử tự động bao phủ toàn diện I/O đĩa vật lý sửa, thêm, xóa và nhất quán", GREEN_COLOR, GREEN_BG),
-        ("1.000 TỆP THỰC NGHIỆM", "Bộ dữ liệu doanh nghiệp thật (4.1 MB, 14 định dạng) đo 5 vòng lặp độc lập", AMBER_ACCENT, AMBER_BG)
+        ("1. Mô hình Kẻ thù PPT (Goldwasser-Micali 1984)", "ĐẠT 100%", "Advantage Adv(A) = 0.0 <= negl(λ)", GREEN_COLOR, GREEN_BG),
+        ("2. Nguyên lý Kerckhoffs (Minh bạch mã nguồn)", "ĐẠT 100%", "Công khai 100% GitHub, chỉ giữ Root Hash", GREEN_COLOR, GREEN_BG),
+        ("3. Mô hình Mạng Dolev-Yao (Chặn bắt / Đánh tráo)", "ĐẠT 100%", "Chặn đứng 100% can thiệp & replay", GREEN_COLOR, GREEN_BG),
+        ("4. Phân tách miền RFC 6962 Certificate Transparency", "ĐẠT 100%", "Tiền tố 0x00 lá vs 0x01 nhánh triệt tiêu va chạm", GREEN_COLOR, GREEN_BG),
+        ("5. Bằng chứng cục bộ Ralph Merkle 1979", "ĐẠT 100%", "Dung lượng 1.369 B (tiết kiệm 98.8% băng thông)", GREEN_COLOR, GREEN_BG),
+        ("6. Lời kêu gọi kiểm nghiệm thực tế (Mục 7 Trang 14)", "ĐẠT 100%", "Dataset 1.000 tệp (4.1 MB), 5 vòng đo chuẩn", GREEN_COLOR, GREEN_BG),
     ]
-    cur_y = top + Inches(0.7)
-    for t, d, c, bg in scores:
-        box = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.25), cur_y, width - Inches(0.5), Inches(1.05))
-        box.fill.solid()
-        box.fill.fore_color.rgb = bg
-        box.line.color.rgb = c
-        tf = box.text_frame
+    cur_y = top + Inches(0.68)
+    for name, tag, desc, col, bg_c in scores:
+        row_box = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.25), cur_y, width - Inches(0.5), Inches(0.74))
+        row_box.fill.solid()
+        row_box.fill.fore_color.rgb = bg_c
+        row_box.line.color.rgb = col
+        row_box.line.width = Pt(1.0)
+        tf = row_box.text_frame
         tf.word_wrap = True
         p_t = tf.paragraphs[0]
-        p_t.text = f"★ {t}"
+        p_t.text = f"{name}   ➔   {tag}"
         p_t.font.bold = True
-        p_t.font.size = Pt(10)
-        p_t.font.color.rgb = c
-        p_d = tf.add_paragraph()
-        p_d.text = d
-        p_d.font.size = Pt(8.2)
-        p_d.font.color.rgb = TEXT_MAIN
-        p_d.space_before = Pt(2)
-        cur_y += Inches(1.18)
-
-
-def add_web_mockup_attack(slide, left, top, width, height):
-    """Slide 7: Giao diện Web Mockup khi bị tấn công đảo bit."""
-    add_browser_window_frame(slide, left, top, width, height, "127.0.0.1:8080/dashboard")
-
-    # Banner báo động đỏ
-    banner = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.2), top + Inches(0.6), width - Inches(0.4), Inches(0.7))
-    banner.fill.solid()
-    banner.fill.fore_color.rgb = RED_BG
-    banner.line.color.rgb = RED_ACCENT
-    tf_b = banner.text_frame
-    tf_b.word_wrap = True
-    p0 = tf_b.paragraphs[0]
-    p0.text = "⚠️ PHÁT HIỆN TẤN CÔNG: VI PHẠM TOÀN VẸN DỮ LIỆU!"
-    p0.font.bold = True
-    p0.font.size = Pt(9.5)
-    p0.font.color.rgb = RED_ACCENT
-    p1 = tf_b.add_paragraph()
-    p1.text = "Thuật toán HD-MerkleTree phát hiện sai khác tức thì và cô lập tệp tin bị can thiệp."
-    p1.font.size = Pt(8)
-    p1.font.color.rgb = TEXT_MAIN
-
-    # Bảng chi tiết định vị lỗi
-    detail_box = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.2), top + Inches(1.4), width - Inches(0.4), Inches(2.3))
-    detail_box.fill.solid()
-    detail_box.fill.fore_color.rgb = RGBColor(255, 255, 255)
-    detail_box.line.color.rgb = BORDER_COLOR
-    tf_d = detail_box.text_frame
-    tf_d.word_wrap = True
-    lines = [
-        ("Vị trí tệp tin bị sửa đổi:", "certificates/pdf_audits/Chung_Thu_Kiem_Toan_110.pdf"),
-        ("Hành vi kẻ tấn công:", "Mô phỏng đảo 1-bit ngẫu nhiên tại byte offset 0x008E"),
-        ("Tốc độ định vị lỗi:", "0.022 ms (Duyệt theo nhánh phân cấp Biba O(log N))"),
-        ("Tỷ lệ nguyên vẹn kho dữ liệu:", "99.9% (999/1.000 tệp tin còn lại an toàn tuyệt đối)"),
-        ("Trạng thái phản ứng hệ thống:", "BLOCKED - Từ chối xác thực tệp hỏng, giữ nguyên State Root")
-    ]
-    for i, (k, v) in enumerate(lines):
-        p_k = tf_d.paragraphs[0] if i == 0 else tf_d.add_paragraph()
-        p_k.text = f"• {k} {v}"
-        p_k.font.size = Pt(8.2)
-        p_k.font.color.rgb = RED_ACCENT if i == 0 else TEXT_MAIN
-        if i > 0:
-            p_k.space_before = Pt(3)
-
-    # Thẻ tóm tắt dưới cùng
-    stat_box = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.2), top + Inches(3.85), width - Inches(0.4), Inches(1.6))
-    stat_box.fill.solid()
-    stat_box.fill.fore_color.rgb = BLUE_BG
-    stat_box.line.color.rgb = BLUE_ACCENT
-    tf_s = stat_box.text_frame
-    tf_s.word_wrap = True
-    ps0 = tf_s.paragraphs[0]
-    ps0.text = "DẪN CHỨNG CHỨNG MINH KHOA HỌC:"
-    ps0.font.bold = True
-    ps0.font.size = Pt(9)
-    ps0.font.color.rgb = NAVY_COLOR
-    ps1 = tf_s.add_paragraph()
-    ps1.text = "Nhờ phân cấp thư mục Biba 1977, hệ thống chỉ duyệt nhánh vi phạm thay vì quét toàn bộ 1.000 tệp tin. Thời gian định vị tệp lỗi nhanh hơn 4.000 lần so với duyệt tuần tự O(N)."
-    ps1.font.size = Pt(8.2)
-    ps1.font.color.rgb = TEXT_MAIN
-    ps1.space_before = Pt(3)
-
-
-def add_rfc6962_merkle_tree_diagram(slide, left, top, width, height):
-    """Slide 8: Sơ đồ Cây Merkle phân tách miền RFC 6962."""
-    add_card(slide, left, top, width, height)
-    tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(0.18), width - Inches(0.5), Inches(0.5))
-    p0 = tb.text_frame.paragraphs[0]
-    p0.text = "SƠ ĐỒ CÂY MERKLE PHÂN TÁCH MIỀN RFC 6962"
-    p0.font.bold = True
-    p0.font.size = Pt(11)
-    p0.font.color.rgb = NAVY_COLOR
-
-    # Root Node
-    root = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(1.8), top + Inches(0.7), Inches(2.2), Inches(0.65))
-    root.fill.solid()
-    root.fill.fore_color.rgb = NAVY_COLOR
-    root.line.color.rgb = NAVY_COLOR
-    tf_r = root.text_frame
-    tf_r.word_wrap = True
-    pr = tf_r.paragraphs[0]
-    pr.text = "ROOT HASH (32 B)\nHierarchical State Root"
-    pr.font.bold = True
-    pr.font.size = Pt(8)
-    pr.font.color.rgb = RGBColor(255, 255, 255)
-    pr.alignment = PP_ALIGN.CENTER
-
-    # Branch Nodes
-    b_left = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.4), top + Inches(1.65), Inches(2.3), Inches(0.7))
-    b_left.fill.solid()
-    b_left.fill.fore_color.rgb = BLUE_BG
-    b_left.line.color.rgb = BLUE_ACCENT
-    tf_bl = b_left.text_frame
-    tf_bl.word_wrap = True
-    pbl = tf_bl.paragraphs[0]
-    pbl.text = "NÚT NHÁNH 1 (0x01)\nH(0x01 || Trái || Phải)"
-    pbl.font.bold = True
-    pbl.font.size = Pt(8)
-    pbl.font.color.rgb = BLUE_ACCENT
-    pbl.alignment = PP_ALIGN.CENTER
-
-    b_right = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(3.1), top + Inches(1.65), Inches(2.3), Inches(0.7))
-    b_right.fill.solid()
-    b_right.fill.fore_color.rgb = BLUE_BG
-    b_right.line.color.rgb = BLUE_ACCENT
-    tf_br = b_right.text_frame
-    tf_br.word_wrap = True
-    pbr = tf_br.paragraphs[0]
-    pbr.text = "NÚT NHÁNH 2 (0x01)\nH(0x01 || Trái || Phải)"
-    pbr.font.bold = True
-    pbr.font.size = Pt(8)
-    pbr.font.color.rgb = BLUE_ACCENT
-    pbr.alignment = PP_ALIGN.CENTER
-
-    # Leaf Nodes
-    leaf_w = Inches(1.25)
-    for i in range(4):
-        lx = left + Inches(0.25 + i * 1.35)
-        leaf = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, lx, top + Inches(2.65), leaf_w, Inches(0.85))
-        leaf.fill.solid()
-        leaf.fill.fore_color.rgb = AMBER_BG
-        leaf.line.color.rgb = AMBER_ACCENT
-        tf_l = leaf.text_frame
-        tf_l.word_wrap = True
-        pl0 = tf_l.paragraphs[0]
-        pl0.text = f"LÁ {i+1} (0x00)"
-        pl0.font.bold = True
-        pl0.font.size = Pt(7.5)
-        pl0.font.color.rgb = AMBER_ACCENT
-        pl0.alignment = PP_ALIGN.CENTER
-        pl1 = tf_l.add_paragraph()
-        pl1.text = "H(0x00||Data)"
-        pl1.font.size = Pt(7)
-        pl1.font.color.rgb = TEXT_MAIN
-        pl1.alignment = PP_ALIGN.CENTER
-
-    # Chú thích an toàn
-    note = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.25), top + Inches(3.8), width - Inches(0.5), Inches(1.65))
-    note.fill.solid()
-    note.fill.fore_color.rgb = GREEN_BG
-    note.line.color.rgb = GREEN_COLOR
-    tf_n = note.text_frame
-    tf_n.word_wrap = True
-    pn0 = tf_n.paragraphs[0]
-    pn0.text = "CHỨNG MINH TOÁN HỌC KHÁNG SECOND-PREIMAGE:"
-    pn0.font.bold = True
-    pn0.font.size = Pt(9)
-    pn0.font.color.rgb = GREEN_COLOR
-    pn1 = tf_n.add_paragraph()
-    pn1.text = "Do tiền tố 0x00 (Lá) và 0x01 (Nhánh) là hai tập byte rời nhau, không tồn tại bất kỳ chuỗi dữ liệu tệp nào có thể tạo ra mã băm trùng khớp với nút nhánh. Xác suất giả mạo triệt tiêu về dưới 2^-128 theo Birthday bound của SHA-256."
-    pn1.font.size = Pt(8.2)
-    pn1.font.color.rgb = TEXT_MAIN
-    pn1.space_before = Pt(3)
-
-
-def add_pipeline_chevron_diagram(slide, left, top, width, height):
-    """Slide 9: Sơ đồ 3 giai đoạn quy trình kỹ thuật."""
-    add_card(slide, left, top, width, height)
-    tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(0.2), width - Inches(0.5), Inches(0.5))
-    p0 = tb.text_frame.paragraphs[0]
-    p0.text = "QUY TRÌNH HIỆN THỰC HÓA BA GIAI ĐOẠN"
-    p0.font.bold = True
-    p0.font.size = Pt(11)
-    p0.font.color.rgb = NAVY_COLOR
-
-    phases = [
-        ("GIAI ĐOẠN 1: DỊCH THUẬT & KHUNG LÝ THUYẾT",
-         "• Dịch học thuật toàn văn bài báo Harry Halpin 2025.\n• Trích xuất 6 luận điểm an ninh mật mã học cốt lõi.\n• Xác định lỗ hổng Rebuild O(N) của cây Merkle phẳng.",
-         NAVY_COLOR, BLUE_BG),
-        ("GIAI ĐOẠN 2: THIẾT KẾ & HIỆN THỰC HÓA PoC",
-         "• Phát triển HD-MerkleTree phân cấp Biba 1977.\n• Cài đặt chuẩn tiền tố RFC 6962 Domain Separation.\n• Lập trình khung 7 Security Games độc lập.",
-         PURPLE_ACCENT, PURPLE_BG),
-        ("GIAI ĐOẠN 3: ĐO LƯỜNG THỰC NGHIỆM ĐỊNH LƯỢNG",
-         "• Xây dựng bộ 1.000 tệp tin thực tế (4.1 MB, 23 thư mục).\n• Đo kiểm 5 vòng độc lập bằng time.perf_counter().\n• Tích hợp Web Demo trực quan kiểm thử một chạm.",
-         GREEN_COLOR, GREEN_BG)
-    ]
-    cur_y = top + Inches(0.7)
-    for title, desc, col, bg_c in phases:
-        box = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.25), cur_y, width - Inches(0.5), Inches(1.4))
-        box.fill.solid()
-        box.fill.fore_color.rgb = bg_c
-        box.line.color.rgb = col
-        tf = box.text_frame
-        tf.word_wrap = True
-        p_t = tf.paragraphs[0]
-        p_t.text = title
-        p_t.font.bold = True
-        p_t.font.size = Pt(9)
+        p_t.font.size = Pt(8.5)
         p_t.font.color.rgb = col
         p_d = tf.add_paragraph()
         p_d.text = desc
-        p_d.font.size = Pt(8.2)
+        p_d.font.size = Pt(7.8)
         p_d.font.color.rgb = TEXT_MAIN
-        p_d.space_before = Pt(3)
-        cur_y += Inches(1.55)
+        p_d.space_before = Pt(2)
+        cur_y += Inches(0.81)
 
 
-def add_web_mockup_safe(slide, left, top, width, height):
-    """Slide 10: Giao diện Web Mockup khi hệ thống an toàn ban đầu."""
-    add_browser_window_frame(slide, left, top, width, height, "127.0.0.1:8080/monitor")
+def add_dirty_path_chart_slide(slide, left, top, width, height):
+    """Slide 12: Biểu đồ cột Clustered so sánh chi phí cập nhật Dirty-Path vs Rebuild."""
+    card = add_card(slide, left, top, width, height)
 
-    # Banner an toàn xanh lá
-    banner = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.2), top + Inches(0.6), width - Inches(0.4), Inches(0.7))
-    banner.fill.solid()
-    banner.fill.fore_color.rgb = GREEN_BG
-    banner.line.color.rgb = GREEN_COLOR
-    tf_b = banner.text_frame
-    tf_b.word_wrap = True
-    p0 = tf_b.paragraphs[0]
-    p0.text = "✓ HỆ THỐNG AN TOÀN: ĐÃ NẠP 1.000 TỆP TIN NGUYÊN BẢN"
-    p0.font.bold = True
-    p0.font.size = Pt(9.5)
-    p0.font.color.rgb = GREEN_COLOR
-    p1 = tf_b.add_paragraph()
-    p1.text = "Toàn bộ 1.000 tệp tin đã được lập chỉ mục băm và khởi tạo cây trạng thái thành công."
-    p1.font.size = Pt(8)
-    p1.font.color.rgb = TEXT_MAIN
-
-    # Bảng thông số hệ thống
-    detail_box = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.2), top + Inches(1.4), width - Inches(0.4), Inches(2.25))
-    detail_box.fill.solid()
-    detail_box.fill.fore_color.rgb = RGBColor(255, 255, 255)
-    detail_box.line.color.rgb = BORDER_COLOR
-    tf_d = detail_box.text_frame
-    tf_d.word_wrap = True
-    lines = [
-        ("Tổng số tệp tin quản lý:", "1.000 tệp tin (Dung lượng tổng: 4.10 MB)"),
-        ("Cấu trúc phân tầng Biba:", "44 nút thư mục phân cấp (23 thư mục vật lý)"),
-        ("Mã băm gốc SHA-256 Root:", "68b6ff85d8ff48dcf7cfb21ab07edb6d..."),
-        ("Hierarchical State Root:", "c00746adfd343a50bc8b04838c2b5eb3..."),
-        ("Thời gian khởi tạo ban đầu:", "62.58 ms (Flat SHA) | 89.91 ms (HD-MerkleTree)")
-    ]
-    for i, (k, v) in enumerate(lines):
-        p_k = tf_d.paragraphs[0] if i == 0 else tf_d.add_paragraph()
-        p_k.text = f"• {k} {v}"
-        p_k.font.size = Pt(8.2)
-        p_k.font.color.rgb = NAVY_COLOR if i == 2 else TEXT_MAIN
-        if i > 0:
-            p_k.space_before = Pt(3)
-
-    # Thẻ cam kết
-    stat_box = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.2), top + Inches(3.8), width - Inches(0.4), Inches(1.65))
-    stat_box.fill.solid()
-    stat_box.fill.fore_color.rgb = BLUE_BG
-    stat_box.line.color.rgb = BLUE_ACCENT
-    tf_s = stat_box.text_frame
-    tf_s.word_wrap = True
-    ps0 = tf_s.paragraphs[0]
-    ps0.text = "ĐỐI CHUẨN 3 MÔ HÌNH NỀN TẢNG (BASELINE):"
-    ps0.font.bold = True
-    ps0.font.size = Pt(9)
-    ps0.font.color.rgb = NAVY_COLOR
-    ps1 = tf_s.add_paragraph()
-    ps1.text = "Cả 3 mô hình nền tảng (Flat SHA-256, HMAC-SHA256, Standard Merkle Tree) đều được hiện thực hóa độc lập và đo đạc trên cùng tập dữ liệu để đảm bảo tính khách quan tuyệt đối."
-    ps1.font.size = Pt(8.2)
-    ps1.font.color.rgb = TEXT_MAIN
-    ps1.space_before = Pt(3)
-
-
-def add_5tier_architecture_visual(slide, left, top, width, height):
-    """Slide 11: Sơ đồ kiến trúc 5 tầng của mô hình HD-MerkleTree."""
-    add_card(slide, left, top, width, height)
-    tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(0.18), width - Inches(0.5), Inches(0.5))
-    p0 = tb.text_frame.paragraphs[0]
-    p0.text = "SƠ ĐỒ 5 TẦNG KIẾN TRÚC MÔ HÌNH ĐỀ XUẤT HD-MERKLETREE"
+    tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(0.2), width - Inches(0.5), Inches(0.75))
+    tf = tb.text_frame
+    tf.word_wrap = True
+    p0 = tf.paragraphs[0]
+    p0.text = "BIỂU ĐỒ ĐỐI SÁNH: THỜI GIAN CẬP NHẬT TỆP TIN (MILIGIÂY)"
     p0.font.bold = True
     p0.font.size = Pt(11)
     p0.font.color.rgb = NAVY_COLOR
+    p1 = tf.add_paragraph()
+    p1.text = "Standard Merkle Tree (Rebuild mảng 1D) vs HD-MerkleTree Đề xuất (Dirty-Path O(log N))"
+    p1.font.size = Pt(8.5)
+    p1.font.color.rgb = TEXT_MUTED
 
-    tiers = [
-        ("TẦNG 5: CLIENT VERIFICATION & ZEROIZATION",
-         "Hàm hmac.compare_digest() O(1) chống kênh kề Kocher 1996; secure_erase() xóa đè RAM.",
-         NAVY_COLOR, RGBColor(238, 242, 255)),
-        ("TẦNG 4: PROOF GENERATOR ENGINE",
-         "Tạo Inclusion Proof gọn nhẹ 1.369 Byte (tiết kiệm 98.8% băng thông) & Consistency Proof RFC 6962.",
+    chart_data = CategoryChartData()
+    chart_data.categories = ['Sửa 1 tệp tin', 'Thêm 1 tệp mới', 'Xóa 1 tệp tin']
+    chart_data.add_series('Standard Merkle (Rebuild)', (73.42, 72.97, 74.89))
+    chart_data.add_series('HD-MerkleTree (Dirty-Path)', (0.16, 0.17, 0.10))
+
+    x, y, cx, cy = left + Inches(0.25), top + Inches(1.0), width - Inches(0.5), height - Inches(1.3)
+    chart = slide.shapes.add_chart(
+        XL_CHART_TYPE.COLUMN_CLUSTERED, x, y, cx, cy, chart_data
+    ).chart
+
+    chart.has_legend = True
+    chart.legend.position = XL_LEGEND_POSITION.TOP
+    chart.legend.include_in_layout = False
+    chart.legend.font.size = Pt(8.5)
+
+    plots = chart.plots[0]
+    if len(plots.series) >= 2:
+        plots.series[0].format.fill.solid()
+        plots.series[0].format.fill.fore_color.rgb = RED_ACCENT
+        plots.series[1].format.fill.solid()
+        plots.series[1].format.fill.fore_color.rgb = GREEN_COLOR
+
+    return card
+
+
+def add_benchmark_column_chart(slide, left, top, width, height):
+    """Slide 13: Biểu đồ cột so sánh thời gian Khởi tạo & Xác minh 1 tệp của 4 mô hình."""
+    card = add_card(slide, left, top, width, height)
+
+    tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(0.2), width - Inches(0.5), Inches(0.75))
+    tf = tb.text_frame
+    tf.word_wrap = True
+    p0 = tf.paragraphs[0]
+    p0.text = "BIỂU ĐỒ THỰC NGHIỆM ĐỐI ĐẦU 4 CƠ CHẾ BẢO MẬT (1.000 TỆP)"
+    p0.font.bold = True
+    p0.font.size = Pt(11)
+    p0.font.color.rgb = NAVY_COLOR
+    p1 = tf.add_paragraph()
+    p1.text = "Số liệu đo lường trung bình qua 5 vòng lặp độc lập (perf_counter)"
+    p1.font.size = Pt(8.5)
+    p1.font.color.rgb = TEXT_MUTED
+
+    chart_data = CategoryChartData()
+    chart_data.categories = ['Flat SHA-256', 'HMAC-SHA256', 'Standard Merkle', 'HD-Merkle (Đề xuất)']
+    chart_data.add_series('Thời gian Khởi tạo (ms)', (63.37, 63.79, 62.64, 92.12))
+    chart_data.add_series('Xác minh 1 tệp (ms x100)', (20.0, 8.0, 2.0, 3.0))
+
+    x, y, cx, cy = left + Inches(0.25), top + Inches(1.0), width - Inches(0.5), height - Inches(1.3)
+    chart = slide.shapes.add_chart(
+        XL_CHART_TYPE.COLUMN_CLUSTERED, x, y, cx, cy, chart_data
+    ).chart
+
+    chart.has_legend = True
+    chart.legend.position = XL_LEGEND_POSITION.TOP
+    chart.legend.include_in_layout = False
+    chart.legend.font.size = Pt(8.5)
+
+    plots = chart.plots[0]
+    if len(plots.series) >= 2:
+        plots.series[0].format.fill.solid()
+        plots.series[0].format.fill.fore_color.rgb = BLUE_ACCENT
+        plots.series[1].format.fill.solid()
+        plots.series[1].format.fill.fore_color.rgb = GREEN_COLOR
+
+    return card
+
+
+def add_security_games_cards_visual(slide, left, top, width, height):
+    """Slide 14: Thẻ 4 Game an ninh đối kháng toán học độc lập."""
+    add_card(slide, left, top, width, height)
+    tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(0.2), width - Inches(0.5), Inches(0.5))
+    tb.text_frame.word_wrap = True
+    p0 = tb.text_frame.paragraphs[0]
+    p0.text = "KẾT QUẢ THỰC NGHIỆM 4 MÔ HÌNH ĐỐI KHÁNG ĐẦU TIÊN (GAMES 1 - 4)"
+    p0.font.bold = True
+    p0.font.size = Pt(10.5)
+    p0.font.color.rgb = NAVY_COLOR
+
+    games = [
+        ("GAME 1: KẺ TẤN CÔNG TÍNH TOÁN PPT (GOLDWASSER-MICALI)",
+         "• Năng lực: Thuật toán thời gian đa thức ngẫu nhiên.\n• Kết quả: Kẻ thù thắng 0/50 lượt. Lợi thế Adv(A) = 0.0 <= 2^-128. ĐẠT AN TOÀN.",
          BLUE_ACCENT, BLUE_BG),
-        ("TẦNG 3: IN-MEMORY DYNAMIC MERKLE ENGINE",
-         "ThreadPool băm song song, bộ nhớ đệm Dirty-Path cập nhật cục bộ chỉ h=4 nút tổ tiên.",
+        ("GAME 2: KẺ TẤN CÔNG ĐƯỜNG TRUYỀN DOLEV-YAO",
+         "• Năng lực: Can thiệp gói tin, tráo đổi Merkle Proof, Replay Attack.\n• Kết quả: Phát hiện 100% mọi nỗ lực can thiệp và làm lệch Root Hash. ĐẠT AN TOÀN.",
          PURPLE_ACCENT, PURPLE_BG),
-        ("TẦNG 2: RFC 6962 DOMAIN SEPARATION",
-         "Gắn tiền tố byte 0x00 cho nút lá và 0x01 cho nút nhánh, triệt tiêu 100% va chạm tiền ảnh cấp 2.",
+        ("GAME 3: KHÁNG TIỀN ẢNH CẤP HAI (RFC 6962 DOMAIN SEPARATION)",
+         "• Năng lực: Tráo đổi nút lá và nút nhánh để đánh lừa máy khách.\n• Kết quả: Tiền tố 0x00 lá và 0x01 nhánh triệt tiêu 100% va chạm tiền ảnh cấp hai.",
          AMBER_ACCENT, AMBER_BG),
-        ("TẦNG 1: MULTI-TIER STORAGE (BIBA 1977)",
-         "Tổ chức 1.000 tệp tin trong 23 thư mục theo mô hình toàn vẹn phân cấp Biba (No write-up).",
-         GREEN_COLOR, GREEN_BG)
+        ("GAME 4: HIỆU ỨNG TUYẾT LỞ & RANDOM ORACLE (SHANNON DIFFUSION)",
+         "• Năng lực: Đảo 1 bit đầu vào để tìm kiếm tương quan tuyến tính mã băm.\n• Kết quả: Tỷ lệ đổi bit 50.39% xấp xỉ mức lý tưởng 50.0%. ĐẠT KHUẾCH TÁN HOÀN HẢO.",
+         GREEN_COLOR, GREEN_BG),
     ]
-    cur_y = top + Inches(0.7)
-    for title, desc, col, bg_c in tiers:
-        box = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.25), cur_y, width - Inches(0.5), Inches(0.88))
+    cur_y = top + Inches(0.68)
+    for title, desc, col, bg_c in games:
+        box = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.25), cur_y, width - Inches(0.5), Inches(1.15))
         box.fill.solid()
         box.fill.fore_color.rgb = bg_c
         box.line.color.rgb = col
-        box.line.width = Pt(1.5)
+        box.line.width = Pt(1.2)
         tf = box.text_frame
         tf.word_wrap = True
         p_t = tf.paragraphs[0]
@@ -716,259 +467,42 @@ def add_5tier_architecture_visual(slide, left, top, width, height):
         p_d.font.size = Pt(7.8)
         p_d.font.color.rgb = TEXT_MAIN
         p_d.space_before = Pt(2)
-        cur_y += Inches(0.98)
-
-
-def add_dirty_path_chart_slide(slide, left, top, width, height):
-    """Slide 12: Biểu đồ cột thực tế so sánh chi phí cập nhật Dirty-Path vs Rebuild."""
-    add_card(slide, left, top, width, height)
-    tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(0.18), width - Inches(0.5), Inches(0.5))
-    p0 = tb.text_frame.paragraphs[0]
-    p0.text = "BIỂU ĐỒ ĐỐI SÁNH THỜI GIAN CẬP NHẬT TỆP (MS)"
-    p0.font.bold = True
-    p0.font.size = Pt(11)
-    p0.font.color.rgb = NAVY_COLOR
-
-    # Thêm biểu đồ cột native
-    cdata = CategoryChartData()
-    cdata.categories = ['Sửa tệp (Modify)', 'Thêm tệp (Add)', 'Xóa tệp (Delete)']
-    cdata.add_series('Standard Merkle (ms)', (0.14, 73.42, 70.81))
-    cdata.add_series('HD-MerkleTree (ms)', (0.14, 0.16, 0.10))
-
-    chart_shape = slide.shapes.add_chart(
-        XL_CHART_TYPE.COLUMN_CLUSTERED,
-        left + Inches(0.25), top + Inches(0.7), width - Inches(0.5), Inches(3.2),
-        cdata
-    )
-    chart = chart_shape.chart
-    chart.has_legend = True
-    chart.legend.position = XL_LEGEND_POSITION.TOP
-    chart.legend.include_in_layout = False
-
-    # Thẻ ghi chú chỉ số đột phá
-    callout = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.25), top + Inches(4.0), width - Inches(0.5), Inches(1.45))
-    callout.fill.solid()
-    callout.fill.fore_color.rgb = GREEN_BG
-    callout.line.color.rgb = GREEN_COLOR
-    tf_c = callout.text_frame
-    tf_c.word_wrap = True
-    pc0 = tf_c.paragraphs[0]
-    pc0.text = "⚡ ĐỘT PHÁ TỐC ĐỘ CẬP NHẬT CỦA HD-MERKLETREE:"
-    pc0.font.bold = True
-    pc0.font.size = Pt(9)
-    pc0.font.color.rgb = GREEN_COLOR
-    pc1 = tf_c.add_paragraph()
-    pc1.text = "• Thêm tệp mới: Nhanh hơn 458 lần (0.16 ms so với 73.42 ms)\n• Xóa tệp tin: Nhanh hơn 708 lần (0.10 ms so với 70.81 ms)\n• Nguyên nhân: Tránh Rebuild O(N) nhờ cơ chế lan truyền Dirty-Path cục bộ."
-    pc1.font.size = Pt(8.2)
-    pc1.font.color.rgb = TEXT_MAIN
-    pc1.space_before = Pt(3)
-
-
-def add_benchmark_column_chart(slide, left, top, width, height):
-    """Slide 13: Biểu đồ cột thực tế so sánh hiệu năng 4 mô hình."""
-    add_card(slide, left, top, width, height)
-    tb = slide.shapes.add_textbox(left + Inches(0.2), top + Inches(0.18), width - Inches(0.4), Inches(0.5))
-    p0 = tb.text_frame.paragraphs[0]
-    p0.text = "BIỂU ĐỒ HIỆU NĂNG 4 MÔ HÌNH (1.000 TỆP TIN)"
-    p0.font.bold = True
-    p0.font.size = Pt(10.5)
-    p0.font.color.rgb = NAVY_COLOR
-
-    cdata = CategoryChartData()
-    cdata.categories = ['Flat SHA', 'HMAC', 'Std Merkle', 'HD-Merkle']
-    cdata.add_series('Khởi tạo Build (ms)', (62.58, 60.65, 60.72, 89.91))
-    cdata.add_series('Xác minh 1 tệp (ms)', (0.17, 0.07, 0.02, 0.02))
-
-    chart_shape = slide.shapes.add_chart(
-        XL_CHART_TYPE.COLUMN_CLUSTERED,
-        left + Inches(0.2), top + Inches(0.7), width - Inches(0.4), Inches(3.2),
-        cdata
-    )
-    chart = chart_shape.chart
-    chart.has_legend = True
-    chart.legend.position = XL_LEGEND_POSITION.TOP
-    chart.legend.include_in_layout = False
-
-    callout = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.2), top + Inches(4.0), width - Inches(0.4), Inches(1.5))
-    callout.fill.solid()
-    callout.fill.fore_color.rgb = BLUE_BG
-    callout.line.color.rgb = BLUE_ACCENT
-    tf_c = callout.text_frame
-    tf_c.word_wrap = True
-    pc0 = tf_c.paragraphs[0]
-    pc0.text = "NHẬN XÉT THỰC NGHIỆM ĐỊNH LƯỢNG:"
-    pc0.font.bold = True
-    pc0.font.size = Pt(8.8)
-    pc0.font.color.rgb = NAVY_COLOR
-    pc1 = tf_c.add_paragraph()
-    pc1.text = "• Xác minh 1 tệp của HD-Merkle đạt 0.02 ms (nhanh hơn ~8.5 lần Flat SHA 0.17 ms).\n• Thời gian khởi tạo 89.91 ms hoàn toàn tối ưu cho 1.000 tệp trong 23 thư mục."
-    pc1.font.size = Pt(8)
-    pc1.font.color.rgb = TEXT_MAIN
-    pc1.space_before = Pt(2)
-
-
-def add_security_games_cards_visual(slide, left, top, width, height):
-    """Slide 14: Lưới 4 thẻ thách đấu an ninh hình thức Games 1-4."""
-    add_card(slide, left, top, width, height)
-    tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(0.18), width - Inches(0.5), Inches(0.5))
-    p0 = tb.text_frame.paragraphs[0]
-    p0.text = "KẾT QUẢ ĐỐI KHÁNG THỰC TẾ (GAMES 1 – 4)"
-    p0.font.bold = True
-    p0.font.size = Pt(11)
-    p0.font.color.rgb = NAVY_COLOR
-
-    games_data = [
-        ("GAME 1: PPT ADVERSARY", "Tấn công: Tìm va chạm ngẫu nhiên\nKết quả: Thử thách 50 lượt ngẫu nhiên\nKẻ thù thắng: 0/50 (0.0% va chạm)\nLợi thế đối thủ: Adv <= 2^-128", GREEN_COLOR, GREEN_BG),
-        ("GAME 2: DOLEV-YAO NETWORK", "Tấn công: Nghe lén, đảo bit, tráo proof\nKết quả: Kiểm tra đối chiếu Root Hash\nPhát hiện: 100% can thiệp bị chặn\nThời gian phản ứng: 0.02 ms", BLUE_ACCENT, BLUE_BG),
-        ("GAME 3: SECOND-PREIMAGE", "Tấn công: Tráo nút lá thành nút nhánh\nKết quả: Phân tách tiền tố 0x00 & 0x01\nKháng va chạm: Triệt tiêu 100%\nChuẩn áp dụng: RFC 6962", PURPLE_ACCENT, PURPLE_BG),
-        ("GAME 4: AVALANCHE EFFECT", "Tấn công: Đảo 1 bit tìm quy luật băm\nKết quả đo đạc: 129/256 bit biến đổi\nTỷ lệ khuếch tán: 50.39% ≈ 50%\nĐặc tính: Chuẩn Shannon Diffusion", AMBER_ACCENT, AMBER_BG)
-    ]
-    cur_y = top + Inches(0.7)
-    for title, desc, col, bg_c in games_data:
-        box = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.25), cur_y, width - Inches(0.5), Inches(1.15))
-        box.fill.solid()
-        box.fill.fore_color.rgb = bg_c
-        box.line.color.rgb = col
-        box.line.width = Pt(1.5)
-        tf = box.text_frame
-        tf.word_wrap = True
-        p_t = tf.paragraphs[0]
-        p_t.text = f"🛡️ {title}  [ PASS ]"
-        p_t.font.bold = True
-        p_t.font.size = Pt(9)
-        p_t.font.color.rgb = col
-        p_d = tf.add_paragraph()
-        p_d.text = desc
-        p_d.font.size = Pt(8)
-        p_d.font.color.rgb = TEXT_MAIN
-        p_d.space_before = Pt(2)
         cur_y += Inches(1.25)
-
-
-def add_web_mockup_console_slide(slide, left, top, width, height):
-    """Slide 16: Giao diện phòng thí nghiệm Web Demo Console."""
-    add_browser_window_frame(slide, left, top, width, height, "127.0.0.1:8080/terminal")
-
-    # 3 Nút bấm tấn công giả lập
-    btn_data = [("⚡ Đảo 1 Bit", RED_ACCENT), ("➕ Chèn Tệp Lạ", AMBER_ACCENT), ("🗑️ Xóa Lén Tệp", BLUE_ACCENT)]
-    w_btn = (width - Inches(0.8)) / 3
-    for i, (b_txt, b_col) in enumerate(btn_data):
-        btn = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.25 + i * (w_btn + Inches(0.15))), top + Inches(0.6), w_btn, Inches(0.45))
-        btn.fill.solid()
-        btn.fill.fore_color.rgb = b_col
-        btn.line.fill.background()
-        tf = btn.text_frame
-        p = tf.paragraphs[0]
-        p.text = b_txt
-        p.font.bold = True
-        p.font.size = Pt(8.5)
-        p.font.color.rgb = RGBColor(255, 255, 255)
-        p.alignment = PP_ALIGN.CENTER
-
-    # Cửa sổ Console Terminal màu tối
-    console = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.25), top + Inches(1.15), width - Inches(0.5), Inches(4.25))
-    console.fill.solid()
-    console.fill.fore_color.rgb = DARK_CONSOLE
-    console.line.color.rgb = DARK_CONSOLE
-    tf_c = console.text_frame
-    tf_c.word_wrap = True
-
-    logs = [
-        ("$ python src/demo/web_demo.py --port 8080", CONSOLE_YELLOW),
-        ("[SYSTEM] Web Server started at http://127.0.0.1:8080", CONSOLE_GREEN),
-        ("[INFO] Scanning realistic_dataset (1.000 files, 4.10 MB)...", RGBColor(255, 255, 255)),
-        ("[SUCCESS] HD-MerkleTree built: 44 directories indexed in 0.089 s", CONSOLE_GREEN),
-        ("[SIMULATE] User clicked: [Đảo 1 Bit Ngẫu Nhiên]", CONSOLE_YELLOW),
-        ("[ATTACK] Injected bit-flip into 'Chung_Thu_Kiem_Toan_110.pdf'", RGBColor(248, 113, 113)),
-        ("[ALERT] Localized corrupted file in 0.022 ms via Biba Dirty-Path!", CONSOLE_YELLOW),
-        ("[VERDICT] Proof verification: REJECTED (Integrity violation detected)", RGBColor(248, 113, 113)),
-        ("[BENCHMARK] Throughput: 45,454 files/sec | Zero memory leaks", CONSOLE_GREEN)
-    ]
-    for i, (l_txt, l_col) in enumerate(logs):
-        p = tf_c.paragraphs[0] if i == 0 else tf_c.add_paragraph()
-        p.text = l_txt
-        p.font.size = Pt(8)
-        p.font.color.rgb = l_col
-        if i > 0:
-            p.space_before = Pt(4)
 
 
 def add_network_payload_chart(slide, left, top, width, height):
-    """Slide 17: Biểu đồ thanh thực tế so sánh dung lượng truyền tải mạng (Proof Payload)."""
-    add_card(slide, left, top, width, height)
-    tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(0.18), width - Inches(0.5), Inches(0.5))
-    p0 = tb.text_frame.paragraphs[0]
-    p0.text = "BIỂU ĐỒ DUNG LƯỢNG TRUYỀN TẢI QUA MẠNG (BYTES)"
+    """Slide 17: Biểu đồ thanh Clustered Bar Chart so sánh dung lượng bằng chứng truyền mạng."""
+    card = add_card(slide, left, top, width, height)
+
+    tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(0.2), width - Inches(0.5), Inches(0.75))
+    tf = tb.text_frame
+    tf.word_wrap = True
+    p0 = tf.paragraphs[0]
+    p0.text = "BIỂU ĐỒ BĂNG THÔNG MẠNG: DUNG LƯỢNG BẰNG CHỨNG XÁC THỰC (BYTES)"
     p0.font.bold = True
     p0.font.size = Pt(11)
     p0.font.color.rgb = NAVY_COLOR
+    p1 = tf.add_paragraph()
+    p1.text = "So sánh lượng dữ liệu truyền qua mạng khi xác minh 1 tệp tin (Ít hơn là tốt hơn)"
+    p1.font.size = Pt(8.5)
+    p1.font.color.rgb = TEXT_MUTED
 
-    cdata = CategoryChartData()
-    cdata.categories = ['Flat SHA', 'HMAC', 'Std Merkle', 'HD-Merkle']
-    cdata.add_series('Kích thước Proof (Bytes)', (113802, 113807, 990, 1369))
+    chart_data = CategoryChartData()
+    chart_data.categories = ['Flat SHA-256 (Tải cả bảng)', 'HMAC-SHA256 (Tải cả bảng)', 'Standard Merkle Proof', 'HD-MerkleTree Proof (Đề xuất)']
+    chart_data.add_series('Dung lượng gói tin (Bytes)', (113802, 113807, 990, 1369))
 
-    chart_shape = slide.shapes.add_chart(
-        XL_CHART_TYPE.BAR_CLUSTERED,
-        left + Inches(0.25), top + Inches(0.7), width - Inches(0.5), Inches(3.2),
-        cdata
-    )
-    chart = chart_shape.chart
+    x, y, cx, cy = left + Inches(0.25), top + Inches(1.0), width - Inches(0.5), height - Inches(1.3)
+    chart = slide.shapes.add_chart(
+        XL_CHART_TYPE.BAR_CLUSTERED, x, y, cx, cy, chart_data
+    ).chart
+
     chart.has_legend = False
+    plots = chart.plots[0]
+    if len(plots.series) >= 1:
+        plots.series[0].format.fill.solid()
+        plots.series[0].format.fill.fore_color.rgb = BLUE_ACCENT
 
-    callout = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.25), top + Inches(4.0), width - Inches(0.5), Inches(1.45))
-    callout.fill.solid()
-    callout.fill.fore_color.rgb = GREEN_BG
-    callout.line.color.rgb = GREEN_COLOR
-    tf_c = callout.text_frame
-    tf_c.word_wrap = True
-    pc0 = tf_c.paragraphs[0]
-    pc0.text = "🌐 TIẾT KIỆM BĂNG THÔNG MẠNG ĐỘT PHÁ (98.8%):"
-    pc0.font.bold = True
-    pc0.font.size = Pt(9)
-    pc0.font.color.rgb = GREEN_COLOR
-    pc1 = tf_c.add_paragraph()
-    pc1.text = "• Bằng chứng HD-Merkle chỉ 1.369 Byte (so với toàn bộ bảng 113.802 Byte).\n• Máy khách chỉ cần tải các nút anh em trên nhánh, không lộ 999 tệp còn lại.\n• Bảo vệ 100% tính riêng tư siêu dữ liệu (Metadata Confidentiality)."
-    pc1.font.size = Pt(8.2)
-    pc1.font.color.rgb = TEXT_MAIN
-    pc1.space_before = Pt(3)
-
-
-def add_closing_quadrant_visual(slide, left, top, width, height):
-    """Slide 18: Lưới 4 khối đóng góp giá trị toàn diện."""
-    add_card(slide, left, top, width, height)
-    tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(0.2), width - Inches(0.5), Inches(0.5))
-    p0 = tb.text_frame.paragraphs[0]
-    p0.text = "BỐN ĐÓNG GÓP TOÀN DIỆN CỦA ĐỒ ÁN DT005"
-    p0.font.bold = True
-    p0.font.size = Pt(11)
-    p0.font.color.rgb = NAVY_COLOR
-
-    quads = [
-        ("1. HỌC THUẬT & DỊCH THUẬT", "Dịch toàn văn bài báo Harry Halpin 2025; đối chiếu 100% luận điểm Kẻ thù mật mã học.", NAVY_COLOR, BLUE_BG),
-        ("2. KIẾN TRÚC PoC SÁNG TẠO", "Đề xuất HD-MerkleTree phân cấp Biba 1977, cập nhật Dirty-Path nhanh hơn 458 - 708 lần.", BLUE_ACCENT, BLUE_BG),
-        ("3. MÔ PHỎNG 7 SECURITY GAMES", "Khung kiểm định đối kháng toán học độc lập (PPT, Dolev-Yao, RFC 6962, Tuyết lở, Kênh kề).", PURPLE_ACCENT, PURPLE_BG),
-        ("4. THỰC NGHIỆM ĐỊNH LƯỢNG", "Đo kiểm 1.000 tệp tin qua 5 vòng lặp, chứng minh tiết kiệm 98.8% băng thông qua Web Demo.", GREEN_COLOR, GREEN_BG)
-    ]
-    cur_y = top + Inches(0.7)
-    for title, desc, col, bg_c in quads:
-        box = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.25), cur_y, width - Inches(0.5), Inches(1.15))
-        box.fill.solid()
-        box.fill.fore_color.rgb = bg_c
-        box.line.color.rgb = col
-        box.line.width = Pt(1.5)
-        tf = box.text_frame
-        tf.word_wrap = True
-        p_t = tf.paragraphs[0]
-        p_t.text = f"🏆 {title}"
-        p_t.font.bold = True
-        p_t.font.size = Pt(9.5)
-        p_t.font.color.rgb = col
-        p_d = tf.add_paragraph()
-        p_d.text = desc
-        p_d.font.size = Pt(8.2)
-        p_d.font.color.rgb = TEXT_MAIN
-        p_d.space_before = Pt(2)
-        cur_y += Inches(1.25)
+    return card
 
 
 # ==============================================================================
@@ -1076,7 +610,7 @@ add_academic_paper_card(slide2, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5
 
 
 # ==============================================================================
-# SLIDE 3: BỐI CẢNH & ĐỘNG LỰC NGHIÊN CỨU (KNOWLEDGE TRANSFER DIAGRAM)
+# SLIDE 3: BỐI CẢNH & ĐỘNG LỰC NGHIÊN CỨU (DRAW.IO PLACEHOLDER)
 # ==============================================================================
 slide3 = prs.slides.add_slide(blank_layout)
 add_base_background(slide3)
@@ -1094,11 +628,18 @@ add_bullet_card(slide3, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75),
          "Cung cấp giải pháp bảo vệ toàn vẹn dữ liệu cho các hệ thống doanh nghiệp, cơ sở dữ liệu nhật ký kiểm toán không thể sửa đổi (Append-Only Log) và bảo vệ máy khách nhẹ (Light Client) tiết kiệm hơn 98% băng thông mạng.")
     ], font_body_size=8.8)
 
-add_knowledge_transfer_diagram(slide3, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75))
+add_placeholder_card(slide3, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+    "Sơ đồ chuyển giao tri thức từ bài báo Oxford đến đồ án DT005", [
+        "Khối 1: Nền tảng triết học mật mã học của Harry Halpin (2025) và khái niệm Kẻ thù hình thức.",
+        "Khối 2: Khoảng trống khoa học bài báo: không có mã nguồn, không có dữ liệu, không có đo đạc định lượng.",
+        "Khối 3: Đóng góp hiện thực hóa của đồ án DT005: PoC HD-MerkleTree, 7 Games an ninh, 1.000 tệp tin.",
+        "Khối 4: Quy trình kiểm nghiệm toán học độc lập và đối chuẩn thực nghiệm đa tầng.",
+        "Mũi tên luồng: Thể hiện chuỗi kế thừa lý thuyết và phát triển thực nghiệm khép kín."
+    ])
 
 
 # ==============================================================================
-# SLIDE 4: TỔNG HỢP CÁC LUẬN ĐIỂM MẬT MÃ HỌC CỐT LÕI (4 THESES GRID)
+# SLIDE 4: TỔNG HỢP CÁC LUẬN ĐIỂM MẬT MÃ HỌC CỐT LÕI (DRAW.IO PLACEHOLDER)
 # ==============================================================================
 slide4 = prs.slides.add_slide(blank_layout)
 add_base_background(slide4)
@@ -1120,11 +661,18 @@ add_bullet_card(slide4, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75),
          "Cảnh báo nguy cơ tấn công đo thời gian (Timing Attack theo Paul Kocher 1996) và rò rỉ danh tính tệp tin qua siêu dữ liệu.")
     ], font_body_size=8.5)
 
-add_core_theses_grid(slide4, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75))
+add_placeholder_card(slide4, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+    "Sơ đồ tương quan 4 trụ cột an ninh mật mã học trong hệ thống", [
+        "Trụ cột 1: Second-Preimage Resistance (Đảo 1 bit làm sai lệch chuỗi băm, bảo vệ bởi SHA-256).",
+        "Trụ cột 2: Domain Separation RFC 6962 (Tách miền 0x00 cho lá và 0x01 cho nhánh để chống va chạm).",
+        "Trụ cột 3: Membership Proof O(log N) (Bằng chứng thành viên nhỏ gọn, không để lộ cấu trúc thư mục).",
+        "Trụ cột 4: Append-Only Consistency Proof (Xác thực lịch sử tệp tin không bị kẻ tấn công sửa lén).",
+        "Trung tâm: Chuỗi băm gốc Root Hash 32-byte đại diện bất biến cho toàn bộ 1.000 tệp tin."
+    ])
 
 
 # ==============================================================================
-# SLIDE 5: PHƯƠNG PHÁP LUẬN NGHIÊN CỨU: BA TRỤ CỘT ĐỘC LẬP (3 PILLARS VISUAL)
+# SLIDE 5: PHƯƠNG PHÁP LUẬN NGHIÊN CỨU: BA TRỤ CỘT ĐỘC LẬP (DRAW.IO PLACEHOLDER)
 # ==============================================================================
 slide5_method = prs.slides.add_slide(blank_layout)
 add_base_background(slide5_method)
@@ -1146,7 +694,13 @@ add_bullet_card(slide5_method, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.
          "- Bản chất: Đo lường khách quan 5 lần lặp độc lập trên 1.000 tệp tin thực tế, so sánh đối đầu trực diện 4 mô hình bảo mật.")
     ], font_body_size=8.5)
 
-add_three_pillars_visual(slide5_method, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75))
+add_placeholder_card(slide5_method, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+    "Sơ đồ tam giác / 3 trụ cột phương pháp luận nghiên cứu khoa học", [
+        "Đỉnh 1 (Lý thuyết Toán Mật mã): Mô hình Kẻ thù PPT, Dolev-Yao, 7 Security Games, Big-O O(log N).",
+        "Đỉnh 2 (Thiết kế Kỹ thuật Hệ thống): Cấu trúc 5 tầng HD-MerkleTree, Thuật toán Dirty-Path, Bộ đệm RAM.",
+        "Đỉnh 3 (Thực nghiệm Đối chuẩn Khách quan): Dataset 1.000 tệp tin, Đo đạc 4 mô hình qua 5 vòng lặp.",
+        "Vòng tròn trung tâm: Đạt chuẩn khoa học mức 6-8 điểm theo đúng yêu cầu đề bài của giảng viên."
+    ])
 
 
 # ==============================================================================
@@ -1181,7 +735,7 @@ add_audit_scorecard(slide6_matrix, Inches(6.6), Inches(1.35), Inches(5.9), Inche
 
 
 # ==============================================================================
-# SLIDE 7: CHỨNG MINH CHI TIẾT ĐỐI CHIẾU 1, 2, 3 (WEB MOCKUP ATTACK ALERT)
+# SLIDE 7: CHỨNG MINH CHI TIẾT ĐỐI CHIẾU 1, 2, 3 (REAL WEB ATTACK SCREENSHOT)
 # ==============================================================================
 slide7 = prs.slides.add_slide(blank_layout)
 add_base_background(slide7)
@@ -1200,11 +754,14 @@ add_bullet_card(slide7, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75),
          "- Dẫn chứng chứng minh: Lập trình sẵn 3 nút mô phỏng tấn công trong web_demo.py. Thao tác trên 1.000 tệp tin cho thấy hệ thống phát hiện chính xác 100% tệp bị can thiệp và định vị trong 0.022 ms.")
     ], font_body_size=8.8)
 
-add_web_mockup_attack(slide7, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75))
+add_real_screenshot(slide7, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+    os.path.join(SCREENSHOTS_DIR, "web_attack.png"),
+    "Giao diện Web Demo thật: Phát hiện tấn công đảo 1 bit",
+    "Hệ thống phát hiện ngay lập tức vi phạm toàn vẹn khi có 1 bit bị sửa đổi trên đĩa, định vị chính xác tệp hỏng trong 80.40 ms.")
 
 
 # ==============================================================================
-# SLIDE 8: CHỨNG MINH CHI TIẾT ĐỐI CHIẾU 4, 5, 6 (RFC 6962 TREE DIAGRAM)
+# SLIDE 8: CHỨNG MINH CHI TIẾT ĐỐI CHIẾU 4, 5, 6 (DRAW.IO PLACEHOLDER)
 # ==============================================================================
 slide8 = prs.slides.add_slide(blank_layout)
 add_base_background(slide8)
@@ -1223,11 +780,18 @@ add_bullet_card(slide8, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75),
          "- Dẫn chứng thực thi: Nhóm xây dựng 1.000 tệp tin thực tế, đo đạc độc lập 5 lần bằng hàm CPU thời gian thực perf_counter.")
     ], font_body_size=8.8)
 
-add_rfc6962_merkle_tree_diagram(slide8, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75))
+add_placeholder_card(slide8, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+    "Sơ đồ cấu trúc cây Merkle phân tách tiền tố theo chuẩn RFC 6962", [
+        "Tầng lá (Leaf Nodes): Leaf = SHA256( 0x00 || File_Data ) - Tiền tố 0x00 bắt buộc cho nút lá.",
+        "Tầng nhánh (Internal Nodes): Parent = SHA256( 0x01 || Left_Hash || Right_Hash ) - Tiền tố 0x01 bắt buộc.",
+        "Tầng gốc (Root Hash): Chuỗi băm 32 byte bất biến đại diện cho toàn bộ kho dữ liệu.",
+        "Cơ chế an ninh: Kẻ tấn công cố ghép 2 lá thành 1 nhánh giả sẽ bị phát hiện ngay do tiền tố không khớp.",
+        "Chuẩn hóa: Áp dụng trực tiếp chuẩn Certificate Transparency RFC 6962 theo đề xuất của Harry Halpin."
+    ])
 
 
 # ==============================================================================
-# SLIDE 9: QUY TRÌNH HIỆN THỰC HÓA KỸ THUẬT 3 GIAI ĐOẠN (PIPELINE CHEVRON)
+# SLIDE 9: QUY TRÌNH HIỆN THỰC HÓA KỸ THUẬT 3 GIAI ĐOẠN (DRAW.IO PLACEHOLDER)
 # ==============================================================================
 slide9_data = prs.slides.add_slide(blank_layout)
 add_base_background(slide9_data)
@@ -1249,11 +813,17 @@ add_bullet_card(slide9_data, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75
          "- Đóng gói giao diện Web Demo trực quan trình diễn trước hội đồng.")
     ], font_body_size=8.8)
 
-add_pipeline_chevron_diagram(slide9_data, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75))
+add_placeholder_card(slide9_data, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+    "Sơ đồ quy trình 3 giai đoạn xử lý dữ liệu thực nghiệm 1.000 tệp tin", [
+        "Giai đoạn 1 (Tập dữ liệu 1.000 tệp): 4.12 MB, 14 định dạng (PDF, DOCX, JS, PY, LOG...), 23 thư mục phân cấp.",
+        "Giai đoạn 2 (Tiến trình song song): Quét cây đĩa, băm song song đa luồng, tính toán đường dẫn Dirty-Path.",
+        "Giai đoạn 3 (Đối chuẩn 4 mô hình): So sánh SHA-256, HMAC, Standard Merkle và HD-MerkleTree qua 5 vòng đo.",
+        "Môi trường tạm (Temp Workspace): Mọi thao tác thêm/sửa/xóa đều thực hiện trên thư mục tạm cô lập."
+    ])
 
 
 # ==============================================================================
-# SLIDE 10: [TRỤ CỘT I - HƯỚNG 1] 3 MÔ HÌNH NỀN TẢNG (WEB MOCKUP SAFE STATE)
+# SLIDE 10: [TRỤ CỘT I - HƯỚNG 1] 3 MÔ HÌNH NỀN TẢNG (REAL WEB SAFE SCREENSHOT)
 # ==============================================================================
 slide10_base = prs.slides.add_slide(blank_layout)
 add_base_background(slide10_base)
@@ -1274,11 +844,14 @@ add_bullet_card(slide10_base, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.7
          "Cả 3 mô hình đều phát hiện chính xác 100% khi xảy ra tấn công trên 1.000 tệp tin.")
     ], font_body_size=8.8)
 
-add_web_mockup_safe(slide10_base, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75))
+add_real_screenshot(slide10_base, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+    os.path.join(SCREENSHOTS_DIR, "web_safe.png"),
+    "Giao diện Web Demo thật: Trạng thái toàn vẹn 100% (1.000 tệp)",
+    "Hệ thống quét và xác thực 1.000 tệp tin thực tế trong 60.59 ms, tốc độ 16,504 tệp/s, Root Hash hiển thị đầy đủ.")
 
 
 # ==============================================================================
-# SLIDE 11: [TRỤ CỘT I - HƯỚNG 1] KIẾN TRÚC MÔ HÌNH ĐỀ XUẤT HD-MERKLETREE
+# SLIDE 11: [TRỤ CỘT I - HƯỚNG 1] KIẾN TRÚC MÔ HÌNH ĐỀ XUẤT HD-MERKLETREE (DRAW.IO PLACEHOLDER)
 # ==============================================================================
 slide11_arch = prs.slides.add_slide(blank_layout)
 add_base_background(slide11_arch)
@@ -1298,7 +871,14 @@ add_bullet_card(slide11_arch, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.7
          "Hàm hmac.compare_digest triệt tiêu kênh kề đo thời gian O(1) theo Kocher 1996; hàm secure_erase() xóa đè RAM ngăn kẻ thù trích xuất bộ nhớ (Memory Dump Adversary).")
     ], font_body_size=8.2)
 
-add_5tier_architecture_visual(slide11_arch, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75))
+add_placeholder_card(slide11_arch, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+    "Sơ đồ kiến trúc phân cấp 5 tầng chi tiết của mô hình HD-MerkleTree", [
+        "Tầng 1 (File Leaf Nodes): Lưu mã băm lá RFC 6962 cho từng tệp tin vật lý trên đĩa.",
+        "Tầng 2 (Directory Sub-Trees): Gom nhóm các tệp cùng thư mục thành cây con cục bộ theo mô hình Biba 1977.",
+        "Tầng 3 (Global Aggregator): Tổng hợp các Root thư mục thành Master Root Hash duy nhất.",
+        "Tầng 4 (Memory Cache & Indexing): Bảng băm tra cứu O(1) đường dẫn tệp và cache node cha cho Dirty-Path.",
+        "Tầng 5 (Storage & Proof Layer): Tạo Compact Proof và Batch Multi-Proof cho máy khách xác thực độc lập."
+    ])
 
 
 # ==============================================================================
@@ -1543,7 +1123,7 @@ for b_text in bullets_nc15:
 
 
 # ==============================================================================
-# SLIDE 16: HƯỚNG DẪN KỊCH BẢN TRÌNH DIỄN DEMO WEB (CONSOLE MOCKUP)
+# SLIDE 16: HƯỚNG DẪN KỊCH BẢN TRÌNH DIỄN DEMO WEB (REAL TERMINAL SCREENSHOT)
 # ==============================================================================
 slide16_demo = prs.slides.add_slide(blank_layout)
 add_base_background(slide16_demo)
@@ -1561,7 +1141,10 @@ add_bullet_card(slide16_demo, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.7
          "Nhấp Chạy kiểm tra toàn vẹn. Hệ thống lập tức chỉ đúng tên tệp bị can thiệp, hiển thị tỷ lệ nguyên vẹn và tốc độ xử lý hơn 4.000 tệp mỗi giây.")
     ], font_body_size=9.5)
 
-add_web_mockup_console_slide(slide16_demo, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75))
+add_real_screenshot(slide16_demo, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+    os.path.join(SCREENSHOTS_DIR, "terminal_cli.png"),
+    "Cửa sổ Terminal thật: Bộ kiểm thử an ninh mật mã (17/17 PASS)",
+    "Thực thi python -m unittest discover -s src/tests -v: Toàn bộ 17 ca kiểm thử an ninh (sửa, thêm, xóa, RFC 6962) đều vượt qua 100%.")
 
 
 # ==============================================================================
@@ -1585,7 +1168,7 @@ add_network_payload_chart(slide17_charts, Inches(6.6), Inches(1.35), Inches(5.9)
 
 
 # ==============================================================================
-# SLIDE 18: TỔNG KẾT ĐÓNG GÓP KHOA HỌC VÀ THỰC TIỄN (CLOSING QUADRANT)
+# SLIDE 18: TỔNG KẾT ĐÓNG GÓP KHOA HỌC VÀ THỰC TIỄN (DRAW.IO PLACEHOLDER)
 # ==============================================================================
 slide18_sum = prs.slides.add_slide(blank_layout)
 add_base_background(slide18_sum)
@@ -1605,7 +1188,14 @@ add_bullet_card(slide18_sum, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75
          "Bộ slide báo cáo chặt chẽ cùng ứng dụng web demo trực quan sẵn sàng trình diễn trước hội đồng.")
     ], font_body_size=9.0)
 
-add_closing_quadrant_visual(slide18_sum, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75))
+add_placeholder_card(slide18_sum, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
+    "Sơ đồ chu trình khép kín 4 khối đóng góp & Định hướng phát triển", [
+        "Khối 1 (Khoa học): Hoàn thiện khoảng trống thực nghiệm của bài báo Oxford Cybersecurity 2025.",
+        "Khối 2 (Hiệu năng): Cập nhật Dirty-Path O(log N) chỉ tốn 0.16 ms (nhanh hơn 458 lần so với Rebuild 73 ms).",
+        "Khối 3 (An ninh): Vượt qua 100% 7 Security Games toán học và 17/17 Unit Tests tự động.",
+        "Khối 4 (Ứng dụng): Web Demo trực quan, CLI độc lập, tích hợp kiểm tra toàn vẹn phân tán.",
+        "Lộ trình tương lai: Tích hợp Bằng chứng Không Tri thức (Zero-Knowledge Proofs) và Sổ cái phân tán."
+    ])
 
 # Lưu bài thuyết trình
 try:

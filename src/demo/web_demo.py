@@ -1890,9 +1890,20 @@ HTML_PAGE = """<!DOCTYPE html>
         .catch(() => {});
     }
 
-    window.onload = () => {
+    window.onload = async () => {
       loadModelStatus();
       initBenchmarkCharts();
+      const params = new URLSearchParams(window.location.search);
+      const action = params.get('action');
+      if (action === 'safe') {
+        if (typeof learnCurrentModel === 'function') await learnCurrentModel();
+        if (typeof verifyCurrentModel === 'function') await verifyCurrentModel();
+        if (typeof runHeadToHeadCompare === 'function') await runHeadToHeadCompare();
+      } else if (action === 'attack') {
+        if (typeof learnCurrentModel === 'function') await learnCurrentModel();
+        if (typeof triggerAttack === 'function') await triggerAttack('tamper');
+        if (typeof verifyCurrentModel === 'function') await verifyCurrentModel();
+      }
       console.log('Hệ thống hợp nhất Live Demo & Benchmark DT005 đã sẵn sàng trên cổng 8080.');
     };
   </script>
