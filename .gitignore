@@ -24,3 +24,12 @@ htmlcov/
 # OS files
 Thumbs.db
 .DS_Store
+
+# Datasets
+realistic_dataset/
+kaggle_dataset/
+*.zip
+*.tar.gz
+
+# Documentation
+docs/
