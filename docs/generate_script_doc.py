@@ -261,7 +261,7 @@ add_slide_section(
     "Thứ nhất là Danh sách băm phẳng SHA-256; Thứ hai là Danh sách băm có khóa HMAC-SHA256; và Thứ ba là Cây Merkle chuẩn của Ralph Merkle 1979. "
     "Cả 3 mô hình đều phát hiện 100% sai lệch khi tệp bị sửa đổi, hoàn thành trọn vẹn yêu cầu tái lập kết quả bài báo khoa học gốc.",
     notes="Khẳng định đã tái lập thành công 100% mô hình của bài báo khoa học gốc.",
-    drawio_guide="Vẽ 4 khối chuyển giao: Khối 1: Triết học Harry Halpin (2025) -> Khối 2: Khoảng trống thực nghiệm của bài báo -> Khối 3: Mã nguồn hiện thực hóa đồ án DT005 -> Khối 4: Kết quả chạy lại 3 mô hình."
+    drawio_guide="Vẽ 4 khối kiến trúc hoạt động: Khối 1: Băm phẳng SHA-256 (Tệp tin -> Băm SHA-256 -> Bảng Manifest) -> Khối 2: Băm có khóa HMAC-SHA256 (Tệp tin + Khóa K -> Băm HMAC) -> Khối 3: Cây Merkle nhị phân truyền thống (Lá -> Băm từng đôi -> Merkle Root) -> Khối 4: Quy trình máy khách xác minh độc lập bằng cách so khớp băm."
 )
 
 # SLIDE 4

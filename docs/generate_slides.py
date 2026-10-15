@@ -229,50 +229,25 @@ def add_paper_web_screenshot_card(slide, left, top, width, height):
     card = add_card(slide, left, top, width, height)
 
     # Tiêu đề khung ảnh
-    tb = slide.shapes.add_textbox(left + Inches(0.2), top + Inches(0.12), width - Inches(0.4), Inches(0.45))
+    tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(0.18), width - Inches(0.5), Inches(0.55))
     tf = tb.text_frame
     tf.word_wrap = True
     p0 = tf.paragraphs[0]
     p0.text = "ẢNH CHỤP BÀI BÁO THỰC TẾ TRÊN CỔNG OXFORD ACADEMIC"
     p0.font.bold = True
-    p0.font.size = Pt(11)
+    p0.font.size = Pt(11.5)
     p0.font.color.rgb = NAVY_COLOR
 
     p1 = tf.add_paragraph()
     p1.text = "Cổng xuất bản: academic.oup.com/cybersecurity  |  DOI: 10.1093/cybsec/tyaf006"
-    p1.font.size = Pt(8.2)
+    p1.font.size = Pt(8.5)
     p1.font.color.rgb = TEXT_MUTED
+    p1.space_before = Pt(2)
 
     # Chèn ảnh chụp bài báo thực tế
     img_path = r"d:\AnToanvaBaoMatHeThongThongTin\GK\docs\paper_web_article_clean.png"
     if os.path.exists(img_path):
-        slide.shapes.add_picture(img_path, left + Inches(0.2), top + Inches(0.60), width=width - Inches(0.4))
-
-    # Khung thông tin chứng minh xuất bản chính thức ở chân thẻ
-    badge_box = slide.shapes.add_shape(
-        MSO_SHAPE.ROUNDED_RECTANGLE,
-        left + Inches(0.2), top + Inches(4.75),
-        width - Inches(0.4), Inches(0.85)
-    )
-    badge_box.fill.solid()
-    badge_box.fill.fore_color.rgb = BLUE_BG
-    badge_box.line.color.rgb = BLUE_ACCENT
-    badge_box.line.width = Pt(1.0)
-    tf_b = badge_box.text_frame
-    tf_b.word_wrap = True
-
-    pb0 = tf_b.paragraphs[0]
-    pb0.text = "XÁC NHẬN MINH CHỨNG XUẤT BẢN KHOA HỌC CHÍNH THỨC"
-    pb0.font.bold = True
-    pb0.font.size = Pt(9.0)
-    pb0.font.color.rgb = NAVY_COLOR
-
-    pb1 = tf_b.add_paragraph()
-    pb1.text = "• Tạp chí: Oxford Journal of Cybersecurity (Oxford University Press)  |  Tập 11, Số 1, 2025\n" \
-               "• Tác giả: Harry Halpin (Nym Technologies & Inria)  |  Đăng tải: 27/03/2025  |  ID: tyaf006"
-    pb1.font.size = Pt(8.2)
-    pb1.font.color.rgb = TEXT_MAIN
-    pb1.space_before = Pt(2)
+        slide.shapes.add_picture(img_path, left + Inches(0.25), top + Inches(0.85), width=width - Inches(0.5))
 
     return card
 
@@ -518,23 +493,23 @@ add_header(slide3_base, "Phần 1: Hiện thực hóa & Tái lập kết quả b
 
 add_bullet_card(slide3_base, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75), 
     "Tái Lập 3 Mô Hình Nền Tảng Trên Tập Dữ Liệu Thực Nghiệm", [
-        ("• 1. Danh sách băm phẳng SHA-256 (sha256_manifest.py):",
-         "Băm tuần tự từng tệp tin; khởi tạo ~62.6 ms trên 1.000 tệp. Phát hiện 100% sai khác. Hạn chế: Client phải tải toàn bộ danh mục 111 KB để xác minh 1 tệp."),
-        ("• 2. Danh sách băm có khóa bí mật HMAC-SHA256 (hmac_manifest.py):",
-         "Sử dụng khóa đối xứng K chống giả mạo danh mục (~60.6 ms). Hạn chế: Buộc phải phân phối và quản lý khóa bí mật K cho mọi client."),
-        ("• 3. Cây Merkle nhị phân truyền thống (standard_merkle_tree.py):",
-         "Cây Merkle phẳng theo Ralph Merkle (1979); sinh Merkle Proof 990 Byte, xác minh trong 0.02 ms. Hạn chế: Bế tắc Rebuild O(N) khi sửa đổi tệp."),
-        ("• Đánh giá kết quả tái lập (Replication Result):",
-         "Cả 3 mô hình đều phát hiện chính xác 100% mọi hành vi tấn công, hoàn thành trọn vẹn yêu cầu tái lập kết quả bài báo khoa học gốc.")
-    ], font_title_size=12, font_body_size=9.5)
+        ("• 1. Danh sách băm phẳng SHA-256:",
+         "Băm tuần tự từng tệp tin dữ liệu, thời gian khởi tạo 62.6 ms trên 1.000 tệp. Phát hiện chính xác 100% mọi sai lệch dữ liệu. Hạn chế lớn là máy khách phải tải về toàn bộ danh mục 111 KB chỉ để xác minh 1 tệp tin duy nhất."),
+        ("• 2. Danh sách băm có khóa bí mật HMAC-SHA256:",
+         "Sử dụng khóa bí mật đối xứng để chống giả mạo danh mục băm, thời gian khởi tạo 60.6 ms. Hạn chế là bắt buộc phải phân phối và quản lý lưu trữ an toàn khóa bí mật cho tất cả các máy khách."),
+        ("• 3. Cây Merkle nhị phân truyền thống:",
+         "Dựng cấu trúc cây theo nguyên bản Merkle năm 1979, kích thước bằng chứng xác thực 990 Byte, thời gian xác minh siêu nhanh 0.02 ms. Hạn chế lớn là bế tắc khi phải dựng lại toàn bộ cây khi thêm, sửa hoặc xóa tệp tin."),
+        ("• Đánh giá kết quả thực nghiệm tái lập:",
+         "Cả 3 mô hình nền tảng đều phát hiện chính xác 100% các hành vi tấn công sửa đổi tệp, hoàn thành trọn vẹn mục tiêu hiện thực hóa và kiểm thử thực nghiệm trên tập dữ liệu thực tế.")
+    ], font_title_size=12.5, font_body_size=10.0)
 
 add_placeholder_card(slide3_base, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75),
-    "Sơ đồ chuyển giao tri thức từ bài báo Oxford đến đồ án DT005", [
-        "Khối 1: Nền tảng triết học mật mã học của Harry Halpin (2025) và khái niệm Kẻ thù hình thức.",
-        "Khối 2: Khoảng trống khoa học bài báo: không có mã nguồn, không có dữ liệu, không có đo đạc định lượng.",
-        "Khối 3: Đóng góp hiện thực hóa của đồ án DT005: PoC HD-MerkleTree, 7 Games an ninh, 2 tập dữ liệu Kaggle.",
-        "Khối 4: Quy trình kiểm nghiệm toán học độc lập và đối chuẩn thực nghiệm đa tầng.",
-        "Mũi tên luồng: Thể hiện chuỗi kế thừa lý thuyết và phát triển thực nghiệm khép kín."
+    "Sơ đồ kiến trúc hoạt động của 3 mô hình kiểm tra toàn vẹn nền tảng", [
+        "Khối 1: Mô hình băm phẳng SHA-256: Tệp tin dữ liệu -> Băm SHA-256 từng tệp -> Tạo danh mục băm Manifest -> Máy khách tải toàn bộ danh mục để so khớp tuần tự.",
+        "Khối 2: Mô hình băm có khóa HMAC-SHA256: Tệp tin kết hợp Khóa bí mật K -> Băm mã xác thực HMAC -> Chống giả mạo danh mục nhưng đòi hỏi phân phối khóa an toàn.",
+        "Khối 3: Mô hình Cây Merkle nhị phân truyền thống: Tệp tin -> Băm nút lá -> Ghép băm từng đôi lên nút cha -> Chuỗi băm gốc Merkle Root và Bằng chứng Merkle Proof.",
+        "Khối 4: Quy trình xác minh độc lập của máy khách: Máy khách nhận tệp tin và băm hoặc bằng chứng tương ứng -> Tính lại giá trị băm tại chỗ -> So khớp trực tiếp để phát hiện sai khác.",
+        "Mũi tên luồng: Thể hiện chuỗi xử lý từ tệp tin gốc đến cấu trúc xác thực và quy trình kiểm tra toàn vẹn của máy khách."
     ])
 
 
