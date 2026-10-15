@@ -37,24 +37,22 @@ python -m src.proposed_model.hd_merkle_tree --dir realistic_dataset --consistenc
 
 ---
 
-## 2. BỘ KIỂM THỬ TỰ ĐỘNG TOÀN DIỆN (AUTOMATED TEST SUITE)
+## 2. BỘ KIỂM ĐỊNH AN NINH HÌNH THỨC (7 SECURITY GAMES)
 
-Dự án trang bị bộ kiểm thử tự động gồm 17 bài test độc lập (`src/tests/test_file_integrity.py`), thực thi qua 1-click hoặc lệnh chuẩn:
+Dự án trang bị bộ kiểm định an ninh hình thức bám sát 100% luận điểm bài báo Harry Halpin (Oxford 2025), thực thi qua lệnh:
 
 ```bash
-run_tests.bat
-# Hoặc:
-python -m unittest discover -s src/tests -v
+python -m src.proposed_model.security_games
 ```
 
-* **Phạm vi kiểm thử:**
-  1. Tính đúng đắn của giải thuật băm luồng SHA-256 và HMAC-SHA256.
-  2. Xác thực thành công khi dữ liệu toàn vẹn; từ chối khi sửa đổi tệp, thêm tệp lạ, xóa tệp hoặc dùng sai khóa bí mật HMAC.
-  3. Xác thực tính hợp lệ của Merkle Inclusion Proof trên Standard Merkle Tree và HD-MerkleTree.
-  4. Phân tách miền RFC 6962 chống va chạm Second-Preimage.
-  5. **Kiểm thử cập nhật tăng dần thực tế:** Thực sự thay đổi, thêm và xóa tệp trên đĩa trong thư mục tạm độc lập, gọi `update_file_fast()`, và đối chiếu Root Hash sau cập nhật khớp chính xác 100% với cây dựng mới từ đầu.
-  6. Kiểm thử Bằng chứng Nhất quán RFC 6962 Canonical Log (Consistency Proof) và các điều kiện biên ($m=n, m \le 0, m > n$).
-  7. Xử lý tệp rỗng 0-byte, thư mục rỗng và tệp trùng tên ở các thư mục con khác nhau.
+* **Phạm vi 7 mô hình kiểm định:**
+  1. **IntegritySecurityGame:** Thách đấu hình thức Challenger vs PPT Adversary (Advantage triệt tiêu về mức $\le 2^{-128}$).
+  2. **DolevYaoNetworkGame:** Kiểm thử phát hiện 100% can thiệp tráo đổi bằng chứng, sửa đổi tệp và tấn công phát lại trên kênh truyền.
+  3. **SecondPreimageGame:** Kháng va chạm tiền ảnh thứ hai bằng phân tách miền RFC 6962 (`0x00` lá, `0x01` nhánh).
+  4. **RandomOracleApproximationExperiment:** Kiểm định xấp xỉ tiên tri ngẫu nhiên ROM, đạt tỷ lệ tuyết lở 50.39% phân phối đồng đều.
+  5. **ConsistencyProofGame:** Bằng chứng nhất quán chỉ-thêm (Append-Only Consistency Proof) theo RFC 6962 Certificate Transparency.
+  6. **BibaHierarchicalIntegrityModel:** Kiểm tra mô hình toàn vẹn phân cấp Biba (nguyên lý "No write-up").
+  7. **MetadataLeakageAndSideChannelAudit:** So khớp băm thời gian hằng số triệt tiêu tấn công kênh kề đo thời gian và kiểm toán siêu dữ liệu.
 
 ---
 
@@ -94,8 +92,5 @@ Kết quả được ghi nhận chi tiết, truy nguyên tại `results/benchmar
 - **Khởi động Giao diện Web Trực quan:** Nhấp đúp vào `run_demo_web.bat` (hoặc chạy `python src/demo/web_demo.py --port 8080`). Mở trình duyệt tại `http://127.0.0.1:8080`.
 - **Chạy Kiểm định 7 Security Games:** `python -m src.proposed_model.security_games`.
 - **Tài liệu & Slide trong thư mục `docs/`:**
-  - `docs/Bao_Cao_Giua_Ky_DT05.pptx`: Slide thuyết trình PowerPoint 16:9.
-  - `docs/Bao_Cao_Tong_Hop_Giua_Ky_DT005.docx`: Báo cáo tổng hợp giữa kỳ.
-  - `docs/Thiet_Ke_Kien_Truc_Va_Giai_Thuat.docx`: Đặc tả kiến trúc kỹ thuật và giải thuật.
-  - `docs/Mo_Ta_Yeu_Cau_Va_Ke_Hoach_Thuc_Hien.docx`: Bản mô tả yêu cầu và kế hoạch.
-  - `docs/Dich_Thuat_Va_Tai_Lap_Bai_Bao.docx`: Dịch thuật và phân tích bài báo của Harry Halpin (2025).
+  - `docs/Bao_Cao_Giua_Ky_DT05.pptx`: Slide thuyết trình PowerPoint 16:9 chuẩn 10 slide.
+  - `docs/Thiet_Ke_Va_Phan_Tich_He_Thong_DT005.docx`: Đặc tả phân tích và thiết kế kiến trúc hệ thống.

@@ -1,4 +1,0 @@
-version: '3.8'
-services:
-  worker_445:
-    image: enterprise/worker:445

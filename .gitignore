@@ -33,3 +33,6 @@ kaggle_dataset/
 
 # Documentation
 docs/
+
+# Benchmark Results
+results/
