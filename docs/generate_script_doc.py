@@ -3,10 +3,10 @@
 Script tự động tạo tài liệu Word (.docx) chứa KỊCH BẢN THUYẾT TRÌNH VÀ HƯỚNG DẪN DEMO 5 PHÚT.
 Bám sát chính xác từng slide trong Bao_Cao_Giua_Ky_DT05.pptx (17 slides):
 - Phân bổ thời gian chuẩn xác cho từng slide (tổng 5 phút = 300 giây).
-- Lời thoại đọc miệng (verbatim) cho từng slide, súc tích, đĩnh đạc, chuẩn học thuật.
+- Loại bỏ hoàn toàn các nhãn thang điểm thô, chuyển hóa thành văn phong học thuật bảo vệ đồ án chuẩn mực.
+- Lời thoại đọc miệng (verbatim) cho từng slide, súc tích, đĩnh đạc, tự tin, không bị cháy giáo án.
 - Hướng dẫn chi tiết vẽ sơ đồ Draw.io tại các slide có khung vẽ.
 - Kịch bản Live Demo cực kỳ chi tiết cho Slide 15 (tay bấm nút gì, mắt nhìn terminal chỉ gì, miệng nói gì).
-- Bổ sung thông tin 2 tập dữ liệu Kaggle và Bảng đối sánh độ phức tạp Big-O lý thuyết.
 """
 import os
 import sys
@@ -84,20 +84,15 @@ r_not.font.color.rgb = RGBColor(180, 83, 9)
 p_notice.add_run("\n• Tổng thời lượng trình bày quy định là ")
 r_time = p_notice.add_run("5 phút (300 giây)")
 r_time.font.bold = True
-p_notice.add_run(". Kịch bản này được tối ưu từng câu chữ để bạn nói với tốc độ vừa phải (~120 từ/phút), dõng dạc, tự tin và không bị cháy giáo án.\n")
-p_notice.add_run("• Cấu trúc slide giữ trọn vẹn toàn bộ các khối kiến thức học thuật theo đúng yêu cầu đánh giá của Giảng viên:\n")
-p_notice.add_run("   + ")
-r_t1 = p_notice.add_run("Thang điểm [6-8]")
-r_t1.font.bold = True
-p_notice.add_run(": Dịch toàn văn bài báo khoa học Harry Halpin (Oxford 2025), hiện thực hóa và chạy lại 3 mô hình nền tảng đối chứng.\n")
-p_notice.add_run("   + ")
-r_t2 = p_notice.add_run("Thang điểm [9, 10]")
-r_t2.font.bold = True
-p_notice.add_run(": Tự thiết kế mô hình HD-Merkle Tree, thuật toán Dirty-Path Update O(log N), kiểm chứng trên 2 tập dữ liệu Kaggle (1.115 & 5.600 tệp), vượt qua 100% 7 Security Games và 17/17 Unit Tests.\n")
-p_notice.add_run("• Toàn bộ các slide chụp kết quả web tĩnh đã được thay thế bằng ")
+p_notice.add_run(". Kịch bản này được tối ưu từng câu chữ để bạn nói với tốc độ vừa phải (~120 từ/phút), dõng dạc, tự tin, không bị cháy giáo án.\n")
+p_notice.add_run("• Cấu trúc slide và lời thoại thể hiện sự chuyên nghiệp của một buổi bảo vệ đồ án khoa học:\n")
+p_notice.add_run("   + Hoàn thành trọn vẹn việc dịch toàn văn bài báo Harry Halpin Oxford 2025 và tái lập 3 mô hình nền tảng đối chứng.\n")
+p_notice.add_run("   + Tự thiết kế mô hình HD-Merkle Tree và thuật toán Dirty-Path Update O(log N), chứng minh hiệu năng cập nhật nhanh hơn 458 - 748 lần, tiết kiệm 98.8% băng thông.\n")
+p_notice.add_run("   + Vượt qua 100% 7 Security Games hình thức và 17/17 Unit Tests tự động trên 2 tập dữ liệu Kaggle thực tế (1.115 & 5.600 tệp).\n")
+p_notice.add_run("• Toàn bộ các ảnh chụp web tĩnh đã được thay thế bằng ")
 r_live = p_notice.add_run("SLIDE 15: LIVE DEMONSTRATION")
 r_live.font.bold = True
-p_notice.add_run(" để bạn trình diễn thực tế trực tiếp trên Trình duyệt và Streaming Terminal Logs.\n")
+p_notice.add_run(" để bạn trình diễn thực tế trực tiếp trên Trình duyệt Web và Streaming Terminal Logs.\n")
 p_notice.add_run("• Các vị trí có khung chờ sơ đồ Draw.io (Slide 3, 4, 5, 7, 9, 16) đã ghi rõ thành phần bắt buộc để bạn xem và vẽ theo.")
 
 # BẢNG PHÂN BỔ THỜI GIAN
@@ -108,22 +103,22 @@ r_tbt.font.size = Pt(11.5)
 r_tbt.font.color.rgb = RGBColor(30, 58, 138)
 
 slide_schedule = [
-    ("Slide 1", "Trang tiêu đề đề tài DT005 & Mục tiêu điểm [6-8], [9,10]", "15 giây", "0:00 - 0:15"),
-    ("Slide 2", "Giới thiệu & Tóm tắt bài báo Harry Halpin (Oxford 2025) [6-8]", "15 giây", "0:15 - 0:30"),
-    ("Slide 3", "Hiện thực hóa & Chạy lại 3 mô hình nền tảng bài báo [6-8]", "15 giây", "0:30 - 0:45"),
-    ("Slide 4", "Phân tích 4 hạn chế bài báo gốc & Động lực cải tiến [9, 10]", "15 giây", "0:45 - 1:00"),
-    ("Slide 5", "Đề xuất mô hình mới: Cây Merkle phân cấp động (HD-Merkle) [9, 10]", "15 giây", "1:00 - 1:15"),
-    ("Slide 6", "Thuật toán đề xuất: Cập nhật động theo đường dẫn bẩn (Dirty-Path) [9, 10]", "15 giây", "1:15 - 1:30"),
-    ("Slide 7", "Cơ chế an ninh mật mã & Chuẩn phân tách miền RFC 6962 [9, 10]", "15 giây", "1:30 - 1:45"),
-    ("Slide 8", "Phòng chống tấn công kênh kề đo thời gian & Xóa sạch bộ nhớ [9, 10]", "15 giây", "1:45 - 2:00"),
-    ("Slide 9", "Thiết kế 2 tập dữ liệu Kaggle thực tế (1.115 & 5.600 tệp) [9, 10]", "15 giây", "2:00 - 2:15"),
-    ("Slide 10", "Bảng đối sánh Big-O lý thuyết & Cập nhật động nhanh hơn 458-748 lần", "20 giây", "2:15 - 2:35"),
-    ("Slide 11", "Khung 7 Trò chơi an ninh mật mã học: Games 1 – 4 [Toán học]", "15 giây", "2:35 - 2:50"),
-    ("Slide 12", "Khung 7 Trò chơi an ninh mật mã học: Games 5 – 7 & Bảng tổng kết", "15 giây", "2:50 - 3:05"),
+    ("Slide 1", "Trang tiêu đề đề tài DT005 & Mục tiêu khoa học hệ thống", "15 giây", "0:00 - 0:15"),
+    ("Slide 2", "Giới thiệu & Tóm tắt bài báo Harry Halpin (Oxford 2025)", "15 giây", "0:15 - 0:30"),
+    ("Slide 3", "Hiện thực hóa & Chạy lại 3 mô hình nền tảng bài báo", "15 giây", "0:30 - 0:45"),
+    ("Slide 4", "Phân tích 4 nút thắt kỹ thuật của mô hình nền tảng", "15 giây", "0:45 - 1:00"),
+    ("Slide 5", "Đề xuất mô hình mới: Cây Merkle phân cấp động (HD-Merkle Tree)", "15 giây", "1:00 - 1:15"),
+    ("Slide 6", "Thuật toán đề xuất: Cập nhật động theo đường dẫn bẩn (Dirty-Path)", "15 giây", "1:15 - 1:30"),
+    ("Slide 7", "Cơ chế an ninh mật mã & Chuẩn phân tách miền RFC 6962", "15 giây", "1:30 - 1:45"),
+    ("Slide 8", "Phòng chống tấn công kênh kề đo thời gian & Xóa sạch bộ nhớ", "15 giây", "1:45 - 2:00"),
+    ("Slide 9", "Thiết kế 2 tập dữ liệu Kaggle thực tế (1.115 & 5.600 tệp tin)", "15 giây", "2:00 - 2:15"),
+    ("Slide 10", "Bảng đối sánh Big-O lý thuyết & Thực nghiệm cập nhật nhanh 458-748x", "20 giây", "2:15 - 2:35"),
+    ("Slide 11", "Khung 7 Trò chơi an ninh mật mã học: Games 1 – 4", "15 giây", "2:35 - 2:50"),
+    ("Slide 12", "Khung 7 Trò chơi an ninh mật mã học: Games 5 – 7 & Tổng kết", "15 giây", "2:50 - 3:05"),
     ("Slide 13", "Bảng ma trận đối chiếu 100% tiêu chí bài báo khoa học gốc", "15 giây", "3:05 - 3:20"),
     ("Slide 14", "Bộ kiểm thử an ninh mật mã tự động (17/17 Unit Tests PASS 100%)", "15 giây", "3:20 - 3:35"),
     ("Slide 15", "LIVE DEMONSTRATION: Trình diễn thực tế trên Trình duyệt & Terminal", "80 giây", "3:35 - 4:55"),
-    ("Slide 16", "Tổng kết đóng góp khoa học & Khẳng định kết quả vượt trội [9, 10]", "15 giây", "4:55 - 5:10"),
+    ("Slide 16", "Tổng kết đóng góp khoa học & Khẳng định kết quả vượt trội", "15 giây", "4:55 - 5:10"),
     ("Slide 17", "Lời cảm ơn Quý Thầy Cô & Phiên hỏi đáp học thuật (Q&A)", "10 giây", "5:10 - 5:20"),
 ]
 
@@ -242,45 +237,46 @@ add_slide_section(
     doc, 1, "Trang Tiêu Đề Đề Tài DT005", "Trang bìa", "15 giây",
     "Kính thưa Thầy và Hội đồng đánh giá, em tên là Võ Anh Kiệt. Hôm nay em xin báo cáo đồ án giữa kỳ đề tài DT005: "
     "Hệ thống kiểm tra toàn vẹn tệp bằng SHA-256, HMAC và Cây Merkle phân cấp HD-Merkle Tree. "
-    "Đồ án bám sát 2 mục tiêu đánh giá: Dịch toàn văn bài báo khoa học Harry Halpin Oxford 2025 và chạy lại 3 mô hình nền tảng "
-    "đạt thang điểm 6-8; đồng thời tự thiết kế mô hình mới, thuật toán mới đạt kết quả thực nghiệm vượt trội đáp ứng thang điểm 9-10.",
-    notes="Nói rõ họ tên, MSSV, tên đề tài và 2 thang điểm đánh giá để gây ấn tượng ngay từ đầu."
+    "Đồ án tập trung nghiên cứu bài toán đối kháng trong bài báo khoa học Oxford 2025 của Harry Halpin, "
+    "tái lập 3 mô hình nền tảng đối chứng, đồng thời tự thiết kế kiến trúc phân cấp mới và thuật toán cập nhật động "
+    "đạt hiệu năng và độ an toàn mật mã vượt trội.",
+    notes="Nói rõ ràng họ tên, MSSV, tên đề tài và mục tiêu khoa học tổng quát."
 )
 
 # SLIDE 2
 add_slide_section(
-    doc, 2, "Giới Thiệu & Tóm Tắt Bài Báo Harry Halpin (Oxford 2025)", "Thang điểm [6-8]", "15 giây",
+    doc, 2, "Giới Thiệu & Tóm Tắt Bài Báo Harry Halpin (Oxford 2025)", "Cơ sở lý thuyết", "15 giây",
     "Đầu tiên, em đã dịch thuật học thuật toàn văn bài báo 'The Adversary: The Philosophy of Cryptography' của tác giả Harry Halpin, "
     "xuất bản trên Oxford Journal of Cybersecurity năm 2025. Bài báo đặt ra luận điểm cốt lõi: Mật mã học không phải bài toán tĩnh, "
     "mà là cuộc đối đầu có chủ đích giữa Kẻ phòng thủ và 4 mô hình Kẻ thù hình thức: Kẻ nghe lén thụ động, Kẻ tấn công đường truyền Dolev-Yao, "
-    "Kẻ thù tính toán PPT và Kẻ thù khai thác kênh kề siêu dữ liệu.",
+    "Kẻ thù tính toán PPT và Kẻ thù khai thác kênh kề siêu dữ liệu. Bài báo thuần lý thuyết, tạo động lực thực nghiệm cho đồ án của em.",
     notes="Nhấn mạnh đây là bài báo mới xuất bản năm 2025 trên tạp chí Q1 uy tín của Đại học Oxford."
 )
 
 # SLIDE 3
 add_slide_section(
-    doc, 3, "Hiện Thực Hóa & Chạy Lại Kết Quả 3 Mô Hình Nền Tảng", "Thang điểm [6-8]", "15 giây",
-    "Để giải quyết khoảng trống thực nghiệm của bài báo gốc, em đã hiện thực hóa và chạy lại 3 mô hình nền tảng: "
-    "Thứ nhất là Danh sách băm phẳng SHA-256; Thứ hai là Danh sách băm có khóa HMAC; và Thứ ba là Cây Merkle chuẩn của Ralph Merkle 1979. "
-    "Cả 3 mô hình đều phát hiện 100% sai lệch khi tệp bị sửa đổi, hoàn thành trọn vẹn yêu cầu tái lập kết quả nền tảng ở thang điểm 6 đến 8.",
-    notes="Khẳng định đã hoàn thành 100% yêu cầu tái lập kết quả bài báo gốc.",
+    doc, 3, "Hiện Thực Hóa & Chạy Lại Kết Quả 3 Mô Hình Nền Tảng", "Hiện thực hóa bài báo", "15 giây",
+    "Để giải quyết khoảng trống thực nghiệm của bài báo gốc, em đã hiện thực hóa và chạy lại 3 mô hình nền tảng đối chứng: "
+    "Thứ nhất là Danh sách băm phẳng SHA-256; Thứ hai là Danh sách băm có khóa HMAC-SHA256; và Thứ ba là Cây Merkle chuẩn của Ralph Merkle 1979. "
+    "Cả 3 mô hình đều phát hiện 100% sai lệch khi tệp bị sửa đổi, hoàn thành trọn vẹn yêu cầu tái lập kết quả bài báo khoa học gốc.",
+    notes="Khẳng định đã tái lập thành công 100% mô hình của bài báo khoa học gốc.",
     drawio_guide="Vẽ 4 khối chuyển giao: Khối 1: Triết học Harry Halpin (2025) -> Khối 2: Khoảng trống thực nghiệm của bài báo -> Khối 3: Mã nguồn hiện thực hóa đồ án DT005 -> Khối 4: Kết quả chạy lại 3 mô hình."
 )
 
 # SLIDE 4
 add_slide_section(
-    doc, 4, "Phân Tích Hạn Chế Bài Báo Gốc & Động Lực Cải Tiến", "Mục tiêu đạt [9, 10]", "15 giây",
+    doc, 4, "Phân Tích Hạn Chế Bài Báo Gốc & Động Lực Cải Tiến", "Phân tích hạn chế", "15 giây",
     "Từ thực nghiệm tái lập, em chỉ ra 4 nút thắt kỹ thuật của mô hình nền tảng: "
     "Một là bế tắc Rebuild toàn bộ O(N) khi chỉ 1 tệp thay đổi; Hai là mảng lá phẳng thiếu phản ánh cấu trúc thư mục thực tế; "
     "Ba là nguy cơ va chạm Second-Preimage giữa nút lá và nút nhánh nếu không tách miền; "
     "Bốn là lãng phí băng thông khi client phải tải toàn bộ danh mục 111 KB và làm rò rỉ siêu dữ liệu.",
-    notes="Đây là cơ sở khoa học để đề xuất mô hình mới đạt điểm 9, 10.",
+    notes="Đây là cơ sở khoa học để đề xuất mô hình mới đạt hiệu năng vượt trội.",
     drawio_guide="Vẽ sơ đồ 4 trụ cột an ninh: Trụ cột 1: Second-Preimage Resistance -> Trụ cột 2: Domain Separation RFC 6962 -> Trụ cột 3: Membership Proof O(log N) -> Trụ cột 4: Append-Only Consistency. Trung tâm là Master Root Hash 32 byte."
 )
 
 # SLIDE 5
 add_slide_section(
-    doc, 5, "Đề Xuất Mô Hình Mới: Cây Merkle Phân Cấp Động (HD-Merkle Tree)", "Trọng tâm đạt [9, 10]", "15 giây",
+    doc, 5, "Đề Xuất Mô Hình Mới: Cây Merkle Phân Cấp Động (HD-Merkle Tree)", "Kiến trúc đề xuất", "15 giây",
     "Để khắc phục triệt để, em tự xây dựng mô hình mới: Cây Merkle phân cấp động HD-Merkle Tree, kết hợp mô hình toàn vẹn phân tầng Biba 1977 "
     "với chuẩn Certificate Transparency RFC 6962. Tầng 1 băm lá tệp tin với tiền tố 0x00; Tầng 2 gom nhóm tệp thành các cây con thư mục độc lập; "
     "và Tầng 3 tổng hợp các Directory Root thành Master Root Hash duy nhất. Lợi thế là cô lập lỗi và định vị sai lệch trong O(k log N).",
@@ -290,7 +286,7 @@ add_slide_section(
 
 # SLIDE 6
 add_slide_section(
-    doc, 6, "Thuật Toán Đề Xuất: Cập Nhật Động Theo Đường Dẫn Bẩn (Dirty-Path)", "Trọng tâm đạt [9, 10]", "15 giây",
+    doc, 6, "Thuật Toán Đề Xuất: Cập Nhật Động Theo Đường Dẫn Bẩn (Dirty-Path)", "Giải thuật đề xuất", "15 giây",
     "Cùng với mô hình, em tự phát triển thuật toán Dirty-Path Update: Khi có thao tác Thêm, Sửa hoặc Xóa 1 tệp, "
     "thuật toán tra cứu nhanh vị trí lá qua bảng băm chỉ mục O(1) và chỉ lan truyền cập nhật dọc theo đường dẫn bẩn từ lá lên gốc. "
     "Độ phức tạp tính toán được hạ từ tuyến tính O(N) của mô hình truyền thống xuống độ phức tạp logarit O(log N).",
@@ -299,7 +295,7 @@ add_slide_section(
 
 # SLIDE 7
 add_slide_section(
-    doc, 7, "Cơ Chế An Ninh Mật Mã & Chuẩn Phân Tách Miền RFC 6962", "Trọng tâm đạt [9, 10]", "15 giây",
+    doc, 7, "Cơ Chế An Ninh Mật Mã & Chuẩn Phân Tách Miền RFC 6962", "Cơ chế an ninh", "15 giây",
     "Về mặt mật mã học, hệ thống áp dụng chuẩn phân tách miền RFC 6962: Tiền tố 0x00 cho nút lá và 0x01 cho nút nhánh, "
     "triệt tiêu 100% nguy cơ tấn công Second-Preimage. Đồng thời, hệ thống cung cấp Bằng chứng thành viên rút gọn Compact Inclusion Proof "
     "chỉ 1.37 KB và Bằng chứng nhất quán Append-Only Consistency Proof chứng minh lịch sử tệp tin không bị sửa lén.",
@@ -309,7 +305,7 @@ add_slide_section(
 
 # SLIDE 8
 add_slide_section(
-    doc, 8, "Phòng Chống Kênh Kề Đo Thời Gian & Xóa Sạch Bộ Nhớ", "Trọng tâm đạt [9, 10]", "15 giây",
+    doc, 8, "Phòng Chống Kênh Kề Đo Thời Gian & Xóa Sạch Bộ Nhớ", "Phòng chống nâng cao", "15 giây",
     "Nhằm đối phó với kẻ thù kênh kề, em thay thế toán tử so sánh chuỗi thông thường bằng hàm hmac.compare_digest() "
     "có thời gian so sánh hằng số O(1), triệt tiêu rò rỉ thời gian CPU. Với kẻ thù trích xuất bộ nhớ tiến trình, "
     "các khóa HMAC và vùng đệm nhạy cảm được quản lý trong bytearray và chủ động ghi đè bằng giá trị 0x00 qua hàm secure_erase().",
@@ -318,7 +314,7 @@ add_slide_section(
 
 # SLIDE 9
 add_slide_section(
-    doc, 9, "Thiết Kế 2 Tập Dữ Liệu Kaggle Thực Tế & Phương Pháp Đo Lường", "Thang điểm [9, 10]", "15 giây",
+    doc, 9, "Thiết Kế 2 Tập Dữ Liệu Kaggle Thực Tế & Phương Pháp Đo Lường", "Thực nghiệm", "15 giây",
     "Để đánh giá khách quan, em sử dụng 2 tập dữ liệu Kaggle thực tế: "
     "Tập 1 là kaggle_dataset gồm 1.115 tệp, dung lượng 29 MB, 23 thư mục đa tầng với 7 định dạng thực tế dùng đối chuẩn baseline. "
     "Tập 2 là kaggle_dataset_large gồm 5.600 tệp, 175 MB chia 6 danh mục lớn tại Downloads dùng kiểm tra chịu tải và quan sát streaming log terminal. "
@@ -329,12 +325,12 @@ add_slide_section(
 
 # SLIDE 10
 add_slide_section(
-    doc, 10, "Bảng Đối Sánh Big-O Lý Thuyết & Cập Nhật Động 458-748 Lần", "Thang điểm [9, 10]", "20 giây",
+    doc, 10, "Bảng Đối Sánh Big-O Lý Thuyết & Cập Nhật Động 458-748 Lần", "Đối chuẩn hiệu năng", "20 giây",
     "Bảng đối sánh Big-O chứng minh ưu thế lý thuyết: Cả 3 mô hình cũ đều có chi phí cập nhật O(N), trong khi HD-Merkle đạt O(log N). "
     "Thực nghiệm đối đầu chứng minh kết quả vượt trội: Khi sửa 1 tệp tin, mô hình cũ mất 73.4 mili-giây, còn HD-Merkle chỉ mất 0.16 mili-giây — "
     "nhanh hơn 458 LẦN! Khi xóa tệp nhanh hơn 748 LẦN! Tốc độ xác minh 1 tệp đạt 0.02 mili-giây, nhanh hơn 8.5 lần so với danh sách phẳng. "
-    "Đây là minh chứng rõ ràng nhất cho kết quả tốt hơn vượt trội ở thang điểm 9 và 10.",
-    notes="Chỉ tay vào bảng Big-O ở nửa trên slide và con số 458 - 748 lần ở nửa dưới slide."
+    "Mọi thông số đo lường đã được xác thực trực tiếp trên bảng điều khiển console terminal như Thầy Cô đang quan sát.",
+    notes="Chỉ tay vào bảng Big-O ở nửa trên slide và con số 458 - 748 lần kèm log console ở nửa dưới slide."
 )
 
 # SLIDE 11
@@ -451,13 +447,13 @@ add_slide_section(
 
 # SLIDE 16
 add_slide_section(
-    doc, 16, "Tổng Kết Đóng Góp Khoa Học & Khẳng Định Kết Quả Vượt Trội", "Thang điểm [9, 10]", "15 giây",
+    doc, 16, "Tổng Kết Đóng Góp Khoa Học & Khẳng Định Kết Quả Vượt Trội", "Tổng kết học thuật", "15 giây",
     "Tóm lại, đồ án DT005 đạt được 4 đóng góp nổi bật: "
-    "Một là hoàn thành xuất sắc việc nghiên cứu và tái lập 3 mô hình của bài báo Harry Halpin Oxford 2025 ở thang điểm 6-8; "
-    "Hai là tự thiết kế mô hình HD-Merkle Tree kết hợp Biba và RFC 6962 ở thang điểm 9-10; "
+    "Một là hoàn thành xuất sắc việc nghiên cứu và tái lập 3 mô hình của bài báo Harry Halpin Oxford 2025; "
+    "Hai là tự thiết kế mô hình HD-Merkle Tree kết hợp Biba 1977 và chuẩn phân tách miền RFC 6962; "
     "Ba là phát triển thuật toán Dirty-Path cập nhật nhanh hơn 458 đến 748 lần, tiết kiệm 98.8% băng thông mạng; "
     "và Bốn là kiểm chứng an ninh toán học trọn vẹn qua 7 Games, 17 Unit Tests và trình diễn trực tiếp trên 2 tập dữ liệu Kaggle lớn.",
-    notes="Khẳng định vững chắc đã đáp ứng đầy đủ và vượt trội các tiêu chí thang điểm 9, 10 của Giảng viên.",
+    notes="Khẳng định vững chắc đã đạt được kết quả nghiên cứu và hiện thực hóa xuất sắc.",
     drawio_guide="Vẽ sơ đồ chu trình khép kín 4 khối: Khối 1: Khoa học bài báo -> Khối 2: Đột phá hiệu năng 458-748x -> Khối 3: Kiểm định an ninh 7 Games & 17 Tests -> Khối 4: Ứng dụng thực tế Web Demo & Kaggle."
 )
 
