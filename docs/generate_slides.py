@@ -224,81 +224,57 @@ def add_terminal_card(slide, left, top, width, height, title, log_lines):
     return card
 
 
-def add_academic_paper_card(slide, left, top, width, height):
-    """Slide 2: Thẻ bài báo Oxford 2025 với font chữ lớn, bố cục rõ nét."""
-    add_card(slide, left, top, width, height)
+def add_paper_web_screenshot_card(slide, left, top, width, height):
+    """Slide 2: Thẻ hiển thị ảnh chụp màn hình bài báo thực tế trên cổng Oxford Academic."""
+    card = add_card(slide, left, top, width, height)
 
-    badge = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.25), top + Inches(0.2), width - Inches(0.5), Inches(0.65))
-    badge.fill.solid()
-    badge.fill.fore_color.rgb = NAVY_COLOR
-    badge.line.color.rgb = NAVY_COLOR
-    tf_b = badge.text_frame
-    tf_b.word_wrap = True
-    p0 = tf_b.paragraphs[0]
-    p0.text = "OXFORD JOURNAL OF CYBERSECURITY (OXFORD UNIVERSITY PRESS)"
-    p0.font.bold = True
-    p0.font.size = Pt(10)
-    p0.font.color.rgb = RGBColor(255, 255, 255)
-    p1 = tf_b.add_paragraph()
-    p1.text = "ISSN 2057-2085 • Tập 11, Số 1, Năm 2025 • Article ID: tyae024"
-    p1.font.size = Pt(9.0)
-    p1.font.color.rgb = RGBColor(255, 255, 255)
-
-    tb = slide.shapes.add_textbox(left + Inches(0.25), top + Inches(1.0), width - Inches(0.5), height - Inches(1.15))
+    # Tiêu đề khung ảnh
+    tb = slide.shapes.add_textbox(left + Inches(0.2), top + Inches(0.12), width - Inches(0.4), Inches(0.45))
     tf = tb.text_frame
     tf.word_wrap = True
+    p0 = tf.paragraphs[0]
+    p0.text = "ẢNH CHỤP BÀI BÁO THỰC TẾ TRÊN CỔNG OXFORD ACADEMIC"
+    p0.font.bold = True
+    p0.font.size = Pt(11)
+    p0.font.color.rgb = NAVY_COLOR
 
-    p_t = tf.paragraphs[0]
-    p_t.text = "The Adversary: The Philosophy of Cryptography"
-    p_t.font.bold = True
-    p_t.font.size = Pt(13.5)
-    p_t.font.color.rgb = NAVY_COLOR
+    p1 = tf.add_paragraph()
+    p1.text = "Cổng xuất bản: academic.oup.com/cybersecurity  |  DOI: 10.1093/cybsec/tyaf006"
+    p1.font.size = Pt(8.2)
+    p1.font.color.rgb = TEXT_MUTED
 
-    p_a = tf.add_paragraph()
-    p_a.text = "Tác giả: Harry Halpin  |  Đơn vị: Nym Technologies & Inria Research"
-    p_a.font.size = Pt(10)
-    p_a.font.color.rgb = BLUE_ACCENT
-    p_a.space_after = Pt(8)
+    # Chèn ảnh chụp bài báo thực tế
+    img_path = r"d:\AnToanvaBaoMatHeThongThongTin\GK\docs\paper_web_article_clean.png"
+    if os.path.exists(img_path):
+        slide.shapes.add_picture(img_path, left + Inches(0.2), top + Inches(0.60), width=width - Inches(0.4))
 
-    # Khung trích dẫn Abstract
-    q_box = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.25), top + Inches(1.95), width - Inches(0.5), Inches(1.85))
-    q_box.fill.solid()
-    q_box.fill.fore_color.rgb = BLUE_BG
-    q_box.line.color.rgb = BLUE_ACCENT
-    tf_q = q_box.text_frame
-    tf_q.word_wrap = True
-    p_qh = tf_q.paragraphs[0]
-    p_qh.text = "[ TRÍCH ĐOẠN LUẬN ĐIỂM CỐT LÕI TỪ BÀI BÁO ]"
-    p_qh.font.bold = True
-    p_qh.font.size = Pt(9.5)
-    p_qh.font.color.rgb = NAVY_COLOR
-    p_qb = tf_q.add_paragraph()
-    p_qb.text = "“Mật mã học không chỉ là bài toán mã hóa dữ liệu tĩnh, mà là sự tương tác đối kháng hình thức giữa người xây dựng hệ thống và Kẻ thù (The Adversary). Để bảo đảm toàn vẹn kho dữ liệu, bắt buộc phải sử dụng cây Merkle phân tách miền (RFC 6962) và kiểm nghiệm trên dữ liệu thực tế biến thiên.”"
-    p_qb.font.size = Pt(9.0)
-    p_qb.font.color.rgb = TEXT_MAIN
-    p_qb.space_before = Pt(4)
+    # Khung thông tin chứng minh xuất bản chính thức ở chân thẻ
+    badge_box = slide.shapes.add_shape(
+        MSO_SHAPE.ROUNDED_RECTANGLE,
+        left + Inches(0.2), top + Inches(4.75),
+        width - Inches(0.4), Inches(0.85)
+    )
+    badge_box.fill.solid()
+    badge_box.fill.fore_color.rgb = BLUE_BG
+    badge_box.line.color.rgb = BLUE_ACCENT
+    badge_box.line.width = Pt(1.0)
+    tf_b = badge_box.text_frame
+    tf_b.word_wrap = True
 
-    # 4 Thẻ Badges học thuật
-    badges = [
-        ("Kẻ thù PPT & Dolev-Yao", BLUE_ACCENT, BLUE_BG),
-        ("Chuẩn RFC 6962 Domain Separation", GREEN_COLOR, GREEN_BG),
-        ("Cây Merkle & Xác minh O(log N)", PURPLE_ACCENT, PURPLE_BG),
-        ("Nguyên lý Kerckhoffs & Kênh kề", AMBER_ACCENT, AMBER_BG)
-    ]
-    b_y = top + Inches(4.0)
-    for i, (b_txt, b_col, b_bg) in enumerate(badges):
-        b_shape = slide.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, left + Inches(0.25 + (i % 2) * 2.75), b_y + Inches((i // 2) * 0.75), Inches(2.65), Inches(0.62))
-        b_shape.fill.solid()
-        b_shape.fill.fore_color.rgb = b_bg
-        b_shape.line.color.rgb = b_col
-        tf_b = b_shape.text_frame
-        tf_b.word_wrap = True
-        p_b = tf_b.paragraphs[0]
-        p_b.text = f"✓ {b_txt}"
-        p_b.font.bold = True
-        p_b.font.size = Pt(8.8)
-        p_b.font.color.rgb = b_col
-        p_b.alignment = PP_ALIGN.CENTER
+    pb0 = tf_b.paragraphs[0]
+    pb0.text = "XÁC NHẬN MINH CHỨNG XUẤT BẢN KHOA HỌC CHÍNH THỨC"
+    pb0.font.bold = True
+    pb0.font.size = Pt(9.0)
+    pb0.font.color.rgb = NAVY_COLOR
+
+    pb1 = tf_b.add_paragraph()
+    pb1.text = "• Tạp chí: Oxford Journal of Cybersecurity (Oxford University Press)  |  Tập 11, Số 1, 2025\n" \
+               "• Tác giả: Harry Halpin (Nym Technologies & Inria)  |  Đăng tải: 27/03/2025  |  ID: tyaf006"
+    pb1.font.size = Pt(8.2)
+    pb1.font.color.rgb = TEXT_MAIN
+    pb1.space_before = Pt(2)
+
+    return card
 
 
 def add_audit_scorecard(slide, left, top, width, height):
@@ -530,7 +506,7 @@ add_bullet_card(slide2, Inches(0.8), Inches(1.35), Inches(5.6), Inches(5.75),
          "Bài báo thuần lý thuyết, hoàn toàn thiếu mã nguồn và kiểm chứng định lượng trên dữ liệu thực tế — Đây là động lực hiện thực hóa của đồ án DT005.")
     ], font_title_size=12, font_body_size=9.5)
 
-add_academic_paper_card(slide2, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75))
+add_paper_web_screenshot_card(slide2, Inches(6.6), Inches(1.35), Inches(5.9), Inches(5.75))
 
 
 # ==============================================================================

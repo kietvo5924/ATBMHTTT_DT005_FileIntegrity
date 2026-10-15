@@ -247,10 +247,11 @@ add_slide_section(
 add_slide_section(
     doc, 2, "Giới Thiệu & Tóm Tắt Bài Báo Harry Halpin (Oxford 2025)", "Cơ sở lý thuyết", "15 giây",
     "Đầu tiên, em đã dịch thuật học thuật toàn văn bài báo 'The Adversary: The Philosophy of Cryptography' của tác giả Harry Halpin, "
-    "xuất bản trên Oxford Journal of Cybersecurity năm 2025. Bài báo đặt ra luận điểm cốt lõi: Mật mã học không phải bài toán tĩnh, "
-    "mà là cuộc đối đầu có chủ đích giữa Kẻ phòng thủ và 4 mô hình Kẻ thù hình thức: Kẻ nghe lén thụ động, Kẻ tấn công đường truyền Dolev-Yao, "
-    "Kẻ thù tính toán PPT và Kẻ thù khai thác kênh kề siêu dữ liệu. Bài báo thuần lý thuyết, tạo động lực thực nghiệm cho đồ án của em.",
-    notes="Nhấn mạnh đây là bài báo mới xuất bản năm 2025 trên tạp chí Q1 uy tín của Đại học Oxford."
+    "xuất bản trên Oxford Journal of Cybersecurity năm 2025. Như Thầy Cô quan sát bên phải màn hình, đây là ảnh chụp bài báo thực tế "
+    "trên cổng xuất bản Oxford Academic. Bài báo đặt ra luận điểm cốt lõi: Mật mã học không phải bài toán tĩnh, "
+    "mà là cuộc đối đầu tương tác giữa Kẻ phòng thủ và 4 mô hình Kẻ thù hình thức: Kẻ nghe lén thụ động, Kẻ tấn công Dolev-Yao, "
+    "Kẻ thù tính toán PPT và Kẻ thù khai thác kênh kề siêu dữ liệu.",
+    notes="Chỉ tay sang ảnh chụp bài báo thực tế trên cổng Oxford Academic ở nửa phải slide để khẳng định tính chính thống của đề tài."
 )
 
 # SLIDE 3
