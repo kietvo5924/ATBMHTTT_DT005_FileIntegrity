@@ -301,16 +301,16 @@ HTML_PAGE = """<!DOCTYPE html>
           const artifactNames = Object.values(artifactsDetected).flat().filter(Boolean);
 
           const modelsLive = data.models_live_scan || {};
-          const flat_ms = Number(modelsLive.flat_sha256?.latency_ms || g6.benchmark_times?.flat_sha_ms || 230);
-          const hmac_ms = Number(modelsLive.hmac_sha256?.latency_ms || g6.benchmark_times?.hmac_ms || 225);
-          const std_ms = Number(modelsLive.merkle_std?.latency_ms || g6.benchmark_times?.std_tree_ms || 240);
-          const hd_ms = Number(modelsLive.hd_merkle?.latency_ms || g6.timing_breakdown?.total_hd_ms || 0.0017);
-          const speedupFactor = Math.max(1, Math.round(flat_ms / (hd_ms || 0.001)));
+          const flat_ms = Number(modelsLive.flat_sha256?.latency_ms ?? g6.benchmark_times?.flat_sha_ms ?? 0);
+          const hmac_ms = Number(modelsLive.hmac_sha256?.latency_ms ?? g6.benchmark_times?.hmac_ms ?? 0);
+          const std_ms = Number(modelsLive.merkle_std?.latency_ms ?? g6.benchmark_times?.std_tree_ms ?? 0);
+          const hd_ms = Number(modelsLive.hd_merkle?.latency_ms ?? g6.timing_breakdown?.total_hd_ms ?? 0);
+          const speedupFactor = hd_ms > 0 ? Math.max(1, Math.round(flat_ms / hd_ms)) : 1;
 
-          const g7FlatPayload = (g7.metadata_privacy && g7.metadata_privacy.flat_sha256_hmac && g7.metadata_privacy.flat_sha256_hmac.payload_size) || '254.22 KB';
-          const g7HdPayload = (g7.metadata_privacy && ((g7.metadata_privacy.hd_merkle_tree && g7.metadata_privacy.hd_merkle_tree.payload_size) || (g7.metadata_privacy.hd_merkle && g7.metadata_privacy.hd_merkle.payload_size))) || '256 Bytes';
-          const g4ProofBytes = g4.proof_size_bytes || 320;
-          const g4ProofNodes = g4.proof_length_nodes || 4;
+          const g7FlatPayload = (g7.metadata_privacy && g7.metadata_privacy.flat_sha256_hmac && g7.metadata_privacy.flat_sha256_hmac.payload_size) || '-- KB';
+          const g7HdPayload = (g7.metadata_privacy && ((g7.metadata_privacy.hd_merkle_tree && g7.metadata_privacy.hd_merkle_tree.payload_size) || (g7.metadata_privacy.hd_merkle && g7.metadata_privacy.hd_merkle.payload_size))) || '-- Bytes';
+          const g4ProofBytes = g4.proof_size_bytes ?? 0;
+          const g4ProofNodes = g4.proof_length_nodes ?? 0;
 
           const cleanStr = (s) => (s || '').toString().replace(/[()]/g, '');
 
@@ -2565,10 +2565,10 @@ HTML_PAGE = """<!DOCTYPE html>
           const resArea = document.getElementById('batchProofResults');
           if (resArea) resArea.style.display = 'flex';
 
-          const stdBytes = data.std_batch_size || 10800;
-          const hdBytes = data.batch_size || 1420;
-          const savings = data.savings_percent || '87.0%';
-          const latency = data.latency_ms || 0.45;
+          const stdBytes = data.std_batch_size || 0;
+          const hdBytes = data.batch_size || 0;
+          const savings = data.savings_percent || '0%';
+          const latency = data.latency_ms || 0;
 
           document.getElementById('batchStdSize').innerText = `${(stdBytes / 1024).toFixed(1)} KB (${stdBytes.toLocaleString()} Bytes)`;
           document.getElementById('batchHdSize').innerText = `${(hdBytes / 1024).toFixed(1)} KB (${hdBytes.toLocaleString()} Bytes)`;
@@ -2737,7 +2737,7 @@ HTML_PAGE = """<!DOCTYPE html>
       updateText('bHdVerify', `<strong>${hd.verify_ms.toFixed(3)} ms - Quét song song</strong>`);
       updateText('bHdUpdate', `<strong>${(hd.update_ms || 0).toFixed(2)} ms - Dirty-path log N</strong>`);
       updateText('bHdMeta', `${(hd.metadata_kb || 0).toFixed(2)} KB`);
-      updateText('bHdProof', `<strong>${hd.proof_bytes || 0} Bytes - Batch: ~1.4 KB</strong>`);
+      updateText('bHdProof', `<strong>${hd.proof_size || ((hd.proof_bytes || 0) + ' Bytes')}</strong>`);
     }
 
     async function runHeadToHeadCompare(btn, showToast = false) {
@@ -2951,11 +2951,13 @@ class WebDemoHandler(BaseHTTPRequestHandler):
                 model_files = disk_files
                 if model == "sha256":
                     root = STATE["sha256"].root_hash
-                    proof_sz = "N/A - Cần tải toàn bộ danh mục 111 KB"
+                    manifest_sz = len(json.dumps(STATE["sha256"].manifest).encode("utf-8")) if hasattr(STATE["sha256"], "manifest") else 0
+                    proof_sz = f"N/A - Cần tải toàn bộ danh mục ({manifest_sz / 1024:.2f} KB)" if manifest_sz > 0 else "N/A - Cần tải toàn bộ danh mục"
                     file_count = len(STATE["sha256"].manifest)
                 elif model == "hmac":
                     root = getattr(STATE["hmac"], "aggregate_hmac", "") or getattr(STATE["hmac"], "root_hash", "")
-                    proof_sz = "N/A - Yêu cầu khóa bí mật K"
+                    manifest_sz = len(json.dumps(STATE["hmac"].manifest).encode("utf-8")) if hasattr(STATE["hmac"], "manifest") else 0
+                    proof_sz = f"N/A - Yêu cầu khóa bí mật K ({manifest_sz / 1024:.2f} KB)" if manifest_sz > 0 else "N/A - Yêu cầu khóa bí mật K"
                     file_count = len(STATE["hmac"].manifest)
                 elif model == "merkle_std":
                     root = STATE["merkle_std"].root_hash
@@ -2967,7 +2969,16 @@ class WebDemoHandler(BaseHTTPRequestHandler):
                     root = STATE["hd_merkle"].root_hash
                     sample = disk_files[0] if disk_files else ""
                     p = STATE["hd_merkle"].get_proof(sample) if sample else {}
-                    proof_sz = f"{CompactProof.get_proof_size(CompactProof.serialize(p))} Bytes - Batch: ~1.4 KB"
+                    single_sz = CompactProof.get_proof_size(CompactProof.serialize(p)) if p else 0
+                    batch_str = ""
+                    if len(disk_files) >= 5:
+                        try:
+                            sample_batch = BatchMultiProof.create_batch_proof(STATE["hd_merkle"], disk_files[:5])
+                            b_sz = len(json.dumps(sample_batch).encode("utf-8"))
+                            batch_str = f" - Batch (5 tệp): {b_sz} B"
+                        except Exception:
+                            pass
+                    proof_sz = f"{single_sz} Bytes{batch_str}"
                     file_count = len(STATE["hd_merkle"].file_nodes)
 
             self.send_json({
@@ -3323,7 +3334,8 @@ class WebDemoHandler(BaseHTTPRequestHandler):
                 is_valid_s, raw_vio_s, elapsed = STATE["sha256"].verify_all()
                 name = "Flat SHA-256 Manifest"
                 lat = elapsed * 1000
-                proof_sz = "N/A - Cần tải toàn bộ danh mục 111 KB"
+                manifest_sz = len(json.dumps(STATE["sha256"].manifest).encode("utf-8")) if hasattr(STATE["sha256"], "manifest") else 0
+                proof_sz = f"N/A - Cần tải toàn bộ danh mục ({manifest_sz / 1024:.2f} KB)" if manifest_sz > 0 else "N/A - Cần tải toàn bộ danh mục"
                 for v in raw_vio_s:
                     if v.startswith("MODIFIED_FILE: "):
                         tampered.append(v.split(": ", 1)[-1])
@@ -3335,7 +3347,8 @@ class WebDemoHandler(BaseHTTPRequestHandler):
                 valid_hmac, raw_violations, elapsed = STATE["hmac"].verify_all()
                 name = "HMAC-SHA256 Manifest"
                 lat = elapsed * 1000
-                proof_sz = "N/A - Yêu cầu bảo mật khóa đối xứng K"
+                manifest_sz = len(json.dumps(STATE["hmac"].manifest).encode("utf-8")) if hasattr(STATE["hmac"], "manifest") else 0
+                proof_sz = f"N/A - Yêu cầu bảo mật khóa đối xứng K ({manifest_sz / 1024:.2f} KB)" if manifest_sz > 0 else "N/A - Yêu cầu bảo mật khóa đối xứng K"
                 for v in raw_violations:
                     if v.startswith("AUTHENTICATION_FAILED: "):
                         tampered.append(v.split(": ", 1)[-1])
@@ -3363,7 +3376,16 @@ class WebDemoHandler(BaseHTTPRequestHandler):
                 lat = elapsed * 1000
                 sample = current_disk_list[0] if current_disk_list else ""
                 sample_p = STATE["hd_merkle"].get_proof(sample) if sample else {}
-                proof_sz = f"{CompactProof.get_proof_size(CompactProof.serialize(sample_p))} Bytes - Batch: ~1.4 KB"
+                single_sz = CompactProof.get_proof_size(CompactProof.serialize(sample_p)) if sample else 0
+                batch_str = ""
+                if len(current_disk_list) >= 5:
+                    try:
+                        sample_batch = BatchMultiProof.create_batch_proof(STATE["hd_merkle"], current_disk_list[:5])
+                        b_sz = len(json.dumps(sample_batch).encode("utf-8"))
+                        batch_str = f" - Batch (5 tệp): {b_sz} B"
+                    except Exception:
+                        pass
+                proof_sz = f"{single_sz} Bytes{batch_str}"
                 for v in raw_violations:
                     if v.startswith("TAMPERED: "):
                         tampered.append(v.split(": ", 1)[-1])
@@ -3514,13 +3536,24 @@ class WebDemoHandler(BaseHTTPRequestHandler):
             lat = (time.perf_counter() - t0) * 1000
 
             batch_bytes = len(json.dumps(batch).encode("utf-8"))
-            depth = max(1, math.ceil(math.log2(max(len(all_known), 8))))
-            std_single_proof_bytes = depth * 72 + 120
-            std_batch_size = std_single_proof_bytes * len(valid_files)
-            if std_batch_size < batch_bytes * 3:
-                std_batch_size = int(batch_bytes * 7.6)
+            if STATE.get("merkle_std") is None and td:
+                m_std = StandardMerkleTree(td)
+                m_std.build_tree()
+                STATE["merkle_std"] = m_std
 
-            savings_pct = round((1 - (batch_bytes / std_batch_size)) * 100, 1)
+            std_batch_size = 0
+            if STATE.get("merkle_std") is not None:
+                for vf in valid_files:
+                    p_vf = STATE["merkle_std"].get_proof(vf)
+                    if p_vf:
+                        std_batch_size += len(json.dumps(p_vf).encode("utf-8"))
+
+            if std_batch_size == 0:
+                depth = max(1, math.ceil(math.log2(max(len(all_known), 8))))
+                std_single_proof_bytes = depth * 72 + 120
+                std_batch_size = std_single_proof_bytes * len(valid_files)
+
+            savings_pct = round((1 - (batch_bytes / max(1, std_batch_size))) * 100, 1)
 
             print(f"\n[TERMINAL SERVER] [BATCH MERKLE PROOF] Xác thực nhóm {len(valid_files)} tệp:", flush=True)
             print(f"                  - Tệp tin         : {valid_files}", flush=True)
@@ -3659,6 +3692,21 @@ class WebDemoHandler(BaseHTTPRequestHandler):
             else:
                 pct_str = "100.0%"
 
+            # Tính kích thước batch proof thực tế cho HD-Merkle nếu có >= 5 tệp
+            batch_sz_str = ""
+            batch_savings_str = ""
+            if len(files) >= 5:
+                try:
+                    sample_batch = BatchMultiProof.create_batch_proof(t_hd, files[:5])
+                    b_sz = len(json.dumps(sample_batch).encode("utf-8"))
+                    batch_sz_str = f" - Batch (5 tệp): {b_sz} B"
+                    std_5_sz = sum(len(json.dumps(m_m.get_proof(f) or []).encode("utf-8")) for f in files[:5])
+                    if std_5_sz > 0:
+                        sav = round((1 - (b_sz / std_5_sz)) * 100, 1)
+                        batch_savings_str = f"tiết kiệm {sav}%"
+                except Exception:
+                    pass
+
             res = [
                 {
                     "name": "HD-MerkleTree Đề xuất",
@@ -3672,7 +3720,7 @@ class WebDemoHandler(BaseHTTPRequestHandler):
                     "proof_bytes": p_hd_sz,
                     "speed_fps": round(len(files) / (v_hd if v_hd > 0 else 0.0001)),
                     "integrity_percent": pct_str,
-                    "proof_size": f"{p_hd_sz} B - Batch: ~1.4 KB",
+                    "proof_size": f"{p_hd_sz} B{batch_sz_str}",
                     "resistance": "100% Kháng Second-Preimage RFC 6962"
                 },
                 {
@@ -3687,7 +3735,7 @@ class WebDemoHandler(BaseHTTPRequestHandler):
                     "proof_bytes": 0,
                     "speed_fps": round(len(files) / (v_s if v_s > 0 else 0.0001)),
                     "integrity_percent": pct_str,
-                    "proof_size": "N/A - Tải toàn bộ N files",
+                    "proof_size": f"N/A - Tải toàn bộ danh mục ({meta_s:.2f} KB)",
                     "resistance": "Không có Proof độc lập"
                 },
                 {
@@ -3702,7 +3750,7 @@ class WebDemoHandler(BaseHTTPRequestHandler):
                     "proof_bytes": 0,
                     "speed_fps": round(len(files) / (v_h if v_h > 0 else 0.0001)),
                     "integrity_percent": pct_str,
-                    "proof_size": "N/A - Nguy cơ lộ khóa K",
+                    "proof_size": f"N/A - Yêu cầu bảo mật khóa K ({meta_h:.2f} KB)",
                     "resistance": "Nguy cơ lộ khóa đối xứng"
                 },
                 {
@@ -3735,7 +3783,7 @@ class WebDemoHandler(BaseHTTPRequestHandler):
             print("-" * 94, flush=True)
             print(f"[*] KẾT LUẬN THỰC NGHIỆM:", flush=True)
             print(f"    1. Tốc độ quét & định vị: HD-MerkleTree vượt trội nhất nhờ Dirty Path O(log N).", flush=True)
-            print(f"    2. Bằng chứng mật mã    : HD-MerkleTree nén Batch Multi-Proof tiết kiệm ~87% băng thông mạng.", flush=True)
+            print(f"    2. Bằng chứng mật mã    : HD-MerkleTree nén Batch Multi-Proof {batch_savings_str or 'tiết kiệm băng thông'}.", flush=True)
             print(f"    3. Kháng Second-Preimage: 100% an toàn bảo mật toán học theo RFC 6962 Domain Separation.", flush=True)
             print("=" * 94 + "\n", flush=True)
             self.send_json(res)

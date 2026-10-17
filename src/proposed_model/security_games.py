@@ -377,7 +377,7 @@ class ConsistencyProofGame:
         self.target_dir = target_dir
         self.tree = HDMerkleTree(target_dir)
 
-    def test_consistency(self, past_size: int = 950) -> Dict[str, Any]:
+    def test_consistency(self, past_size: Optional[int] = None) -> Dict[str, Any]:
         self.tree.build_tree_parallel()
         current_size = len(self.tree.file_nodes)
         if current_size == 0:
@@ -404,7 +404,7 @@ class ConsistencyProofGame:
                     backdoor_detected_on_disk = True
                     break
 
-        if past_size >= current_size:
+        if past_size is None or past_size >= current_size:
             past_size = max(1, current_size - min(50, current_size // 2))
 
         proof_nodes, old_root, new_root = self.tree.get_consistency_proof(past_size)
@@ -744,9 +744,9 @@ class MetadataLeakageAndSideChannelAudit:
             has_real_recon = True
 
         total_files = max(1, num_files)
-        flat_size_kb = round(total_files * 0.11, 2)
-        proof_size_bytes = 1452
-        savings_pct = 98.7
+        flat_size_kb = 0.0
+        proof_size_bytes = 0
+        savings_pct = 0.0
 
         if target_dir and os.path.isdir(target_dir):
             try:
@@ -1051,7 +1051,7 @@ def run_all_scientific_proofs(dataset_dir: Optional[str] = None, baseline_data: 
                 "deleted_count": len(deleted_files),
                 "dirty_nodes": m6["timing_breakdown"]["dirty_nodes_count"],
                 "status": "Bắt quả tang tại nhánh bẩn" if (tampered_files or injected_files or deleted_files) else "Khớp 100%",
-                "payload_size": f"{m4['proof_size_bytes']} Bytes"
+                "payload_size": m7["metadata_privacy"]["hd_merkle_tree"]["payload_size"]
             }
         }
     }
