@@ -1,21 +1,21 @@
 Model,Metric,Mean (ms),Std Dev (ms),Min (ms),Max (ms),Storage (Bytes),Proof Size (Bytes)
-Flat SHA-256 Manifest,build_time,234.6186,0.0,234.6186,234.6186,259718,259718
-Flat SHA-256 Manifest,verify_single,38.9784,0.0,38.9784,38.9784,259718,259718
-Flat SHA-256 Manifest,update_modify,693.1244,0.0,693.1244,693.1244,259718,259718
-Flat SHA-256 Manifest,update_add,6.6566,0.0,6.6566,6.6566,259718,259718
-Flat SHA-256 Manifest,update_delete,0.7349,0.0,0.7349,0.7349,259718,259718
-HMAC-SHA256 Manifest,build_time,247.2469,0.0,247.2469,247.2469,259723,259723
-HMAC-SHA256 Manifest,verify_single,39.6887,0.0,39.6887,39.6887,259723,259723
-HMAC-SHA256 Manifest,update_modify,42.6215,0.0,42.6215,42.6215,259723,259723
-HMAC-SHA256 Manifest,update_add,1.1547,0.0,1.1547,1.1547,259723,259723
-HMAC-SHA256 Manifest,update_delete,0.9637,0.0,0.9637,0.9637,259723,259723
-Standard Merkle Tree,build_time,235.8101,0.0,235.8101,235.8101,90775,1188
-Standard Merkle Tree,verify_single,0.0374,0.0,0.0374,0.0374,90775,1188
-Standard Merkle Tree,update_modify,41.7345,0.0,41.7345,41.7345,90775,1188
-Standard Merkle Tree,update_add,233.0655,0.0,233.0655,233.0655,90775,1188
-Standard Merkle Tree,update_delete,199.5932,0.0,199.5932,199.5932,90775,1188
-HD-MerkleTree (Proposed),build_time,307.5214,0.0,307.5214,307.5214,259736,256
-HD-MerkleTree (Proposed),verify_single,0.0099,0.0,0.0099,0.0099,259736,256
-HD-MerkleTree (Proposed),update_modify,40.677,0.0,40.677,40.677,259736,256
-HD-MerkleTree (Proposed),update_add,0.1825,0.0,0.1825,0.1825,259736,256
-HD-MerkleTree (Proposed),update_delete,0.0739,0.0,0.0739,0.0739,259736,256
+Flat SHA-256 Manifest,build_time,256.0027,13.1019,241.7635,276.16,259718,259718
+Flat SHA-256 Manifest,verify_single,42.8647,1.9604,40.6012,45.1984,259718,259718
+Flat SHA-256 Manifest,update_modify,686.0379,6.1855,677.5788,695.0277,259718,259718
+Flat SHA-256 Manifest,update_add,3.742,3.0026,2.0474,9.0945,259718,259718
+Flat SHA-256 Manifest,update_delete,1.0015,0.274,0.7757,1.4625,259718,259718
+HMAC-SHA256 Manifest,build_time,250.1857,9.722,232.9982,256.3634,259723,259723
+HMAC-SHA256 Manifest,verify_single,42.3892,1.4961,40.1547,43.7544,259723,259723
+HMAC-SHA256 Manifest,update_modify,42.5495,2.7296,39.2829,46.4536,259723,259723
+HMAC-SHA256 Manifest,update_add,1.3383,0.2461,1.1555,1.7618,259723,259723
+HMAC-SHA256 Manifest,update_delete,1.1376,0.2199,0.9704,1.5179,259723,259723
+Standard Merkle Tree,build_time,254.7685,20.0825,223.4139,278.4824,90775,1188
+Standard Merkle Tree,verify_single,0.0471,0.0128,0.036,0.0686,90775,1188
+Standard Merkle Tree,update_modify,41.4484,1.4011,40.1511,42.9887,90775,1188
+Standard Merkle Tree,update_add,283.8959,11.8896,266.754,299.5923,90775,1188
+Standard Merkle Tree,update_delete,233.4808,15.1443,224.2469,259.6944,90775,1188
+HD-MerkleTree (Proposed),build_time,343.1026,36.4801,306.8849,400.5109,259736,256
+HD-MerkleTree (Proposed),verify_single,0.011,0.0024,0.0087,0.0147,259736,256
+HD-MerkleTree (Proposed),update_modify,42.1762,1.975,39.7746,44.5836,259736,256
+HD-MerkleTree (Proposed),update_add,0.2362,0.0287,0.2036,0.2814,259736,256
+HD-MerkleTree (Proposed),update_delete,0.0914,0.0079,0.0833,0.1029,259736,256

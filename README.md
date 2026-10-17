@@ -13,15 +13,15 @@ Dự án hiện thực hóa trọn vẹn các luận điểm cốt lõi và tài
 
 | Mục & Trang trong bài báo Halpin (2025) | Mô hình Toán học / Lý thuyết | Lỗ hổng / Giới hạn An toàn được chỉ ra | Class & Phương thức Hiện thực hóa (DT005) | Kết quả Kiểm định Thực nghiệm |
 | :--- | :--- | :--- | :--- | :--- |
-| **Section 1 & 2** (Trang 2–4) | *Shannon's Noise vs. The Adversary* (Shannon 1948) | Mã kiểm tra lỗi tuyến tính (CRC32) chỉ chống được nhiễu ngẫu nhiên, bất lực hoàn toàn trước Kẻ thù có chủ đích | [`RandomOracleApproximationExperiment`](file:///d:/AnToanvaBaoMatHeThongThongTin/GK/src/proposed_model/security_games.py) (`crc32_forge_patch`) | Kẻ thù qua mặt CRC32 100% bằng 4 byte bù đại số trên $\mathbb{F}_2$; SHA-256 chặn đứng tức thì |
-| **Section 3** (Trang 4–5) | *Biba Hierarchical Integrity Model* (Biba 1977, Ref [21]) | Đối tượng ở mức toàn vẹn thấp can thiệp làm sai lệch trạng thái mức toàn vẹn cao (Vi phạm nguyên lý *No Write-Up*) | [`BibaHierarchicalIntegrityModel`](file:///d:/AnToanvaBaoMatHeThongThongTin/GK/src/proposed_model/security_games.py) (`verify_biba_isolation`) | Phát hiện vi phạm tức thì ($Root \ne Root'$); cập nhật qua Dirty Path $O(\log N) \approx 0.015$ ms; zeroize RAM |
-| **Section 3** (Trang 5) | *Shannon Symmetric Key Distribution* (Shannon 1949) | Kẻ thù khai thác kênh phân phối khóa: nếu 1 máy khách (Verifier) bị lộ khóa bí mật $K$, kẻ thù ký giả mạo toàn bộ | [`DolevYaoNetworkGame`](file:///d:/AnToanvaBaoMatHeThongThongTin/GK/src/proposed_model/security_games.py) (`baseline_comparison.hmac_sha256`) | HMAC sụp đổ nếu 1 client lộ khóa; HD-MerkleTree chỉ cần 32-byte Root Hash công khai, triệt tiêu rủi ro lộ khóa |
-| **Section 4** (Trang 7) | *Formalizing the Adversary: PPT Security Game* (Goldwasser-Micali 1984, Ref [33, 34]) | Kẻ thù có năng lực tính toán đa thức xác suất (PPT) cố gắng tìm giả mạo $M' \ne M$ sao cho $Verify(M', H_0) = 1$ | [`IntegritySecurityGame`](file:///d:/AnToanvaBaoMatHeThongThongTin/GK/src/proposed_model/security_games.py) (`run_game`, 100 trials) | Lợi thế thực nghiệm $Adv(A) = 0.0 \le negl(\lambda) = 2^{-128}$, chặn đứng 100/100 phép thử đa vector |
-| **Section 4** (Trang 8) | *Dolev-Yao Network Adversary* (Dolev-Yao 1983, Ref [52]) | Kẻ thù kiểm soát 100% kênh truyền: tráo đổi bằng chứng, can thiệp sửa đổi trên đường truyền, tấn công phát lại | [`DolevYaoNetworkGame`](file:///d:/AnToanvaBaoMatHeThongThongTin/GK/src/proposed_model/security_games.py) (`run_dolev_yao_tests`) | Chặn đứng 100% (3/3 kịch bản: Cross-proof Swap, In-transit Tampering, Replay Attack) |
-| **Section 4** (Trang 8) | *Random Oracle Model & SAC* (Bellare-Rogaway 1993, Ref [40]) | Hàm băm phải xấp xỉ tiên tri ngẫu nhiên: lật 1-bit đầu vào gây biến đổi độc lập 50% bit đầu ra (Bernoulli) | [`RandomOracleApproximationExperiment`](file:///d:/AnToanvaBaoMatHeThongThongTin/GK/src/proposed_model/security_games.py) (Monte Carlo 1.000 mẫu) | Tỷ lệ đảo bit đạt $49.72\% \approx 50.00\%$, $\sigma = 7.87$ bits (khớp lý thuyết nhị thức $\sigma = 8.00$ bits) |
-| **Section 5** (Trang 8–10) | *The Limits of Formalization: Second-Preimage* (RFC 6962) | Ghép nối chuỗi thô $H(Left \,\|\, Right)$ gây va chạm tiền ảnh thứ hai (Node-Leaf Confusion Attack) | [`SecondPreimageGame`](file:///d:/AnToanvaBaoMatHeThongThongTin/GK/src/proposed_model/security_games.py) (`simulate_attack`) | Standard Merkle Tree bị tấn công (True); HD-Merkle phân tách miền `0x00`/`0x01` kháng tuyệt đối (True) |
-| **Section 5** (Trang 10) | *Timing Side-Channel Resistance* (Kocher 1996, Ref [36]) | Rò rỉ thông tin qua thời gian so sánh chuỗi băm (Early return comparison leak) | [`MetadataLeakageAndSideChannelAudit`](file:///d:/AnToanvaBaoMatHeThongThongTin/GK/src/proposed_model/security_games.py) (`audit_security`, 20.000 chu kỳ) | Naive comparison chênh lệch $\Delta \approx 13$ ms/20k chu kỳ; `hmac.compare_digest` triệt tiêu về $O(1)$ |
-| **Section 6** (Trang 11–13) | *Metadata Leakage & Certificate Transparency* (Laurie et al. RFC 6962, Ref [109, 114]) | Rò rỉ toàn bộ danh mục tệp trên kênh truyền; kẻ thù sửa đổi ngầm lịch sử nhật ký (Backdoor insertion) | [`ConsistencyProofGame`](file:///d:/AnToanvaBaoMatHeThongThongTin/GK/src/proposed_model/security_games.py) & [`MetadataLeakageAndSideChannelAudit`](file:///d:/AnToanvaBaoMatHeThongThongTin/GK/src/proposed_model/security_games.py) | Bằng chứng nhất quán $O(\log N)$ phát hiện 100% sửa lén; giấu $N-1$ tệp, tiết kiệm >99% băng thông mạng |
+| **Section 1 & 2** (Trang 2–4) | *Shannon's Noise vs. The Adversary* (Shannon 1948) | Mã kiểm tra lỗi tuyến tính (CRC32) chỉ chống được nhiễu ngẫu nhiên, bất lực hoàn toàn trước Kẻ thù có chủ đích | [`RandomOracleApproximationExperiment`](src/proposed_model/security_games.py) (`crc32_forge_patch`) | Kẻ thù qua mặt CRC32 100% bằng 4 byte bù đại số trên $\mathbb{F}_2$; SHA-256 chặn đứng tức thì |
+| **Section 3** (Trang 4–5) | *Biba Hierarchical Integrity Model* (Biba 1977, Ref [21]) | Đối tượng ở mức toàn vẹn thấp can thiệp làm sai lệch trạng thái mức toàn vẹn cao (Vi phạm nguyên lý *No Write-Up*) | [`BibaHierarchicalIntegrityModel`](src/proposed_model/security_games.py) (`verify_biba_isolation`) | Phát hiện vi phạm tức thì ($Root \ne Root'$); cập nhật qua Dirty Path $O(\log N) \approx 0.015$ ms; zeroize RAM |
+| **Section 3** (Trang 5) | *Shannon Symmetric Key Distribution* (Shannon 1949) | Kẻ thù khai thác kênh phân phối khóa: nếu 1 máy khách (Verifier) bị lộ khóa bí mật $K$, kẻ thù ký giả mạo toàn bộ | [`DolevYaoNetworkGame`](src/proposed_model/security_games.py) (`baseline_comparison.hmac_sha256`) | HMAC sụp đổ nếu 1 client lộ khóa; HD-MerkleTree chỉ cần 32-byte Root Hash công khai, triệt tiêu rủi ro lộ khóa |
+| **Section 4** (Trang 7) | *Formalizing the Adversary: PPT Security Game* (Goldwasser-Micali 1984, Ref [33, 34]) | Kẻ thù có năng lực tính toán đa thức xác suất (PPT) cố gắng tìm giả mạo $M' \ne M$ sao cho $Verify(M', H_0) = 1$ | [`IntegritySecurityGame`](src/proposed_model/security_games.py) (`run_game`, 100 trials) | Lợi thế thực nghiệm $Adv(A) = 0.0 \le negl(\lambda) = 2^{-128}$, chặn đứng 100/100 phép thử đa vector |
+| **Section 4** (Trang 8) | *Dolev-Yao Network Adversary* (Dolev-Yao 1983, Ref [52]) | Kẻ thù kiểm soát 100% kênh truyền: tráo đổi bằng chứng, can thiệp sửa đổi trên đường truyền, tấn công phát lại | [`DolevYaoNetworkGame`](src/proposed_model/security_games.py) (`run_dolev_yao_tests`) | Chặn đứng 100% (3/3 kịch bản: Cross-proof Swap, In-transit Tampering, Replay Attack) |
+| **Section 4** (Trang 8) | *Random Oracle Model & SAC* (Bellare-Rogaway 1993, Ref [40]) | Hàm băm phải xấp xỉ tiên tri ngẫu nhiên: lật 1-bit đầu vào gây biến đổi độc lập 50% bit đầu ra (Bernoulli) | [`RandomOracleApproximationExperiment`](src/proposed_model/security_games.py) (Monte Carlo 1.000 mẫu) | Tỷ lệ đảo bit đạt $49.72\% \approx 50.00\%$, $\sigma = 7.87$ bits (khớp lý thuyết nhị thức $\sigma = 8.00$ bits) |
+| **Section 5** (Trang 8–10) | *The Limits of Formalization: Second-Preimage* (RFC 6962) | Ghép nối chuỗi thô $H(Left \,\|\, Right)$ gây va chạm tiền ảnh thứ hai (Node-Leaf Confusion Attack) | [`SecondPreimageGame`](src/proposed_model/security_games.py) (`simulate_attack`) | Standard Merkle Tree bị tấn công (True); HD-Merkle phân tách miền `0x00`/`0x01` kháng tuyệt đối (True) |
+| **Section 5** (Trang 10) | *Timing Side-Channel Resistance* (Kocher 1996, Ref [36]) | Rò rỉ thông tin qua thời gian so sánh chuỗi băm (Early return comparison leak) | [`MetadataLeakageAndSideChannelAudit`](src/proposed_model/security_games.py) (`audit_security`, 20.000 chu kỳ) | Naive comparison chênh lệch $\Delta \approx 13$ ms/20k chu kỳ; `hmac.compare_digest` triệt tiêu về $O(1)$ |
+| **Section 6** (Trang 11–13) | *Metadata Leakage & Certificate Transparency* (Laurie et al. RFC 6962, Ref [109, 114]) | Rò rỉ toàn bộ danh mục tệp trên kênh truyền; kẻ thù sửa đổi ngầm lịch sử nhật ký (Backdoor insertion) | [`ConsistencyProofGame`](src/proposed_model/security_games.py) & [`MetadataLeakageAndSideChannelAudit`](src/proposed_model/security_games.py) | Bằng chứng nhất quán $O(\log N)$ phát hiện 100% sửa lén; giấu $N-1$ tệp, tiết kiệm >99% băng thông mạng |
 
 ---
 
@@ -46,25 +46,25 @@ Toàn bộ 7 mô hình được thực nghiệm hóa 100% (không hardcode/mocke
 
 ## 3. KẾT QUẢ BENCHMARK THỰC NGHIỆM ĐỘC LẬP & ABLATION STUDY
 
-Thực nghiệm được đo đạc tự động qua script benchmark độc lập [`src/benchmark/run_benchmark.py`](file:///d:/AnToanvaBaoMatHeThongThongTin/GK/src/benchmark/run_benchmark.py) (làm nóng cache trước khi đo, thao tác cập nhật thực hiện trên bản sao tạm độc lập, không làm biến đổi dữ liệu gốc):
+Thực nghiệm được đo đạc tự động qua script benchmark độc lập [`src/benchmark/run_benchmark.py`](src/benchmark/run_benchmark.py) (làm nóng cache trước khi đo, thao tác cập nhật thực hiện trên bản sao tạm độc lập, không làm biến đổi dữ liệu gốc):
 
 ```bash
-python -m src.benchmark.run_benchmark --dir "C:\Users\Admin\Downloads\kaggle_dataset" --runs 5 --results-dir results
+python -m src.benchmark.run_benchmark --dir "kaggle_dataset" --runs 5 --results-dir results
 ```
 
 Kết quả được ghi nhận chi tiết, truy nguyên tại `results/benchmark_results.json`, `results/benchmark_results.csv` và `results/ablation_results.csv`:
 
-### 3.1. Bảng Đối Sánh Hiệu Năng Thực Nghiệm (Đo trên 2.485 tệp tin)
+### 3.1. Bảng Đối Sánh Hiệu Năng Thực Nghiệm (Đo trên 2.485 tệp tin, 5 vòng lặp)
 
 | Chỉ số (Metric) | Flat SHA-256 | HMAC-SHA256 | Standard Merkle | HD-MerkleTree (Đề xuất) | Đánh giá & Rút ra |
 | :--- | :---: | :---: | :---: | :---: | :--- |
-| **Full Build / Verify (ms)** | 317.60 ± 12.4 | 379.79 ± 15.2 | 304.41 ± 10.8 | 406.51 ± 14.1 | HD-Merkle dựng thêm cấu trúc cây thư mục phân cấp |
-| **Single-File Verify (ms)** | 42.71 ± 2.15 | 44.61 ± 2.30 | **0.04 ± 0.00** | **0.01 ± 0.00** | Cây Merkle xác thực 1 tệp độc lập nhanh hơn **>3.000 lần** nhờ $O(\log N)$ |
-| **Update Sửa tệp (ms)** | 692.23 ± 25.1 | 41.51 ± 1.8 | 39.80 ± 1.5 | 41.92 ± 1.7 | Cả hai cây Merkle cập nhật lá và leo nhánh cực nhanh |
-| **Update Thêm tệp (ms)** | 10.09 ± 0.8 | 1.21 ± 0.1 | **280.83 ± 11.2** | **0.20 ± 0.01** | **HD-Merkle nhanh hơn ~1.400 lần** (tránh Rebuild $O(N)$) |
-| **Update Xóa tệp (ms)** | 1.15 ± 0.1 | 0.95 ± 0.1 | **228.15 ± 9.8** | **0.06 ± 0.00** | **HD-Merkle nhanh hơn ~3.800 lần** (tránh Rebuild $O(N)$) |
-| **Metadata Storage (KB)** | 253.64 KB | 253.65 KB | 88.66 KB | 253.66 KB | Standard Merkle chỉ lưu mảng băm; các mô hình khác lưu đường dẫn |
-| **Proof Size 1 tệp (Bytes)** | 259,731 B | 259,736 B | 1,188 B | **256 B** | **Tiết kiệm 99.9% băng thông** nhờ cấu trúc CompactProof |
+| **Full Build / Verify (ms)** | 256.00 ± 13.10 | 250.19 ± 9.72 | 254.77 ± 20.08 | 343.10 ± 36.48 | HD-Merkle dựng thêm cấu trúc cây thư mục phân cấp |
+| **Single-File Verify (ms)** | 42.86 ± 1.96 | 42.39 ± 1.50 | **0.05 ± 0.01** | **0.01 ± 0.00** | Cây Merkle xác thực 1 tệp độc lập nhanh hơn **>3.000 lần** nhờ $O(\log N)$ |
+| **Update Sửa tệp (ms)** | 686.04 ± 6.19 | 42.55 ± 2.73 | 41.45 ± 1.40 | 42.18 ± 1.98 | Cả hai cây Merkle cập nhật lá và leo nhánh cực nhanh |
+| **Update Thêm tệp (ms)** | 3.74 ± 3.00 | 1.34 ± 0.25 | **283.90 ± 11.89** | **0.24 ± 0.03** | **HD-Merkle nhanh hơn ~1.200 lần** (tránh Rebuild $O(N)$) |
+| **Update Xóa tệp (ms)** | 1.00 ± 0.27 | 1.14 ± 0.22 | **233.48 ± 15.14** | **0.09 ± 0.01** | **HD-Merkle nhanh hơn ~2.600 lần** (tránh Rebuild $O(N)$) |
+| **Metadata Storage (KB)** | 253.63 KB | 253.64 KB | 88.65 KB | 253.65 KB | Standard Merkle chỉ lưu mảng băm; các mô hình khác lưu đường dẫn |
+| **Proof Size 1 tệp (Bytes)** | 259,718 B | 259,723 B | 1,188 B | **256 B** | **Tiết kiệm 99.9% băng thông** nhờ cấu trúc CompactProof |
 
 ---
 
@@ -74,20 +74,20 @@ Nghiên cứu cắt giảm thành phần bóc tách định lượng đóng góp
 
 | Cấu hình Thực Nghiệm | RFC 6962 Domain | Dirty-Path Cache | Luồng Xử Lý | Build Time (ms) | Sửa Tệp (ms) | Thêm Tệp (ms) | Xóa Tệp (ms) | Proof Size (Bytes) | Độ Phức Tạp Thêm/Xóa |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **1. Baseline (Standard Merkle)** | Không | Không (Mảng) | Đơn luồng | 285.15 ± 11.2 | 691.44 ± 24.1 | 292.25 ± 12.5 | 228.71 ± 9.8 | 1,188 B | $O(N)$ Rebuild |
-| **2. Ablation 1 (Tắt Cache)** | Có | TẮT (Full Recompute) | Đa luồng | 321.46 ± 12.8 | 46.73 ± 2.1 | 5.20 ± 0.4 | 5.22 ± 0.3 | 204 B | $O(N)$ Recompute |
-| **3. Ablation 2 (Đơn luồng)** | Có | BẬT $O(\log N)$ | Đơn luồng ($w=1$) | 293.81 ± 10.5 | 41.01 ± 1.9 | 0.23 ± 0.01 | 0.08 ± 0.00 | 256 B | $O(\log N)$ Dirty Path |
-| **4. Full Proposed Model** | Có | BẬT $O(\log N)$ | Đa luồng (Parallel) | 321.84 ± 13.1 | 41.84 ± 1.8 | **0.15 ± 0.01** | **0.10 ± 0.00** | **256 B** | $O(\log N)$ Toàn diện |
+| **1. Baseline (Standard Merkle)** | Không | Không (Mảng) | Đơn luồng | 250.94 ± 10.61 | 685.33 ± 7.96 | 292.73 ± 26.20 | 243.10 ± 27.69 | 1,188 B | $O(N)$ Rebuild |
+| **2. Ablation 1 (Tắt Cache)** | Có | TẮT (Full Recompute) | Đa luồng | 316.26 ± 24.09 | 48.50 ± 2.59 | 5.22 ± 0.44 | 5.39 ± 1.14 | 204 B | $O(N)$ Recompute |
+| **3. Ablation 2 (Đơn luồng)** | Có | BẬT $O(\log N)$ | Đơn luồng ($w=1$) | 278.04 ± 16.20 | 41.84 ± 1.69 | 0.23 ± 0.06 | 0.10 ± 0.04 | 256 B | $O(\log N)$ Dirty Path |
+| **4. Full Proposed Model** | Có | BẬT $O(\log N)$ | Đa luồng (Parallel) | 316.30 ± 10.98 | 41.06 ± 1.66 | **0.19 ± 0.03** | **0.10 ± 0.05** | **256 B** | $O(\log N)$ Toàn diện |
 
 ### 3.3. Phân Tích Đóng Góp Kỹ Thuật (Ablation Insights):
 1. **Đóng góp của Dirty-Path Cache ($O(\log N)$ vs $O(N)$):**
-   - Khi tắt cache (Ablation 1), mỗi thao tác thêm/xóa tệp buộc phải duyệt đệ quy tính lại toàn bộ cây mất **5.20 ms**. Khi bật Dirty-Path Cache (Ablation 2 & Full Proposed), thời gian thêm tệp giảm xuống chỉ còn **0.15 – 0.23 ms** (tăng tốc hơn **25 đến 35 lần** so với tái tính cây và nhanh hơn **~1.900 lần** so với Rebuild toàn bộ của Standard Merkle).
+   - Khi tắt cache (Ablation 1), mỗi thao tác thêm/xóa tệp buộc phải duyệt đệ quy tính lại toàn bộ cây mất **5.22 – 5.39 ms**. Khi bật Dirty-Path Cache (Ablation 2 & Full Proposed), thời gian thêm tệp giảm xuống chỉ còn **0.19 – 0.23 ms** (tăng tốc hơn **25 lần** so với tái tính cây và nhanh hơn **~1.200 đến 2.600 lần** so với Rebuild toàn bộ của Standard Merkle ~233–284 ms).
 2. **Đóng góp của Phân tách Miền RFC 6962 (`0x00`/`0x01`):**
    - Loại bỏ hoàn toàn nguy cơ tấn công tiền ảnh cấp hai (Second-Preimage / Node-Leaf confusion), bảo đảm tách biệt tuyệt đối không gian băm giữa lá dữ liệu và nút nhánh nội bộ.
 3. **Đóng góp của Nén Bằng Chứng (CompactProof):**
-   - Nén kích thước Merkle Proof từ 1,188 Bytes (Standard Merkle) xuống còn **256 Bytes** (giảm 78.5% kích thước proof), giúp Light Client xác thực với chi phí mạng tối thiểu.
+   - Nén kích thước Merkle Proof từ 1,188 Bytes (Standard Merkle) xuống còn **256 Bytes** (nhỏ hơn 4.6 lần), giúp Light Client xác thực với chi phí mạng tối thiểu (tiết kiệm 99.9% so với tải toàn bộ danh mục băm phẳng 253.6 KB).
 4. **Đo lường công bằng sau khi khắc phục lỗi bất đối xứng (`StandardMerkleTree.verify_all`):**
-   - Phương thức [`verify_all()`](file:///d:/AnToanvaBaoMatHeThongThongTin/GK/src/baselines/standard_merkle_tree.py) quét toàn bộ $N$ tệp trên đĩa cứng, đồng bộ tốc độ đo đạc thực tế của cả 4 mô hình, loại bỏ con số tốc độ ảo 21 triệu tệp/giây trước đây.
+   - Phương thức [`verify_all()`](src/baselines/standard_merkle_tree.py) quét toàn bộ $N$ tệp trên đĩa cứng, đồng bộ tốc độ đo đạc thực tế của cả 4 mô hình, loại bỏ con số tốc độ ảo 21 triệu tệp/giây trước đây.
 
 ---
 
@@ -97,22 +97,27 @@ Mọi mô hình trong dự án đều hỗ trợ giao diện dòng lệnh độc
 
 ### 4.1. Baseline 1: Flat SHA-256 Manifest
 ```bash
-python -m src.baselines.sha256_manifest --dir "C:\Users\Admin\Downloads\kaggle_dataset" --verify
+python -m src.baselines.sha256_manifest --dir "kaggle_dataset" --verify
 ```
 
 ### 4.2. Baseline 2: HMAC-SHA256 Manifest (Khóa bí mật đối xứng)
 ```bash
-python -m src.baselines.hmac_manifest --dir "C:\Users\Admin\Downloads\kaggle_dataset" --verify
+python -m src.baselines.hmac_manifest --dir "kaggle_dataset" --verify
 ```
 
 ### 4.3. Baseline 3: Standard Binary Merkle Tree
 ```bash
-python -m src.baselines.standard_merkle_tree --dir "C:\Users\Admin\Downloads\kaggle_dataset"
+python -m src.baselines.standard_merkle_tree --dir "kaggle_dataset"
 ```
 
 ### 4.4. Proposed Model: Hierarchical Dynamic Merkle Tree (HD-MerkleTree)
 ```bash
-python -m src.proposed_model.hd_merkle_tree --dir "C:\Users\Admin\Downloads\kaggle_dataset" --consistency 2400
+python -m src.proposed_model.hd_merkle_tree --dir "kaggle_dataset" --consistency 2400
+```
+
+### 4.5. Kiểm Tra Trùng Lặp Dữ Liệu & Root Checksum (Deduplication)
+```bash
+python -m src.benchmark.deduplicate_dataset --dir "kaggle_dataset"
 ```
 
 ---
@@ -124,17 +129,20 @@ python -m src.proposed_model.hd_merkle_tree --dir "C:\Users\Admin\Downloads\kagg
   python src/demo/web_demo.py --port 8080
   ```
   Mở trình duyệt tại `http://127.0.0.1:8080`.
+- **Chạy Kiểm tra Trùng lặp & Tính Root Checksum:**
+  ```bash
+  python -m src.benchmark.deduplicate_dataset --dir kaggle_dataset
+  ```
 - **Chạy Kiểm định 7 Security Games:**
   ```bash
   python -m src.proposed_model.security_games
   ```
-- **Chạy Toàn Bộ Benchmark & Ablation Study:**
+- **Chạy Toàn Bộ Benchmark & Ablation Study (5 vòng lặp):**
   ```bash
-  python -m src.benchmark.run_benchmark --dir "C:\Users\Admin\Downloads\kaggle_dataset" --runs 5 --results-dir results
+  python -m src.benchmark.run_benchmark --dir "kaggle_dataset" --runs 5 --results-dir results
   ```
-- **Tài liệu & Slide trong thư mục `docs/`:**
-  - `docs/Bao_Cao_Giua_Ky_DT05.pptx`: Slide thuyết trình PowerPoint 16:9 chuẩn 10 slide.
-  - `docs/Thiet_Ke_Va_Phan_Tich_He_Thong_DT005.docx`: Đặc tả phân tích và thiết kế kiến trúc hệ thống.
+- **Slide Báo Cáo Thuyết Trình Giữa Kỳ:**
+  - `docs/Bao_Cao_Giua_Ky_DT05.pptx`: Slide PowerPoint 16:9 chuẩn 10 slide phục vụ báo cáo hội đồng.
 
 ---
 
@@ -147,7 +155,7 @@ python -m src.proposed_model.hd_merkle_tree --dir "C:\Users\Admin\Downloads\kagg
 +------------------------------------+           +------------------------------------+
 |  BLUE TEAM (Phòng Thủ - Port 8080) |           |  RED TEAM (Tấn Công - Port 8081)  |
 |  - Web UI: run_demo_web.bat        |           |  - Web UI: run_red_team_web.bat    |
-|  - Giám sát C:\...\kaggle_dataset  | <=======> |  - CLI:    run_red_team_cli.bat    |
+|  - Giám sát ./kaggle_dataset       | <=======> |  - CLI:    run_red_team_cli.bat    |
 |  - Thuật toán: HD-Merkle, Dirty-   |           |  - Sao lưu an toàn: .adversary_bak |
 |    Path Cache, SHA-256             |           |  - Vector: Tamper, Inject, CRC32.. |
 +------------------------------------+           +------------------------------------+

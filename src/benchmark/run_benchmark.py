@@ -66,8 +66,11 @@ def get_dataset_info(dataset_dir: str) -> Dict[str, Any]:
             p = os.path.join(dirpath, f)
             total_files += 1
             total_bytes += os.path.getsize(p)
+    rel_path = os.path.relpath(os.path.abspath(dataset_dir), BASE_DIR).replace("\\", "/")
+    if rel_path.startswith(".."):
+        rel_path = os.path.abspath(dataset_dir)
     return {
-        "dataset_path": os.path.abspath(dataset_dir),
+        "dataset_path": rel_path,
         "total_files": total_files,
         "total_bytes": total_bytes,
         "total_megabytes": round(total_bytes / (1024 * 1024), 2)
@@ -698,9 +701,9 @@ if __name__ == "__main__":
     if not os.path.isdir(target_dataset):
         # Fallback tự động sang thư mục dataset cục bộ có sẵn nếu realistic_dataset không tồn tại
         candidates = [
-            r"C:\Users\Admin\Downloads\kaggle_dataset",
             os.path.abspath(os.path.join(BASE_DIR, "kaggle_dataset")),
-            os.path.abspath(os.path.join(BASE_DIR, "realistic_dataset"))
+            os.path.abspath(os.path.join(BASE_DIR, "realistic_dataset")),
+            os.path.join(os.path.expanduser("~"), "Downloads", "kaggle_dataset")
         ]
         for c in candidates:
             if os.path.isdir(c):

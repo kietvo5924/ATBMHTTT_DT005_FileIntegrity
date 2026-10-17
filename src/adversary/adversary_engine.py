@@ -128,9 +128,9 @@ class AdversaryEngine:
 
         # Fallback các ứng viên cục bộ
         candidates = [
-            r"C:\Users\Admin\Downloads\kaggle_dataset",
+            os.path.abspath(os.path.join(os.path.dirname(__file__), "../../kaggle_dataset")),
             os.path.abspath(os.path.join(os.path.dirname(__file__), "../../realistic_dataset")),
-            os.path.abspath(os.path.join(os.path.dirname(__file__), "../../kaggle_dataset"))
+            os.path.join(os.path.expanduser("~"), "Downloads", "kaggle_dataset")
         ]
         for c in candidates:
             if os.path.isdir(c):

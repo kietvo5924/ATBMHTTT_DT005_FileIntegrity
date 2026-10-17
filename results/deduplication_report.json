@@ -1,0 +1,22 @@
+{
+  "metadata": {
+    "dataset_directory": "kaggle_dataset",
+    "scan_timestamp": "2026-10-17 22:54:37",
+    "scan_duration_seconds": 0.2934,
+    "hashing_algorithm": "SHA-256",
+    "license": "CC0: Public Domain (Kaggle)",
+    "source_url": "https://www.kaggle.com/datasets/snehaanbhawal/resume-dataset"
+  },
+  "summary": {
+    "total_files": 2485,
+    "total_bytes": 118289418,
+    "total_megabytes": 112.81,
+    "unique_content_hashes": 2485,
+    "duplicate_groups": 0,
+    "duplicate_files_total": 0,
+    "redundant_files_to_remove": 0,
+    "deduplication_rate_percent": 0.0,
+    "root_manifest_checksum": "9dbaa7815227c3c8cf2208c1c17c070ae65af0df1cd3dbefa488b981b3d87517"
+  },
+  "duplicates": {}
+}

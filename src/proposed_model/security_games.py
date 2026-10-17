@@ -450,10 +450,11 @@ class RandomOracleApproximationExperiment:
     def evaluate_rom_properties(
         sample_data: bytes = b"Halpin_2025_DT005_Cryptographic_Integrity_Verification",
         num_samples: int = 1000,
-        target_dir: Optional[str] = None
+        target_dir: Optional[str] = None,
+        seed: Optional[int] = 42
     ) -> Dict[str, Any]:
-        # Sinh số ngẫu nhiên Monte Carlo động theo thời gian thực (không dùng seed tĩnh)
-        rng = random.Random()
+        # Cố định seed ngẫu nhiên mặc định (seed=42) để đảm bảo tính tái lập 100% theo chuẩn khoa học
+        rng = random.Random(seed) if seed is not None else random.Random()
 
         data_len = len(sample_data)
         flipped_counts: List[int] = []
@@ -857,9 +858,9 @@ def run_all_scientific_proofs(dataset_dir: Optional[str] = None, baseline_data: 
     """Chạy toàn bộ 7 kiểm chứng khoa học theo bài báo Harry Halpin và trả về kết quả."""
     if dataset_dir is None or not os.path.exists(dataset_dir):
         candidates = [
-            os.path.abspath(os.path.join(os.path.dirname(__file__), "../../realistic_dataset")),
-            r"C:\Users\Admin\Downloads\kaggle_dataset",
             os.path.abspath(os.path.join(os.path.dirname(__file__), "../../kaggle_dataset")),
+            os.path.abspath(os.path.join(os.path.dirname(__file__), "../../realistic_dataset")),
+            os.path.join(os.path.expanduser("~"), "Downloads", "kaggle_dataset"),
         ]
         for c in candidates:
             if os.path.exists(c) and os.path.isdir(c):

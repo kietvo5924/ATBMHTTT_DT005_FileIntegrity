@@ -1243,7 +1243,7 @@ HTML_PAGE = """<!DOCTYPE html>
         <div style="border-top:1px solid #f1f5f9; padding-top:16px;">
           <div style="font-size:12px; font-weight:700; color:#334155; margin-bottom:8px;">2. Hoặc nhập đường dẫn thư mục:</div>
           <div style="display:flex; gap:8px;">
-            <input type="text" id="modalPathInput" placeholder="Ví dụ: kaggle_dataset_large hoặc kaggle_dataset hoặc C:/Users/Admin/Downloads/kaggle_dataset_large" style="flex:1; padding:9px 12px; border-radius:7px; border:1px solid #cbd5e1; font-family:'JetBrains Mono', monospace; font-size:12px;">
+            <input type="text" id="modalPathInput" placeholder="Ví dụ: kaggle_dataset hoặc realistic_dataset hoặc ./kaggle_dataset" style="flex:1; padding:9px 12px; border-radius:7px; border:1px solid #cbd5e1; font-family:'JetBrains Mono', monospace; font-size:12px;">
             <button id="btnApplyModal" onclick="applyModalPath(this)" class="btn btn-primary" style="width:auto; margin:0; padding:9px 18px; font-size:12.5px; font-weight:700;">Áp dụng</button>
           </div>
           <div style="font-size:11.5px; color:#64748b; margin-top:6px; padding-left:2px;">
@@ -2759,7 +2759,7 @@ HTML_PAGE = """<!DOCTYPE html>
           if (tbody) {
             tbody.innerHTML = data.map(m => `
               <tr class="${m.is_proposed ? 'highlight' : ''}">
-                <td><strong>${m.name}</strong> ${m.is_proposed ? 'Đề xuất' : ''}</td>
+                <td><strong>${m.name}</strong></td>
                 <td>${m.build_ms.toFixed(2)} ms</td>
                 <td>${m.verify_ms.toFixed(3)} ms</td>
                 <td>${m.speed_fps ? m.speed_fps.toLocaleString() + ' tệp/s' : '--'}</td>
