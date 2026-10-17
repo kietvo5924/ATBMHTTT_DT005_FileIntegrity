@@ -34,8 +34,8 @@ kaggle_dataset/
 # Documentation
 docs/
 
-# Benchmark Results
-results/
+# Benchmark Results (Được lưu trữ để phục vụ báo cáo và nộp bài theo yêu cầu đề tài)
+# results/
 
 # Red Team Backups
 .adversary_backups/

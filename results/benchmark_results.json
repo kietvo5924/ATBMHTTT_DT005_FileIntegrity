@@ -1,0 +1,452 @@
+{
+  "environment": {
+    "os_name": "Windows",
+    "os_release": "11",
+    "os_version": "10.0.22631",
+    "architecture": "AMD64",
+    "processor": "Intel64 Family 6 Model 154 Stepping 3, GenuineIntel",
+    "cpu_count": 12,
+    "python_version": "3.14.4",
+    "timestamp": "2026-10-17 16:34:47"
+  },
+  "dataset": {
+    "dataset_path": "C:\\Users\\Admin\\Downloads\\kaggle_dataset",
+    "total_files": 2485,
+    "total_bytes": 118289418,
+    "total_megabytes": 112.81
+  },
+  "parameters": {
+    "num_runs": 1,
+    "sample_target_file": "Resume/Resume.csv"
+  },
+  "raw_results": {
+    "sha256": {
+      "build_time": [
+        0.2346185999995214
+      ],
+      "verify_single": [
+        0.03897839999990538
+      ],
+      "update_modify": [
+        0.69312440000067
+      ],
+      "update_add": [
+        0.006656599998677848
+      ],
+      "update_delete": [
+        0.0007349000006797723
+      ],
+      "storage_bytes": 259718,
+      "proof_bytes": 259718
+    },
+    "hmac": {
+      "build_time": [
+        0.24724690000221017
+      ],
+      "verify_single": [
+        0.03968869999880553
+      ],
+      "update_modify": [
+        0.04262150000067777
+      ],
+      "update_add": [
+        0.0011546999994607177
+      ],
+      "update_delete": [
+        0.000963699996646028
+      ],
+      "storage_bytes": 259723,
+      "proof_bytes": 259723
+    },
+    "standard_merkle": {
+      "build_time": [
+        0.23581010000270908
+      ],
+      "verify_single": [
+        3.739999738172628e-05
+      ],
+      "update_modify": [
+        0.04173449999871082
+      ],
+      "update_add": [
+        0.23306550000052084
+      ],
+      "update_delete": [
+        0.19959319999907166
+      ],
+      "storage_bytes": 90775,
+      "proof_bytes": 1188
+    },
+    "hd_merkle": {
+      "build_time": [
+        0.30752140000186046
+      ],
+      "verify_single": [
+        9.899998985929415e-06
+      ],
+      "update_modify": [
+        0.04067700000086916
+      ],
+      "update_add": [
+        0.00018249999993713573
+      ],
+      "update_delete": [
+        7.389999882434495e-05
+      ],
+      "storage_bytes": 259736,
+      "proof_bytes": 256
+    }
+  },
+  "summary": {
+    "sha256": {
+      "build_time": {
+        "mean_ms": 234.6186,
+        "std_ms": 0.0,
+        "min_ms": 234.6186,
+        "max_ms": 234.6186
+      },
+      "verify_single": {
+        "mean_ms": 38.9784,
+        "std_ms": 0.0,
+        "min_ms": 38.9784,
+        "max_ms": 38.9784
+      },
+      "update_modify": {
+        "mean_ms": 693.1244,
+        "std_ms": 0.0,
+        "min_ms": 693.1244,
+        "max_ms": 693.1244
+      },
+      "update_add": {
+        "mean_ms": 6.6566,
+        "std_ms": 0.0,
+        "min_ms": 6.6566,
+        "max_ms": 6.6566
+      },
+      "update_delete": {
+        "mean_ms": 0.7349,
+        "std_ms": 0.0,
+        "min_ms": 0.7349,
+        "max_ms": 0.7349
+      },
+      "storage_bytes": 259718,
+      "proof_bytes": 259718
+    },
+    "hmac": {
+      "build_time": {
+        "mean_ms": 247.2469,
+        "std_ms": 0.0,
+        "min_ms": 247.2469,
+        "max_ms": 247.2469
+      },
+      "verify_single": {
+        "mean_ms": 39.6887,
+        "std_ms": 0.0,
+        "min_ms": 39.6887,
+        "max_ms": 39.6887
+      },
+      "update_modify": {
+        "mean_ms": 42.6215,
+        "std_ms": 0.0,
+        "min_ms": 42.6215,
+        "max_ms": 42.6215
+      },
+      "update_add": {
+        "mean_ms": 1.1547,
+        "std_ms": 0.0,
+        "min_ms": 1.1547,
+        "max_ms": 1.1547
+      },
+      "update_delete": {
+        "mean_ms": 0.9637,
+        "std_ms": 0.0,
+        "min_ms": 0.9637,
+        "max_ms": 0.9637
+      },
+      "storage_bytes": 259723,
+      "proof_bytes": 259723
+    },
+    "standard_merkle": {
+      "build_time": {
+        "mean_ms": 235.8101,
+        "std_ms": 0.0,
+        "min_ms": 235.8101,
+        "max_ms": 235.8101
+      },
+      "verify_single": {
+        "mean_ms": 0.0374,
+        "std_ms": 0.0,
+        "min_ms": 0.0374,
+        "max_ms": 0.0374
+      },
+      "update_modify": {
+        "mean_ms": 41.7345,
+        "std_ms": 0.0,
+        "min_ms": 41.7345,
+        "max_ms": 41.7345
+      },
+      "update_add": {
+        "mean_ms": 233.0655,
+        "std_ms": 0.0,
+        "min_ms": 233.0655,
+        "max_ms": 233.0655
+      },
+      "update_delete": {
+        "mean_ms": 199.5932,
+        "std_ms": 0.0,
+        "min_ms": 199.5932,
+        "max_ms": 199.5932
+      },
+      "storage_bytes": 90775,
+      "proof_bytes": 1188
+    },
+    "hd_merkle": {
+      "build_time": {
+        "mean_ms": 307.5214,
+        "std_ms": 0.0,
+        "min_ms": 307.5214,
+        "max_ms": 307.5214
+      },
+      "verify_single": {
+        "mean_ms": 0.0099,
+        "std_ms": 0.0,
+        "min_ms": 0.0099,
+        "max_ms": 0.0099
+      },
+      "update_modify": {
+        "mean_ms": 40.677,
+        "std_ms": 0.0,
+        "min_ms": 40.677,
+        "max_ms": 40.677
+      },
+      "update_add": {
+        "mean_ms": 0.1825,
+        "std_ms": 0.0,
+        "min_ms": 0.1825,
+        "max_ms": 0.1825
+      },
+      "update_delete": {
+        "mean_ms": 0.0739,
+        "std_ms": 0.0,
+        "min_ms": 0.0739,
+        "max_ms": 0.0739
+      },
+      "storage_bytes": 259736,
+      "proof_bytes": 256
+    }
+  },
+  "ablation_study": {
+    "raw_ablation": {
+      "baseline_standard": {
+        "name": "1. Baseline (Standard Merkle)",
+        "rfc6962": "Không",
+        "cache": "Không (Mảng phẳng)",
+        "threading": "Đơn luồng",
+        "build_time": [
+          0.22560280000107014
+        ],
+        "update_modify": [
+          0.6944306000004872
+        ],
+        "update_add": [
+          0.33181060000060825
+        ],
+        "update_delete": [
+          0.2830169000008027
+        ],
+        "proof_bytes": 1188,
+        "complexity_add_del": "O(N) Rebuild"
+      },
+      "ablation_no_cache": {
+        "name": "2. Ablation 1 (Tắt Cache)",
+        "rfc6962": "Có (0x00/0x01)",
+        "cache": "TẮT (Tính lại toàn cây)",
+        "threading": "Đa luồng",
+        "build_time": [
+          0.2672569999995176
+        ],
+        "update_modify": [
+          0.04902310000034049
+        ],
+        "update_add": [
+          0.004852099998970516
+        ],
+        "update_delete": [
+          0.005124999999679858
+        ],
+        "proof_bytes": 204,
+        "complexity_add_del": "O(N) Recompute"
+      },
+      "ablation_single_thread": {
+        "name": "3. Ablation 2 (Đơn luồng)",
+        "rfc6962": "Có (0x00/0x01)",
+        "cache": "BẬT O(log N)",
+        "threading": "Đơn luồng (workers=1)",
+        "build_time": [
+          0.25601760000063223
+        ],
+        "update_modify": [
+          0.04118370000287541
+        ],
+        "update_add": [
+          0.0002041000007011462
+        ],
+        "update_delete": [
+          0.0001053000014508143
+        ],
+        "proof_bytes": 256,
+        "complexity_add_del": "O(log N)"
+      },
+      "full_proposed": {
+        "name": "4. Full Proposed Model",
+        "rfc6962": "Có (0x00/0x01)",
+        "cache": "BẬT O(log N)",
+        "threading": "Đa luồng (parallel)",
+        "build_time": [
+          0.3226145999979053
+        ],
+        "update_modify": [
+          0.0413367000001017
+        ],
+        "update_add": [
+          0.00027150000096298754
+        ],
+        "update_delete": [
+          7.660000119358301e-05
+        ],
+        "proof_bytes": 256,
+        "complexity_add_del": "O(log N)"
+      }
+    },
+    "summary": {
+      "baseline_standard": {
+        "name": "1. Baseline (Standard Merkle)",
+        "rfc6962": "Không",
+        "cache": "Không (Mảng phẳng)",
+        "threading": "Đơn luồng",
+        "build_time": {
+          "mean_ms": 225.6028,
+          "std_ms": 0.0,
+          "min_ms": 225.6028,
+          "max_ms": 225.6028
+        },
+        "update_modify": {
+          "mean_ms": 694.4306,
+          "std_ms": 0.0,
+          "min_ms": 694.4306,
+          "max_ms": 694.4306
+        },
+        "update_add": {
+          "mean_ms": 331.8106,
+          "std_ms": 0.0,
+          "min_ms": 331.8106,
+          "max_ms": 331.8106
+        },
+        "update_delete": {
+          "mean_ms": 283.0169,
+          "std_ms": 0.0,
+          "min_ms": 283.0169,
+          "max_ms": 283.0169
+        },
+        "proof_bytes": 1188,
+        "complexity_add_del": "O(N) Rebuild"
+      },
+      "ablation_no_cache": {
+        "name": "2. Ablation 1 (Tắt Cache)",
+        "rfc6962": "Có (0x00/0x01)",
+        "cache": "TẮT (Tính lại toàn cây)",
+        "threading": "Đa luồng",
+        "build_time": {
+          "mean_ms": 267.257,
+          "std_ms": 0.0,
+          "min_ms": 267.257,
+          "max_ms": 267.257
+        },
+        "update_modify": {
+          "mean_ms": 49.0231,
+          "std_ms": 0.0,
+          "min_ms": 49.0231,
+          "max_ms": 49.0231
+        },
+        "update_add": {
+          "mean_ms": 4.8521,
+          "std_ms": 0.0,
+          "min_ms": 4.8521,
+          "max_ms": 4.8521
+        },
+        "update_delete": {
+          "mean_ms": 5.125,
+          "std_ms": 0.0,
+          "min_ms": 5.125,
+          "max_ms": 5.125
+        },
+        "proof_bytes": 204,
+        "complexity_add_del": "O(N) Recompute"
+      },
+      "ablation_single_thread": {
+        "name": "3. Ablation 2 (Đơn luồng)",
+        "rfc6962": "Có (0x00/0x01)",
+        "cache": "BẬT O(log N)",
+        "threading": "Đơn luồng (workers=1)",
+        "build_time": {
+          "mean_ms": 256.0176,
+          "std_ms": 0.0,
+          "min_ms": 256.0176,
+          "max_ms": 256.0176
+        },
+        "update_modify": {
+          "mean_ms": 41.1837,
+          "std_ms": 0.0,
+          "min_ms": 41.1837,
+          "max_ms": 41.1837
+        },
+        "update_add": {
+          "mean_ms": 0.2041,
+          "std_ms": 0.0,
+          "min_ms": 0.2041,
+          "max_ms": 0.2041
+        },
+        "update_delete": {
+          "mean_ms": 0.1053,
+          "std_ms": 0.0,
+          "min_ms": 0.1053,
+          "max_ms": 0.1053
+        },
+        "proof_bytes": 256,
+        "complexity_add_del": "O(log N)"
+      },
+      "full_proposed": {
+        "name": "4. Full Proposed Model",
+        "rfc6962": "Có (0x00/0x01)",
+        "cache": "BẬT O(log N)",
+        "threading": "Đa luồng (parallel)",
+        "build_time": {
+          "mean_ms": 322.6146,
+          "std_ms": 0.0,
+          "min_ms": 322.6146,
+          "max_ms": 322.6146
+        },
+        "update_modify": {
+          "mean_ms": 41.3367,
+          "std_ms": 0.0,
+          "min_ms": 41.3367,
+          "max_ms": 41.3367
+        },
+        "update_add": {
+          "mean_ms": 0.2715,
+          "std_ms": 0.0,
+          "min_ms": 0.2715,
+          "max_ms": 0.2715
+        },
+        "update_delete": {
+          "mean_ms": 0.0766,
+          "std_ms": 0.0,
+          "min_ms": 0.0766,
+          "max_ms": 0.0766
+        },
+        "proof_bytes": 256,
+        "complexity_add_del": "O(log N)"
+      }
+    }
+  }
+}

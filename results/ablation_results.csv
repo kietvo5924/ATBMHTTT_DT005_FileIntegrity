@@ -1,0 +1,5 @@
+Configuration,RFC 6962,Dirty-Path Cache,Threading,Build Mean (ms),Build Std (ms),Modify Mean (ms),Modify Std (ms),Add Mean (ms),Add Std (ms),Delete Mean (ms),Delete Std (ms),Proof Size (Bytes),Complexity Add/Delete
+1. Baseline (Standard Merkle),Không,Không (Mảng phẳng),Đơn luồng,225.6028,0.0,694.4306,0.0,331.8106,0.0,283.0169,0.0,1188,O(N) Rebuild
+2. Ablation 1 (Tắt Cache),Có (0x00/0x01),TẮT (Tính lại toàn cây),Đa luồng,267.257,0.0,49.0231,0.0,4.8521,0.0,5.125,0.0,204,O(N) Recompute
+3. Ablation 2 (Đơn luồng),Có (0x00/0x01),BẬT O(log N),Đơn luồng (workers=1),256.0176,0.0,41.1837,0.0,0.2041,0.0,0.1053,0.0,256,O(log N)
+4. Full Proposed Model,Có (0x00/0x01),BẬT O(log N),Đa luồng (parallel),322.6146,0.0,41.3367,0.0,0.2715,0.0,0.0766,0.0,256,O(log N)

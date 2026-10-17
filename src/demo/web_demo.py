@@ -308,7 +308,7 @@ HTML_PAGE = """<!DOCTYPE html>
           const speedupFactor = Math.max(1, Math.round(flat_ms / (hd_ms || 0.001)));
 
           const g7FlatPayload = (g7.metadata_privacy && g7.metadata_privacy.flat_sha256_hmac && g7.metadata_privacy.flat_sha256_hmac.payload_size) || '254.22 KB';
-          const g7HdPayload = (g7.metadata_privacy && g7.metadata_privacy.hd_merkle && g7.metadata_privacy.hd_merkle.payload_size) || '256 Bytes';
+          const g7HdPayload = (g7.metadata_privacy && ((g7.metadata_privacy.hd_merkle_tree && g7.metadata_privacy.hd_merkle_tree.payload_size) || (g7.metadata_privacy.hd_merkle && g7.metadata_privacy.hd_merkle.payload_size))) || '256 Bytes';
           const g4ProofBytes = g4.proof_size_bytes || 320;
           const g4ProofNodes = g4.proof_length_nodes || 4;
 
@@ -597,7 +597,7 @@ HTML_PAGE = """<!DOCTYPE html>
               <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                 <span style="color: var(--navy); font-weight: 700; font-size: 14px;">5. Hiệu ứng tuyết lở ngẫu nhiên và Bẻ gãy CRC-32</span>
                 ${artifactsDetected.crc32 ?
-                  `<span style="font-size: 11px; color: #b91c1c; background: #fee2e2; padding: 3px 10px; border-radius: 4px; border: 1px solid #fecaca; font-weight:700;">CRC-32 bị bẻ gãy với Patch 0x${g5.crc32_attack?.forged_patch_hex || '9a3335df'}</span>` :
+                  `<span style="font-size: 11px; color: #b91c1c; background: #fee2e2; padding: 3px 10px; border-radius: 4px; border: 1px solid #fecaca; font-weight:700;">CRC-32 bị bẻ gãy với Patch 0x${g5.crc32_comparison?.adversary_forged_patch_hex || g5.crc32_attack?.forged_patch_hex || '9a3335df'}</span>` :
                   `<span style="font-size: 11px; color: #166534; background: #dcfce7; padding: 3px 10px; border-radius: 4px; border: 1px solid #bbf7d0; font-weight:600;">SAC ${g5.sha256_metrics.percentage_flipped}</span>`}
               </div>
               
@@ -624,11 +624,11 @@ HTML_PAGE = """<!DOCTYPE html>
                   <div style="font-size: 11px; font-weight: 700; color: #166534;">4. HD-MerkleTree</div>
                   <div style="font-size: 14px; font-weight: 800; color: #16a34a; font-family:'JetBrains Mono', monospace; margin: 4px 0;">${g5.sha256_metrics.percentage_flipped}</div>
                   <div style="font-size: 11px; font-weight: 800; color: #16a34a; margin-bottom: 2px;">Kháng tuyệt đối</div>
-                  <div style="font-size: 10px; color: #166534; font-weight:600;">CRC-32 bẻ gãy Patch 0x${g5.crc32_attack?.forged_patch_hex || '9a3335df'}</div>
+                  <div style="font-size: 10px; color: #166534; font-weight:600;">CRC-32 bẻ gãy Patch 0x${g5.crc32_comparison?.adversary_forged_patch_hex || g5.crc32_attack?.forged_patch_hex || '9a3335df'}</div>
                 </div>
               </div>
               <div style="font-size: 11.5px; background: #f8fafc; border-left: 3px solid #16a34a; padding: 8px 12px; border-radius: 4px; color: #334155;">
-                Vật chứng: <strong>${artifactsDetected.crc32 || 'forged_transaction_crc32.dat'}</strong> | Monte Carlo: <strong>1000 mẫu</strong> | Lật bit: <strong>${g5.sha256_metrics.flipped_bits} trên 256 bit</strong> | Thuật toán CRC-32: <strong>Bị bẻ gãy với Patch 0x${g5.crc32_attack?.forged_patch_hex || '9a3335df'}</strong>
+                Vật chứng: <strong>${artifactsDetected.crc32 || 'forged_transaction_crc32.dat'}</strong> | Monte Carlo: <strong>1000 mẫu</strong> | Lật bit: <strong>${g5.sha256_metrics.flipped_bits} trên 256 bit</strong> | Thuật toán CRC-32: <strong>Bị bẻ gãy với Patch 0x${g5.crc32_comparison?.adversary_forged_patch_hex || g5.crc32_attack?.forged_patch_hex || '9a3335df'}</strong>
               </div>
             </div>
 
@@ -731,7 +731,7 @@ HTML_PAGE = """<!DOCTYPE html>
                 </div>
               </div>
               <div style="font-size: 11.5px; background: #f8fafc; border-left: 3px solid #16a34a; padding: 8px 12px; border-radius: 4px; color: #334155;">
-                Vật chứng: <strong>${artifactsDetected.metadata_recon || 'adversary_metadata_recon.json'}</strong> | Đo qua <strong>${g7.timing_side_channel?.iterations || 100} chu kỳ</strong> | So sánh tuần tự: <strong>Lệch ~${Number(g7.timing_side_channel?.delta_naive_us || 0.12).toFixed(3)} µs</strong> | Constant-Time hmac.compare_digest: <strong>Triệt tiêu độ lệch còn ~${Number(g7.timing_side_channel?.delta_ct_us || 0.001).toFixed(3)} µs</strong>
+                Vật chứng: <strong>${artifactsDetected.metadata_recon || 'adversary_metadata_recon.json'}</strong> | Đo qua <strong>${(g7.timing_attack?.iterations || g7.timing_side_channel?.iterations || 100)} chu kỳ</strong> | So sánh tuần tự: <strong>Lệch ~${Number(g7.timing_attack?.delta_naive_us || g7.timing_side_channel?.delta_naive_us || 0.12).toFixed(3)} µs</strong> | Constant-Time hmac.compare_digest: <strong>Triệt tiêu độ lệch còn ~${Number(g7.timing_attack?.delta_ct_us || g7.timing_side_channel?.delta_ct_us || 0.001).toFixed(3)} µs</strong>
               </div>
             </div>
           `;
@@ -3351,11 +3351,11 @@ class WebDemoHandler(BaseHTTPRequestHandler):
                 sample_p = STATE["merkle_std"].get_proof(sample) if sample else []
                 proof_sz = f"{len(json.dumps(sample_p))} Bytes"
                 for v in raw_vio_m:
-                    if v.startswith("TAMPERED_CONTENT: "):
+                    if v.startswith("MODIFIED_FILE: ") or v.startswith("TAMPERED_CONTENT: "):
                         tampered.append(v.split(": ", 1)[-1])
                     elif v.startswith("MISSING_FILE: "):
                         missing.append(v.split(": ", 1)[-1])
-                    elif v.startswith("EXTRA_FILE: "):
+                    elif v.startswith("UNREGISTERED_FILE: ") or v.startswith("EXTRA_FILE: "):
                         injected.append(v.split(": ", 1)[-1])
             else: # hd_merkle
                 raw_violations, elapsed = STATE["hd_merkle"].find_tampered_files_fast()
@@ -3630,13 +3630,9 @@ class WebDemoHandler(BaseHTTPRequestHandler):
             print(f"[*] [4/4] Đang đo lường: Standard Merkle Tree (Cây nhị phân phẳng chuẩn)...", flush=True)
             m_m = StandardMerkleTree(td)
             b_m, sz_m = m_m.build_tree()
-            t_vm0 = time.perf_counter()
+            _, _, v_m = m_m.verify_all()
             p_m = m_m.get_proof(sample) if sample else []
-            f_h = hash_file_sha256(os.path.join(td, sample)) if sample else ""
-            if sample:
-                _ = StandardMerkleTree.verify_proof(sample, f_h, p_m, m_m.root_hash)
-            v_m = time.perf_counter() - t_vm0
-            p_m_sz = len(json.dumps(p_m))
+            p_m_sz = len(json.dumps(p_m)) if p_m else 0
             t_um0 = time.perf_counter()
             if sample:
                 m_m.build_tree()
