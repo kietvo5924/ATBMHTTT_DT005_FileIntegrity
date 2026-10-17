@@ -135,6 +135,47 @@ class StandardMerkleTree:
                 
         return hmac.compare_digest(current.hex().lower(), expected_root.lower())
 
+    def verify_all(self) -> Tuple[bool, List[str], float]:
+        """
+        Quét và kiểm tra toàn vẹn toàn bộ các tệp trong thư mục root_dir.
+        Trả về: (is_valid, violations, elapsed_seconds)
+        Đồng nhất chuẩn giao tiếp với SHA256Manifest.verify_all() và HMACManifest.verify_all().
+        """
+        start_time = time.perf_counter()
+        violations: List[str] = []
+        current_files = set()
+
+        file_to_idx = {p: i for i, p in enumerate(self.files_list)}
+
+        for dirpath, _, filenames in os.walk(self.root_dir):
+            for filename in filenames:
+                full_path = os.path.join(dirpath, filename)
+                rel_path = os.path.relpath(full_path, self.root_dir).replace("\\", "/")
+                if rel_path in ("manifest_sha256.json", "manifest_hmac.json", "merkle_standard.json"):
+                    continue
+                current_files.add(rel_path)
+
+                if rel_path not in file_to_idx:
+                    violations.append(f"UNREGISTERED_FILE: {rel_path}")
+                else:
+                    curr_hash = hash_file_sha256(full_path)
+                    h = hashlib.sha256()
+                    h.update(rel_path.encode("utf-8"))
+                    h.update(bytes.fromhex(curr_hash))
+                    leaf_digest = h.digest()
+                    idx = file_to_idx[rel_path]
+                    if leaf_digest != self.leaf_hashes[idx]:
+                        violations.append(f"MODIFIED_FILE: {rel_path}")
+
+        for expected_path in self.files_list:
+            if expected_path not in current_files:
+                violations.append(f"MISSING_FILE: {expected_path}")
+
+        elapsed = time.perf_counter() - start_time
+        is_valid = len(violations) == 0
+        return is_valid, violations, elapsed
+
+
     def update_file(self, rel_path: str) -> Tuple[float, int]:
         """
         Cập nhật khi 1 tệp bị thay đổi trong Standard Merkle Tree.

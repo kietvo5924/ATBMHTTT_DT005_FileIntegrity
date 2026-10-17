@@ -327,25 +327,40 @@ class HDMerkleTree:
         return RFC6962CanonicalLog.verify_consistency_proof(m, n, old_root, new_root, proof_hex)
 
     def find_tampered_files_fast(self) -> Tuple[List[str], float]:
-        """Định vị nhanh tệp bị sửa đổi trong O(k log N)."""
+        """
+        Định vị toàn diện mọi vi phạm toàn vẹn: Sửa đổi (Tampered), Xóa (Missing), và Chèn lạ (Injected).
+        Đảm bảo mô hình đề xuất HD-MerkleTree rà soát đầy đủ 100%, không bỏ sót bất kỳ vi phạm nào.
+        """
         start_time = time.perf_counter()
-        tampered: List[str] = []
+        violations: List[str] = []
 
+        # 1. Duyệt cây phân cấp tìm tệp bị sửa đổi hoặc bị xóa
         def _traverse(node: TreeNode, disk_path: str):
             if node.node_type == NodeType.FILE:
                 if not os.path.exists(disk_path):
-                    tampered.append(f"MISSING: {node.rel_path}")
+                    violations.append(f"MISSING: {node.rel_path}")
                 else:
                     f_hash = hash_single_file_streaming(disk_path)
                     if f_hash != node.file_content_hash:
-                        tampered.append(f"TAMPERED: {node.rel_path}")
+                        violations.append(f"TAMPERED: {node.rel_path}")
             else:
                 for c_name, c_node in node.children.items():
                     _traverse(c_node, os.path.join(disk_path, c_name))
 
         _traverse(self.root_node, self.root_dir)
+
+        # 2. Quét đĩa nhanh tìm các tệp lạ mới xâm nhập (Injected) không có trong cấu trúc cây
+        ignore = {".git", "__pycache__", "manifest_sha256.json", "manifest_hmac.json", "merkle_standard.json", "merkle_hd.json"}
+        for dirpath, _, filenames in os.walk(self.root_dir):
+            for fn in filenames:
+                rel = os.path.relpath(os.path.join(dirpath, fn), self.root_dir).replace("\\", "/")
+                if any(part in ignore for part in rel.split("/")):
+                    continue
+                if rel not in self.file_nodes:
+                    violations.append(f"INJECTED: {rel}")
+
         elapsed = time.perf_counter() - start_time
-        return tampered, elapsed
+        return violations, elapsed
 
     def get_storage_overhead(self) -> int:
         data = {

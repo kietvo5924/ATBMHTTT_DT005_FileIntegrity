@@ -36,3 +36,10 @@ docs/
 
 # Benchmark Results
 results/
+
+# Red Team Backups
+.adversary_backups/
+*.bak
+
+# Temporary Scratch
+scratch/
