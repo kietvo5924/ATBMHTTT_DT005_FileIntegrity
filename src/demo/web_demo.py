@@ -12,6 +12,8 @@ import random
 import shutil
 import subprocess
 import math
+import hashlib
+import hmac
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, parse_qs
 
@@ -27,7 +29,7 @@ from src.proposed_model.hd_merkle_tree import HDMerkleTree
 from src.proposed_model.compact_proof import CompactProof, BatchMultiProof
 from src.baselines.sha256_manifest import SHA256Manifest, hash_file_sha256
 from src.baselines.hmac_manifest import HMACManifest, compute_file_hmac
-from src.baselines.standard_merkle_tree import StandardMerkleTree
+from src.baselines.standard_merkle_tree import StandardMerkleTree, sha256_combine
 
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
 REALISTIC_DATASET_DIR = os.path.join(ROOT_DIR, "realistic_dataset")
@@ -104,10 +106,119 @@ def get_disk_files(target_dir=None):
     return sorted(files)
 
 
+def get_clean_baseline(target_dir=None):
+    """
+    Xác định danh mục tệp và mã băm chuẩn ban đầu (Baseline H_0) cho thư mục target_dir:
+    - Nếu thư mục đang bị Red Team tấn công (có tệp .adversary_attack_manifest.json hoặc có bản sao lưu .bak trong .adversary_backups):
+      + Các tệp bị inject (cửa sau, artifact Red Team) bị loại bỏ khỏi baseline.
+      + Các tệp bị sửa đổi (tampered) được lấy lại mã băm sạch từ bản sao lưu .bak.
+      + Các tệp bị xóa (deleted) được đưa lại vào baseline với mã băm sạch từ bản sao lưu .bak.
+    - Nếu thư mục sạch sẽ (chưa bị tấn công hoặc đã hoàn nguyên 100%):
+      + Quét toàn bộ tệp trên đĩa và lập chỉ mục mã băm.
+    Trả về: (clean_files, clean_hashes, clean_meta, is_under_attack, attack_info)
+    """
+    td = target_dir or STATE.get("target_dir")
+    if not td or not os.path.exists(td) or not os.path.isdir(td):
+        return [], {}, {}, False, {}
+
+    bak_dir = os.path.join(ROOT_DIR, "src", "adversary", ".adversary_backups")
+    state_file = os.path.join(bak_dir, "adversary_state.json")
+    manifest_file = os.path.join(td, ".adversary_attack_manifest.json")
+
+    tampered_map = {}
+    deleted_map = {}
+    injected_set = set()
+    attack_info = {}
+
+    if os.path.exists(state_file):
+        try:
+            with open(state_file, "r", encoding="utf-8") as f:
+                st = json.load(f)
+                if isinstance(st, dict):
+                    tampered_map = st.get("tampered_records", {})
+                    deleted_map = st.get("deleted_records", {})
+                    injected_set = set(st.get("injected_files", []))
+        except Exception:
+            pass
+
+    if os.path.exists(manifest_file):
+        try:
+            with open(manifest_file, "r", encoding="utf-8") as f:
+                attack_info = json.load(f)
+                injected_set.add(".adversary_attack_manifest.json")
+                for k, v in attack_info.items():
+                    if k.startswith("attack_") and isinstance(v, str):
+                        if any(w in k for w in ("injected", "crc32", "proof", "preimage", "metadata")):
+                            injected_set.add(v)
+        except Exception:
+            pass
+
+    known_artifacts = {
+        "forged_transaction_crc32.dat",
+        "dolev_yao_swapped_proof.json",
+        "second_preimage_exploit.bin",
+        "adversary_metadata_recon.json",
+        ".adversary_attack_manifest.json"
+    }
+    injected_set.update(known_artifacts)
+
+    raw_disk = get_disk_files(td)
+    clean_files = []
+    for f in raw_disk:
+        fn = os.path.basename(f)
+        if f in injected_set or fn in known_artifacts:
+            continue
+        if (fn.startswith("backdoor_") or fn.startswith("rootkit_")) and fn.endswith(".py"):
+            continue
+        clean_files.append(f)
+
+    for df, bp in deleted_map.items():
+        if df not in clean_files and os.path.exists(bp):
+            clean_files.append(df)
+
+    clean_files.sort()
+
+    clean_hashes = {}
+    clean_meta = {}
+    for cf in clean_files:
+        if cf in tampered_map and os.path.exists(tampered_map[cf]):
+            bak_p = tampered_map[cf]
+            clean_hashes[cf] = hash_file_sha256(bak_p)
+            try:
+                st_m = os.stat(bak_p)
+                clean_meta[cf] = (st_m.st_mtime, st_m.st_size)
+            except Exception:
+                clean_meta[cf] = (0, 0)
+        elif cf in deleted_map and os.path.exists(deleted_map[cf]):
+            bak_p = deleted_map[cf]
+            clean_hashes[cf] = hash_file_sha256(bak_p)
+            try:
+                st_m = os.stat(bak_p)
+                clean_meta[cf] = (st_m.st_mtime, st_m.st_size)
+            except Exception:
+                clean_meta[cf] = (0, 0)
+        else:
+            full_p = os.path.join(td, cf)
+            clean_hashes[cf] = hash_file_sha256(full_p)
+            try:
+                st_m = os.stat(full_p)
+                clean_meta[cf] = (st_m.st_mtime, st_m.st_size)
+            except Exception:
+                clean_meta[cf] = (0, 0)
+
+    is_under_attack = bool(tampered_map or deleted_map or os.path.exists(manifest_file))
+    return clean_files, clean_hashes, clean_meta, is_under_attack, attack_info
+
+
 def init_workspace():
     global STATE
     STATE["initialized"] = True
-    STATE["target_dir"] = None
+    default_td = None
+    if os.path.exists(KAGGLE_DATASET_DIR) and os.path.isdir(KAGGLE_DATASET_DIR):
+        default_td = KAGGLE_DATASET_DIR
+    elif os.path.exists(REALISTIC_DATASET_DIR) and os.path.isdir(REALISTIC_DATASET_DIR):
+        default_td = REALISTIC_DATASET_DIR
+    STATE["target_dir"] = default_td
     STATE["hd_merkle"] = None
     STATE["sha256"] = None
     STATE["hmac"] = None
@@ -136,11 +247,28 @@ def rebuild_all_models(target_dir=None):
     if "model_verify_stats" not in STATE:
         STATE["model_verify_stats"] = {}
 
+    clean_files, clean_hashes, clean_meta, is_under_attack, attack_info = get_clean_baseline(td)
+    STATE["baseline_files"] = clean_files
+    STATE["baseline_hashes"] = clean_hashes
+    STATE["baseline_meta"] = clean_meta
+    STATE["security_games_baseline"] = {
+        "is_learned": True,
+        "root_hash": "",
+        "target_dir": td,
+        "files": clean_files,
+        "file_hashes": clean_hashes,
+        "hashes": clean_hashes,
+        "file_count": len(clean_files)
+    }
+
     # 1. HD-MerkleTree Đề xuất (xử lý đa luồng & phân cấp)
     t0 = time.perf_counter()
     t = HDMerkleTree(td)
-    t.build_tree_parallel()
+    for rel_path, f_hash in clean_hashes.items():
+        t._insert_file_node(rel_path, f_hash)
+    t.root_hash = t.root_node.compute_hash().hex()
     STATE["hd_merkle"] = t
+    STATE["security_games_baseline"]["root_hash"] = t.root_hash
     t_hd = (time.perf_counter() - t0) * 1000
     n_hd = len(t.file_nodes)
     STATE["model_build_stats"]["hd_merkle"] = {
@@ -153,7 +281,8 @@ def rebuild_all_models(target_dir=None):
     # 2. Flat SHA-256 Manifest
     t0 = time.perf_counter()
     m_sha = SHA256Manifest(td)
-    m_sha.build_manifest()
+    m_sha.manifest = dict(clean_hashes)
+    m_sha._compute_aggregate_root()
     STATE["sha256"] = m_sha
     t_sha = (time.perf_counter() - t0) * 1000
     n_sha = len(m_sha.manifest)
@@ -167,7 +296,31 @@ def rebuild_all_models(target_dir=None):
     # 3. HMAC-SHA256 Manifest
     t0 = time.perf_counter()
     m_hmac = HMACManifest(td, secret_key=STATE["hmac_key"])
-    m_hmac.build_manifest()
+    bak_dir = os.path.join(ROOT_DIR, "src", "adversary", ".adversary_backups")
+    state_file = os.path.join(bak_dir, "adversary_state.json")
+    tamp_map = {}
+    del_map = {}
+    if os.path.exists(state_file):
+        try:
+            with open(state_file, "r", encoding="utf-8") as f:
+                st = json.load(f)
+                tamp_map = st.get("tampered_records", {})
+                del_map = st.get("deleted_records", {})
+        except Exception:
+            pass
+
+    h_manifest = {}
+    for rel in clean_files:
+        if rel in tamp_map and os.path.exists(tamp_map[rel]):
+            h_manifest[rel] = compute_file_hmac(tamp_map[rel], STATE["hmac_key"])
+        elif rel in del_map and os.path.exists(del_map[rel]):
+            h_manifest[rel] = compute_file_hmac(del_map[rel], STATE["hmac_key"])
+        else:
+            full_p = os.path.join(td, rel)
+            if os.path.exists(full_p):
+                h_manifest[rel] = compute_file_hmac(full_p, STATE["hmac_key"])
+    m_hmac.manifest = h_manifest
+    m_hmac._compute_aggregate_hmac()
     STATE["hmac"] = m_hmac
     t_hmac = (time.perf_counter() - t0) * 1000
     n_hmac = len(m_hmac.manifest)
@@ -182,7 +335,24 @@ def rebuild_all_models(target_dir=None):
     # 4. Standard Merkle Tree
     t0 = time.perf_counter()
     m_std = StandardMerkleTree(td)
-    m_std.build_tree()
+    m_std.files_list = sorted(clean_hashes.keys())
+    m_std.leaf_hashes = []
+    for rel in m_std.files_list:
+        h = hashlib.sha256()
+        h.update(rel.encode("utf-8"))
+        h.update(bytes.fromhex(clean_hashes[rel]))
+        m_std.leaf_hashes.append(h.digest())
+    m_std.levels = [m_std.leaf_hashes]
+    curr_lvl = m_std.leaf_hashes
+    while len(curr_lvl) > 1:
+        nxt_lvl = []
+        for i in range(0, len(curr_lvl), 2):
+            left = curr_lvl[i]
+            right = curr_lvl[i + 1] if (i + 1 < len(curr_lvl)) else left
+            nxt_lvl.append(sha256_combine(left, right))
+        m_std.levels.append(nxt_lvl)
+        curr_lvl = nxt_lvl
+    m_std.root_hash = m_std.levels[-1][0].hex()
     STATE["merkle_std"] = m_std
     t_std = (time.perf_counter() - t0) * 1000
     n_std = len(m_std.files_list)
@@ -193,6 +363,12 @@ def rebuild_all_models(target_dir=None):
         "speed_fps": round(n_std / (t_std / 1000)) if t_std > 0 else 0
     }
 
+    STATE["is_learned"] = {
+        "hd_merkle": True,
+        "sha256": True,
+        "hmac": True,
+        "merkle_std": True
+    }
     return STATE["model_build_stats"]
 
 
@@ -209,7 +385,30 @@ HTML_PAGE = """<!DOCTYPE html>
   <script src="/chart.umd.min.js"></script>
   <script>
     if (typeof Chart === 'undefined') {
-      document.write('<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"><\\/script>');
+      const scriptEl = document.createElement('script');
+      scriptEl.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js';
+      document.head.appendChild(scriptEl);
+    }
+
+    function getPathBase(p) {
+      if (!p) return '';
+      const s = p.toString();
+      const bs = String.fromCharCode(92);
+      const idx = Math.max(s.lastIndexOf('/'), s.lastIndexOf(bs));
+      return idx >= 0 ? s.slice(idx + 1) : s;
+    }
+
+    function getPathFirst(p) {
+      if (!p) return '';
+      const s = p.toString();
+      const bs = String.fromCharCode(92);
+      const idx1 = s.indexOf('/');
+      const idx2 = s.indexOf(bs);
+      let idx = -1;
+      if (idx1 >= 0 && idx2 >= 0) idx = Math.min(idx1, idx2);
+      else if (idx1 >= 0) idx = idx1;
+      else if (idx2 >= 0) idx = idx2;
+      return idx >= 0 ? s.slice(0, idx) : s;
     }
 
     async function runWithButtonLoading(btnOrEvent, loadingText, asyncAction) {
@@ -267,7 +466,7 @@ HTML_PAGE = """<!DOCTYPE html>
       }
       const statusLbl = document.getElementById('gamesLoadingStatus');
       const container = document.getElementById('gamesResultsContainer');
-      const shortName = currentTargetDir.split(/[\/\\\\]/).pop() || currentTargetDir;
+      const shortName = getPathBase(currentTargetDir) || currentTargetDir;
       if (statusLbl) statusLbl.innerText = `Đang thực thi 7 mô hình kiểm định an toàn toán học trên ${shortName}...`;
 
       await runWithButtonLoading(btn || 'btnRunSecurityGames', 'Đang kiểm định 7 mô hình...', async () => {
@@ -1330,6 +1529,7 @@ HTML_PAGE = """<!DOCTYPE html>
           <span>Chọn thư mục</span>
         </button>
         <input type="text" id="targetDirInput" value="" style="flex:1; min-width:240px; padding:7px 12px; border-radius:8px; border:1px solid #cbd5e1; font-family:'JetBrains Mono', monospace; font-size:12px; background:#fff;" placeholder="Chưa chọn thư mục (Bấm 'Chọn thư mục' để chọn)..." onchange="applyTargetDirInput()" onkeydown="if(event.key==='Enter') applyTargetDirInput()">
+        <span id="activeFolderBadge" style="display:none; font-size:11.5px; font-weight:700; padding:4px 10px; border-radius:6px; background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe; white-space:nowrap;"></span>
         <button id="btnClearFolder" onclick="clearTargetFolder()" style="display:none; background:transparent; border:none; color:#ef4444; font-size:12px; font-weight:700; cursor:pointer; padding:4px 6px;" title="Hủy chọn thư mục">✕ Bỏ chọn</button>
       </div>
     </div>
@@ -1836,11 +2036,26 @@ HTML_PAGE = """<!DOCTYPE html>
 
     async function handleNativeFolderSelect(fileInput) {
       if (!fileInput.files || fileInput.files.length === 0) return;
-      const relPath = fileInput.files[0].webkitRelativePath || '';
-      const folderName = relPath.split(/[\/\\\\]/)[0] || '';
-      closeFolderModal();
+      const files = fileInput.files;
+      const relPath = files[0].webkitRelativePath || '';
+      const folderName = getPathFirst(relPath) || '';
+      const fileCount = files.length;
+      
+      const samples = [];
+      const step = Math.max(1, Math.floor(fileCount / 5));
+      for (let i = 0; i < fileCount && samples.length < 5; i += step) {
+        if (files[i] && files[i].webkitRelativePath) {
+          samples.push({
+            rel: files[i].webkitRelativePath,
+            size: files[i].size || 0
+          });
+        }
+      }
+      
+      fileInput.value = '';
       if (folderName) {
-        await applyFolderPath(folderName);
+        closeFolderModal();
+        await applyFolderPath(folderName, fileCount, samples);
       }
     }
 
@@ -1874,29 +2089,38 @@ HTML_PAGE = """<!DOCTYPE html>
       await applyFolderPath(p);
     }
 
-    async function applyFolderPath(folderPath) {
+    async function applyFolderPath(folderPath, fileCount, samples) {
       try {
-        const res = await fetch(`/api/workspace?action=set&path=${encodeURIComponent(folderPath)}`);
+        let url = `/api/workspace?action=set&path=${encodeURIComponent(folderPath)}`;
+        if (typeof fileCount === 'number' && fileCount > 0) {
+          url += `&count=${fileCount}`;
+        }
+        if (samples && samples.length > 0) {
+          url += `&samples=${encodeURIComponent(JSON.stringify(samples))}`;
+        }
+        const res = await fetch(url);
         const data = await res.json();
         if (data.status === 'ok') {
           currentTargetDir = data.target_dir;
           Object.keys(modelResultsCache).forEach(k => { modelResultsCache[k] = null; });
           cachedViolations = { tampered: [], injected: [], missing: [], dirty_paths: [] };
-          const shortName = currentTargetDir.split(/[\/\\\\]/).pop() || currentTargetDir;
+          cachedFiles = data.files || [];
+          const fileCount = data.file_count || cachedFiles.length;
+          const shortName = getPathBase(currentTargetDir) || currentTargetDir;
           const targetInput = document.getElementById('targetDirInput');
           if (targetInput) targetInput.value = currentTargetDir;
           const badge = document.getElementById('activeFolderBadge');
           if (badge) {
             badge.style.display = 'inline-block';
-            badge.innerText = `${shortName} (Chưa nạp)`;
+            badge.innerText = `${shortName} (${fileCount} tệp)`;
           }
           const clearBtn = document.getElementById('btnClearFolder');
           if (clearBtn) clearBtn.style.display = 'inline-block';
-          showToastNotification(`Đã chọn thư mục: ${shortName}`);
+          showToastNotification(`✓ Đã chọn thư mục: ${shortName} (${fileCount} tệp tin)`);
           await loadModelStatus();
-          updateDashboardLabels(currentTargetDir, 0);
+          updateDashboardLabels(currentTargetDir, fileCount);
         } else {
-          alert('Lỗi: ' + data.message);
+          alert('Lỗi gắn kết thư mục: ' + data.message);
         }
       } catch (e) {
         console.error(e);
@@ -1923,7 +2147,7 @@ HTML_PAGE = """<!DOCTYPE html>
     }
 
     function updateDashboardLabels(dirName, fileCount) {
-      const shortName = dirName ? (dirName.split(/[\/\\\\]/).pop() || dirName) : '';
+      const shortName = getPathBase(dirName) || dirName || '';
       const subtab = document.getElementById('benchSubtab1');
       if (subtab) {
         subtab.innerText = shortName ? (fileCount > 0 ? `1. Thực nghiệm ${shortName} (${fileCount} tệp tin)` : `1. Thực nghiệm ${shortName}`) : '1. Thực nghiệm trên thư mục giám sát';
@@ -2193,7 +2417,7 @@ HTML_PAGE = """<!DOCTYPE html>
           return;
         }
 
-        const shortName = currentTargetDir.split(/[\/\\\\]/).pop() || currentTargetDir;
+        const shortName = getPathBase(currentTargetDir) || currentTargetDir;
         if (targetInput) targetInput.value = currentTargetDir;
         const clearBtn = document.getElementById('btnClearFolder');
         if (clearBtn) clearBtn.style.display = 'inline-block';
@@ -2201,13 +2425,14 @@ HTML_PAGE = """<!DOCTYPE html>
         document.getElementById('modelHashValue').innerText = data.root_hash || 'Chưa nạp dữ liệu';
 
         if (!data.is_learned) {
+          const fileCount = data.file_count || (data.files ? data.files.length : (cachedFiles ? cachedFiles.length : 0));
           if (badge) {
             badge.style.display = 'inline-block';
-            badge.innerText = `${shortName} (Chưa nạp)`;
+            badge.innerText = `${shortName} (${fileCount} tệp)`;
           }
-          updateDashboardLabels(currentTargetDir, 0);
+          updateDashboardLabels(currentTargetDir, fileCount);
 
-          document.getElementById('statFiles').innerText = '--';
+          document.getElementById('statFiles').innerText = fileCount > 0 ? fileCount.toLocaleString() : '--';
           document.getElementById('statVerifyTime').innerText = '-- ms';
           document.getElementById('statSpeed').innerText = '-- tệp/s';
           document.getElementById('statIntegrityPercent').innerText = '--%';
@@ -2217,9 +2442,9 @@ HTML_PAGE = """<!DOCTYPE html>
           document.getElementById('metricIntegrityPercent').style.color = '#94a3b8';
           document.getElementById('metricProgressBar').style.width = '0%';
           document.getElementById('metricProgressBar').style.background = '#cbd5e1';
-          document.getElementById('metricFilesRatio').innerText = '-- / -- tệp';
+          document.getElementById('metricFilesRatio').innerText = `${fileCount} / ${fileCount} tệp`;
           document.getElementById('metricStatusBadge').innerText = 'Chưa nạp';
-          document.getElementById('metricStatusBadge').style.color = '#64748b';
+          document.getElementById('metricStatusBadge').style.color = '#f59e0b';
           document.getElementById('metricExecTime').innerText = '-- ms';
           document.getElementById('metricSpeed').innerText = '-- tệp/s';
 
@@ -2229,14 +2454,16 @@ HTML_PAGE = """<!DOCTYPE html>
 
           updateStageUI(
             'unlearned',
-            'Chưa nạp dữ liệu',
-            'Nhấn <strong>1. Nạp dữ liệu</strong> để mô hình quét và ghi nhận trạng thái gốc của các tệp tin trong thư mục.',
-            'Chưa nạp'
+            `Đã gắn kết thư mục (${fileCount} tệp tin)`,
+            'Thư mục đã được chọn thành công. Nhấn <strong>1. Nạp Baseline</strong> để mô hình quét và tính toán trạng thái gốc ban đầu.',
+            'Sẵn sàng nạp'
           );
 
-          cachedFiles = [];
+          if (data.files && data.files.length > 0) {
+            cachedFiles = data.files;
+          }
           cachedViolations = { tampered: [], injected: [], missing: [], dirty_paths: [] };
-          renderFileList([], cachedViolations);
+          renderFileList(cachedFiles, cachedViolations);
         } else {
           if (badge) {
             badge.style.display = 'inline-block';
@@ -2316,7 +2543,7 @@ HTML_PAGE = """<!DOCTYPE html>
           cachedFiles = data.files || [];
           renderFileList(cachedFiles, cachedViolations);
 
-          const shortName = currentTargetDir.split(/[\/\\\\]/).pop() || currentTargetDir;
+          const shortName = getPathBase(currentTargetDir) || currentTargetDir;
           const badge = document.getElementById('activeFolderBadge');
           if (badge) {
             badge.style.display = 'inline-block';
@@ -2418,7 +2645,7 @@ HTML_PAGE = """<!DOCTYPE html>
           cachedViolations = { tampered: [], injected: [], missing: [], dirty_paths: [] };
           renderFileList(cachedFiles, cachedViolations);
 
-          const shortName = currentTargetDir.split(/[\/\\\\]/).pop() || currentTargetDir;
+          const shortName = getPathBase(currentTargetDir) || currentTargetDir;
           const badge = document.getElementById('activeFolderBadge');
           if (badge) {
             badge.style.display = 'inline-block';
@@ -2983,10 +3210,10 @@ class WebDemoHandler(BaseHTTPRequestHandler):
 
             self.send_json({
                 "root_hash": root,
-                "file_count": file_count,
+                "file_count": file_count if is_learned else len(disk_files),
                 "is_learned": is_learned,
                 "target_dir": td,
-                "files": model_files if is_learned else [],
+                "files": model_files if is_learned else disk_files,
                 "proof_size": proof_sz,
                 "last_verify": STATE["model_verify_stats"].get(model),
                 "last_build": STATE["model_build_stats"].get(model)
@@ -3009,6 +3236,7 @@ class WebDemoHandler(BaseHTTPRequestHandler):
                 STATE["baseline_meta"] = {}
                 STATE["model_build_stats"] = {}
                 STATE["model_verify_stats"] = {}
+                STATE["security_games_baseline"] = None
                 print("\n[TERMINAL SERVER] [HỦY CHỌN] Đã xóa thư mục giám sát hiện tại.")
                 self.send_json({
                     "status": "ok",
@@ -3023,35 +3251,107 @@ class WebDemoHandler(BaseHTTPRequestHandler):
                 return
 
             elif action == "set":
-                new_path = qs.get("path", [""])[0].strip()
+                raw_path = qs.get("path", [""])[0].strip()
+                new_path = raw_path.strip('\'" ')
                 if not new_path:
                     self.send_json({"status": "error", "message": "Đường dẫn thư mục không được để trống!"})
                     return
                 
+                req_count = None
+                if "count" in qs and qs["count"][0].isdigit():
+                    try:
+                        req_count = int(qs["count"][0])
+                    except Exception:
+                        req_count = None
+                
+                req_samples = []
+                if "samples" in qs:
+                    try:
+                        req_samples = json.loads(qs["samples"][0])
+                    except Exception:
+                        req_samples = []
+
                 downloads_dir = os.path.join(os.path.expanduser("~"), "Downloads")
                 downloads_kaggle = os.path.join(downloads_dir, "kaggle_dataset")
                 downloads_kaggle_large = os.path.join(downloads_dir, "kaggle_dataset_large")
 
-                # Hỗ trợ preset hoặc đường dẫn tương đối / tuyệt đối
-                if new_path == "realistic_dataset":
-                    abs_p = REALISTIC_DATASET_DIR
-                elif new_path in ("kaggle_dataset_large", "Downloads/kaggle_dataset_large", "Downloads\\kaggle_dataset_large"):
-                    abs_p = downloads_kaggle_large
-                elif new_path in ("kaggle_dataset", "Downloads/kaggle_dataset", "Downloads\\kaggle_dataset"):
-                    # Ưu tiên bản sao trong Downloads nếu tồn tại (vì người dùng kéo ra Downloads để chỉnh sửa kiểm thử)
-                    if os.path.exists(downloads_kaggle):
-                        abs_p = downloads_kaggle
-                    else:
-                        abs_p = KAGGLE_DATASET_DIR
-                else:
-                    # Kiểm tra xem có nằm trong Downloads không
-                    check_downloads = os.path.join(downloads_dir, new_path)
-                    if not os.path.isabs(new_path) and os.path.exists(check_downloads) and os.path.isdir(check_downloads):
-                        abs_p = check_downloads
-                    else:
-                        abs_p = os.path.abspath(new_path if os.path.isabs(new_path) else os.path.join(ROOT_DIR, new_path))
+                abs_p = None
+                clean_p = new_path.replace("/", os.sep).replace("\\", os.sep)
+                # 1. Nếu là đường dẫn tuyệt đối trực tiếp và tồn tại trên đĩa -> Dùng ngay, không chuyển hướng
+                if os.path.isabs(clean_p) and os.path.exists(clean_p) and os.path.isdir(clean_p):
+                    abs_p = os.path.abspath(clean_p)
 
-                if not os.path.exists(abs_p) or not os.path.isdir(abs_p):
+                # 2. Nếu là đường dẫn tương đối hoặc tên thư mục duyệt từ web browser
+                if not abs_p:
+                    candidates = []
+                    # Nếu người dùng nhập rõ "download", ưu tiên tìm trong Downloads
+                    if "download" in new_path.lower():
+                        candidates.append(os.path.join(downloads_dir, os.path.basename(new_path)))
+                        candidates.append(os.path.join(downloads_dir, new_path))
+                        if "kaggle_dataset_large" in new_path:
+                            candidates.append(downloads_kaggle_large)
+                        elif "kaggle_dataset" in new_path:
+                            candidates.append(downloads_kaggle)
+
+                    # Ưu tiên các thư mục trong workspace dự án (ROOT_DIR) trước tiên
+                    if new_path == "kaggle_dataset":
+                        candidates.append(KAGGLE_DATASET_DIR)
+                    elif new_path == "realistic_dataset":
+                        candidates.append(REALISTIC_DATASET_DIR)
+                    elif new_path == "kaggle_dataset_large":
+                        candidates.append(downloads_kaggle_large)
+
+                    candidates.append(os.path.join(ROOT_DIR, new_path))
+                    candidates.append(os.path.join(ROOT_DIR, os.path.basename(new_path)))
+                    candidates.append(os.path.join(downloads_dir, new_path))
+                    if new_path == "kaggle_dataset":
+                        candidates.append(downloads_kaggle)
+                    candidates.append(os.path.join(os.path.expanduser("~"), "Desktop", new_path))
+                    candidates.append(os.path.join(os.path.expanduser("~"), "Documents", new_path))
+                    candidates.append(os.path.join("D:\\", new_path))
+                    candidates.append(os.path.join("C:\\", new_path))
+
+                    valid_candidates = []
+                    seen = set()
+                    for cand in candidates:
+                        if cand and os.path.exists(cand) and os.path.isdir(cand):
+                            norm = os.path.normpath(os.path.abspath(cand))
+                            if norm not in seen:
+                                seen.add(norm)
+                                valid_candidates.append(norm)
+
+                    # Đối chiếu với danh sách mẫu tệp hoặc số lượng tệp truyền từ hộp thoại duyệt web
+                    if valid_candidates and (req_samples or req_count is not None):
+                        for cand in valid_candidates:
+                            # Đối chiếu theo danh sách tệp mẫu
+                            if req_samples:
+                                sample_match = True
+                                for s in req_samples:
+                                    rel = s.get("rel", "").replace("/", os.sep).replace("\\", os.sep)
+                                    parts = rel.split(os.sep, 1)
+                                    sub = parts[1] if len(parts) > 1 else parts[0]
+                                    target_file = os.path.join(cand, sub)
+                                    if not os.path.exists(target_file):
+                                        sample_match = False
+                                        break
+                                    if s.get("size", 0) > 0 and os.path.getsize(target_file) != s["size"]:
+                                        sample_match = False
+                                        break
+                                if sample_match:
+                                    abs_p = cand
+                                    break
+
+                            # Đối chiếu theo số lượng tệp
+                            if not abs_p and req_count is not None:
+                                cnt = sum(len(f) for _, _, f in os.walk(cand))
+                                if cnt == req_count:
+                                    abs_p = cand
+                                    break
+
+                    if not abs_p and valid_candidates:
+                        abs_p = valid_candidates[0]
+
+                if not abs_p or not os.path.exists(abs_p) or not os.path.isdir(abs_p):
                     self.send_json({"status": "error", "message": f"Thư mục không tồn tại: {new_path}"})
                     return
                 
@@ -3068,13 +3368,14 @@ class WebDemoHandler(BaseHTTPRequestHandler):
                 STATE["baseline_meta"] = {}
                 STATE["model_build_stats"] = {}
                 STATE["model_verify_stats"] = {}
+                STATE["security_games_baseline"] = None
                 files = get_disk_files(abs_p)
-                print(f"\n[TERMINAL SERVER] [GẮN KẾT THƯ MỤC] Đã chuyển vùng làm việc sang: {abs_p}", flush=True)
+                print(f"\n[TERMINAL SERVER] [GẮN KẾT THƯ MỤC] Đã chuyển vùng làm việc sang: {abs_p} ({len(files)} tệp tin)", flush=True)
                 self.send_json({
                     "status": "ok",
                     "target_dir": abs_p,
-                    "file_count": 0,
-                    "files": [],
+                    "file_count": len(files),
+                    "files": files,
                     "message": f"Đã gắn kết thành công thư mục: {abs_p}"
                 })
 
@@ -3463,23 +3764,27 @@ class WebDemoHandler(BaseHTTPRequestHandler):
                 return
 
             sg_base = STATE.get("security_games_baseline")
-            if not sg_base or not sg_base.get("is_learned"):
-                if STATE.get("baseline_hashes") and STATE.get("baseline_files"):
-                    root_h = ""
-                    if STATE.get("hd_merkle"):
-                        root_h = STATE["hd_merkle"].root_hash
-                    elif STATE.get("model_build_stats", {}).get("hd_merkle"):
-                        root_h = STATE["model_build_stats"]["hd_merkle"].get("root_hash", "")
-                    sg_base = {
-                        "is_learned": True,
-                        "root_hash": root_h,
-                        "target_dir": td,
-                        "files": STATE.get("baseline_files", []),
-                        "file_hashes": STATE.get("baseline_hashes", {}),
-                        "hashes": STATE.get("baseline_hashes", {}),
-                        "file_count": len(STATE.get("baseline_files", []))
-                    }
-                    STATE["security_games_baseline"] = sg_base
+            if not sg_base or not sg_base.get("is_learned") or sg_base.get("target_dir") != td or not sg_base.get("files"):
+                clean_files, clean_hashes, clean_meta, is_under_attack, attack_info = get_clean_baseline(td)
+                root_h = ""
+                if STATE.get("hd_merkle") and STATE.get("target_dir") == td:
+                    root_h = STATE["hd_merkle"].root_hash
+                elif STATE.get("model_build_stats", {}).get("hd_merkle"):
+                    root_h = STATE["model_build_stats"]["hd_merkle"].get("root_hash", "")
+                sg_base = {
+                    "is_learned": True,
+                    "root_hash": root_h or "H0_CLEAN_BASELINE",
+                    "target_dir": td,
+                    "files": clean_files,
+                    "file_hashes": clean_hashes,
+                    "hashes": clean_hashes,
+                    "file_count": len(clean_files)
+                }
+                STATE["security_games_baseline"] = sg_base
+                if not STATE.get("baseline_files") or STATE.get("target_dir") != td:
+                    STATE["baseline_files"] = clean_files
+                    STATE["baseline_hashes"] = clean_hashes
+                    STATE["baseline_meta"] = clean_meta
 
             from src.proposed_model.security_games import run_all_scientific_proofs
             res = run_all_scientific_proofs(td, baseline_data=sg_base)

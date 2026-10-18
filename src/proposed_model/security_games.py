@@ -875,8 +875,8 @@ def run_all_scientific_proofs(dataset_dir: Optional[str] = None, baseline_data: 
     deleted_files = []
 
     if baseline_data and baseline_data.get("file_hashes"):
-        base_hashes = baseline_data.get("file_hashes", {})
-        base_files = set(baseline_data.get("files", []))
+        base_hashes = {k.replace("\\", "/"): v for k, v in baseline_data.get("file_hashes", {}).items()}
+        base_files = set(f.replace("\\", "/") for f in baseline_data.get("files", []))
         disk_files = []
         for dp, _, fns in os.walk(dataset_dir):
             for fn in fns:
@@ -886,7 +886,7 @@ def run_all_scientific_proofs(dataset_dir: Optional[str] = None, baseline_data: 
                 ):
                     continue
                 disk_files.append(rel)
-        cur_set = set(disk_files)
+        cur_set = set(f.replace("\\", "/") for f in disk_files)
         common = sorted(list(base_files & cur_set))
         for f in common:
             fp = os.path.join(dataset_dir, f)
@@ -899,27 +899,27 @@ def run_all_scientific_proofs(dataset_dir: Optional[str] = None, baseline_data: 
     # Quét các vật chứng tấn công cụ thể từ Red Team trên đĩa
     artifacts_detected = {}
     crc_f = os.path.join(dataset_dir, "forged_transaction_crc32.dat")
-    if os.path.exists(crc_f) and (not baseline_data or "forged_transaction_crc32.dat" in injected_files):
+    if os.path.exists(crc_f):
         artifacts_detected["crc32"] = "forged_transaction_crc32.dat"
 
     dolev_f = os.path.join(dataset_dir, "dolev_yao_swapped_proof.json")
-    if os.path.exists(dolev_f) and (not baseline_data or "dolev_yao_swapped_proof.json" in injected_files):
+    if os.path.exists(dolev_f):
         artifacts_detected["dolev_yao"] = "dolev_yao_swapped_proof.json"
 
     preimage_f = os.path.join(dataset_dir, "second_preimage_exploit.bin")
-    if os.path.exists(preimage_f) and (not baseline_data or "second_preimage_exploit.bin" in injected_files):
+    if os.path.exists(preimage_f):
         artifacts_detected["second_preimage"] = "second_preimage_exploit.bin"
 
     recon_f = os.path.join(dataset_dir, "adversary_metadata_recon.json")
-    if os.path.exists(recon_f) and (not baseline_data or "adversary_metadata_recon.json" in injected_files):
+    if os.path.exists(recon_f):
         artifacts_detected["metadata_recon"] = "adversary_metadata_recon.json"
 
-    backdoors = [f for f in os.listdir(dataset_dir) if (f.startswith("backdoor_") or f.startswith("rootkit_")) and f.endswith(".py") and (not baseline_data or f in injected_files)]
+    backdoors = [f for f in os.listdir(dataset_dir) if (f.startswith("backdoor_") or f.startswith("rootkit_")) and f.endswith(".py")]
     if backdoors:
         artifacts_detected["backdoors"] = backdoors
 
     manifest_file = os.path.join(dataset_dir, ".adversary_attack_manifest.json")
-    if os.path.exists(manifest_file) and (not baseline_data or ".adversary_attack_manifest.json" in injected_files):
+    if os.path.exists(manifest_file):
         artifacts_detected["attack_manifest"] = ".adversary_attack_manifest.json"
 
     red_team_active = bool(tampered_files or injected_files or deleted_files or artifacts_detected)
