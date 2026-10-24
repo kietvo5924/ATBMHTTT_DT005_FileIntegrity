@@ -294,14 +294,16 @@ def create_document():
             "title": "PHƯƠNG PHÁP LUẬN & KHẢ NĂNG TÁI LẬP BÀI BÁO",
             "time": "1:00",
             "header": "ĐÁNH GIÁ PHƯƠNG PHÁP LUẬN & HƯỚNG TIẾP CẬN THỰC NGHIỆM",
-            "lead": "Làm rõ tính khả thi tái lập đối với một công trình triết học và định hướng thí nghiệm độc lập",
+            "lead": "Làm rõ tính khả thi tái lập đối với công trình triết học và định hướng thí nghiệm độc lập",
             "bullets": [
-                ("1. Tính khả thi tái lập:", "Bài báo của Halpin là khảo luận triết học thuần túy, không có mã nguồn, không có tập dữ liệu hay benchmark. Nhóm thực hiện thẩm định học thuật (Scholarly Audit) đối chiếu 17 trang PDF và 134 tài liệu tham khảo."),
-                ("2. Thực nghiệm độc lập của sinh viên:", "Sinh viên tự phát triển hệ thống kiểm tra toàn vẹn tệp để minh họa trực quan các khái niệm lý thuyết; kiểm thử CRC32, Dolev-Yao, kênh kề thời gian. Quy trình lưu vết tại MIDTERM_CODE_AUDIT.md.")
+                ("Khảo luận triết học thuần túy:", "Bài báo của TS. Harry Halpin là nghiên cứu nhận thức luận, hoàn toàn không có mã nguồn, không có tập dữ liệu hay bảng đo benchmark."),
+                ("Không tuyên bố sai lệch:", "Nhóm thẩm định toàn văn 17 trang PDF và 134 tài liệu tham khảo; tuyệt đối không bịa đặt số liệu hay tuyên bố 'tái lập 100% benchmark' của tác giả."),
+                ("Minh họa trực quan luận điểm:", "Sinh viên tự phát triển hệ thống kiểm tra toàn vẹn tệp để đưa các luận điểm đối kháng trừu tượng của Halpin vào kiểm chứng thực nghiệm."),
+                ("Phân định ranh giới rạch ròi:", "Mã nguồn và kịch bản đối kháng là sản phẩm độc lập của sinh viên, không phải thuật toán của Halpin (lưu vết tại MIDTERM_CODE_AUDIT.md).")
             ],
             "explanation": (
-                "Giải thích ngắn gọn:\n"
-                "Tại sao bài báo không có code mà đề tài có demo? Bài báo gốc là khảo cứu triết học, không công bố mã nguồn hay số liệu để chạy lại. Do đó, nhóm tự thiết kế hệ thống kiểm tra toàn vẹn tệp độc lập trên tập dữ liệu 2.485 tệp để minh họa thực tế cho các luận điểm của tác giả."
+                "Giải thích dễ hiểu:\n"
+                "Tại sao bài báo không có code mà đề tài lại có demo? Bài báo là nghiên cứu triết học, không có mã nguồn hay số liệu sẵn. Nhóm tự xây dựng phần mềm để minh họa các luận điểm của tác giả, chứ không bịa đặt số liệu của bài báo."
             ),
             "footer": "Báo cáo phân định phương pháp luận độc lập của nhóm nghiên cứu đề tài DT005."
         },
@@ -314,14 +316,14 @@ def create_document():
             "header": "SƠ ĐỒ 4: PHÂN ĐỊNH LÝ THUYẾT & THÍ NGHIỆM ĐỘC LẬP",
             "lead": "Đối sánh minh bạch giữa các luận điểm bài báo và thí nghiệm minh họa do sinh viên xây dựng",
             "bullets": [
-                ("Ví dụ 1 — Nhiễu ngẫu nhiên vs Đối thủ chủ đích:", "Halpin chỉ rõ mã kiểm tra lỗi chỉ chống được nhiễu ngẫu nhiên. DT005 thử nghiệm giải hệ phương trình trên GF(2) bù 4 byte qua mặt CRC32; SHA-256 phát hiện ngay nhờ tính phi tuyến. Giới hạn: Không khẳng định CRC32 bất lực trong kiểm tra lỗi phần cứng ngẫu nhiên."),
-                ("Ví dụ 2 — Phân tách miền nút lá (RFC 6962):", "Halpin nhấn mạnh điểm mù cấu trúc dữ liệu nhưng không đề cập cây Merkle. DT005 cài đặt phân tách miền IETF RFC 6962 (tiền tố 0x00 cho lá, 0x01 cho nhánh) phòng ngừa va chạm cấu trúc. Giới hạn: Đóng góp độc lập của sinh viên, không phải của Halpin."),
-                ("Ví dụ 3 — Kênh kề thời gian:", "Halpin dẫn chứng thời gian thực thi làm lộ bí mật (Kocher 1996). DT005 đo đạc so sánh chuỗi ngắt sớm so với hàm thời gian hằng số hmac.compare_digest. Giới hạn: Đo trên Python có jitter hệ điều hành, chỉ minh họa mức ứng dụng.")
+                ("1. Nhiễu vs Đối thủ chủ đích:", "Halpin (Sec. 1–2): Mã tuyến tính chỉ bắt lỗi ngẫu nhiên, không cản được đối thủ có chủ đích. Minh họa DT005: Giải hệ GF(2) bù 4 byte qua mặt CRC32; SHA-256 phát hiện ngay nhờ tính phi tuyến. Giới hạn: Chỉ minh họa kịch bản giả mạo cụ thể; không phủ nhận vai trò bắt lỗi phần cứng của CRC32."),
+                ("2. Phân tách miền nút lá:", "Lý thuyết bài báo: Halpin nhấn mạnh điểm mù cấu trúc dữ liệu, nhưng không đề cập cây Merkle. Minh họa DT005: Cài đặt chuẩn RFC 6962 (tiền tố 0x00 cho lá, 0x01 cho nhánh) để tránh nhầm lẫn cấu trúc cây. Giới hạn: Đây là giải pháp kỹ thuật độc lập do sinh viên tích hợp, không phải đề xuất của Halpin."),
+                ("3. Rò rỉ kênh kề thời gian:", "Halpin (Sec. 5): Thời gian xử lý thực tế làm rò rỉ dữ liệu ngoài mô hình toán (dẫn Kocher 1996). Minh họa DT005: Đo đạc so sánh chuỗi ngắt sớm làm rò rỉ ký tự; áp dụng hàm thời gian hằng số hmac.compare_digest. Giới hạn: Chỉ minh họa rò rỉ logic ở mức phần mềm ứng dụng; đo trên Python có độ trễ hệ điều hành.")
             ],
             "explanation": (
-                "Giải thích ngắn gọn:\n"
-                "• CRC32 vs SHA-256: CRC32 là mã tuyến tính, thiết kế để bắt lỗi ngẫu nhiên trong truyền dẫn. Đối thủ giải hệ phương trình tuyến tính trên GF(2) để tìm 4 byte bù, sửa nội dung tệp mà CRC32 vẫn khớp. SHA-256 là hàm băm phi tuyến có hiệu ứng tuyết lở (đổi 1 bit đầu vào thì ~50% bit đầu ra thay đổi), không thể làm giả bằng đại số tuyến tính.\n"
-                "• Phân tách miền RFC 6962: Tránh lỗi nhập nhằng nút lá (nhầm lẫn giữa nút lá và cặp băm của nút nhánh). Nhóm thêm tiền tố 0x00 cho lá và 0x01 cho nhánh để phân định rạch ròi cấu trúc cây."
+                "Giải thích dễ hiểu:\n"
+                "• CRC32 vs SHA-256: CRC32 chỉ bắt lỗi đường truyền ngẫu nhiên. Kẻ tấn công tính được 4 byte bù để sửa tệp mà mã CRC32 không đổi. Còn SHA-256 đổi 1 bit là mã băm đổi hoàn toàn nên không làm giả được.\n"
+                "• Phân tách miền RFC 6962: Gắn nhãn 0x00 cho lá và 0x01 cho nhánh để cây không bị nhầm lẫn dữ liệu."
             ),
             "footer": "Bảng đối chiếu minh bạch do sinh viên tự xây dựng; chi tiết mã nguồn lưu tại MIDTERM_CODE_AUDIT.md."
         },
@@ -347,21 +349,17 @@ def create_document():
         {
             "num": 13,
             "title": "KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG: RED TEAM VS BLUE TEAM",
-            "time": "1:00",
+            "time": "0:45",
             "header": "SƠ ĐỒ 5: KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG (DEMO ARCHITECTURE)",
             "lead": "Mô hình đối kháng thực tế 2 màn hình trên tập dữ liệu kaggle_dataset (2.485 tệp tin / ~112,81 MiB theo benchmark)",
             "bullets": [
-                ("1. Hạ tầng diễn tập 2 Màn hình:", "Tương tác thời gian thực giữa Hệ thống giám sát Blue Team (Port 8080) và Động cơ tấn công Red Team (Port 8081)."),
-                ("2. Tập dữ liệu thực nghiệm:", "kaggle_dataset gồm 2.485 tệp tin (~112,81 MiB theo benchmark, nạp cục bộ 2.483 tệp) đóng vai trò môi trường kiểm thử."),
-                ("3. Blue Team (Port 8080):", "Thiết lập mốc tin cậy sạch H_0; quét kiểm tra toàn vẹn định vị chính xác tệp tin bị biến đổi với tốc độ quét trên 2.000 tệp/giây."),
-                ("4. Red Team (Port 8081):", "Mô phỏng tấn công có chủ đích: Sửa byte tệp (In-place Tamper) và giải hệ phương trình GF(2) bù 4 byte qua mặt CRC32."),
-                ("5. Cơ chế hoàn nguyên an toàn:", "Thư mục sao lưu an toàn .adversary_backups/ phục hồi nguyên trạng 100% dữ liệu với nút Rollback All.")
+                ("1. Mô hình diễn tập 2 màn hình:", "Màn hình trái là Blue Team (Port 8080) giám sát toàn vẹn tệp; màn hình phải là Red Team (Port 8081) thực hiện can thiệp."),
+                ("2. Dữ liệu thực nghiệm:", "Thư mục kaggle_dataset (2.485 tệp tin) mô phỏng cấu trúc tệp thực tế để đo kiểm tra toàn vẹn."),
+                ("3. Kịch bản minh họa & Hoàn nguyên:", "Red Team sửa tệp hoặc bù byte qua mặt CRC32; Blue Team phát hiện gian lận và có nút Rollback All để hoàn nguyên dữ liệu gốc an toàn.")
             ],
             "explanation": (
-                "Giải thích vận hành Demo:\n"
-                "- Cửa sổ phải (Red Team): Sửa tệp Resume/Resume.csv hoặc tính 4 byte bù GF(2) qua mặt CRC32.\n"
-                "- Cửa sổ trái (Blue Team): Bấm kiểm tra toàn vẹn, hệ thống phát hiện tệp bị sửa tức thì và báo động.\n"
-                "- Nút Rollback All: Phục hồi lại dữ liệu gốc từ thư mục sao lưu."
+                "Hướng dẫn thuyết minh:\n"
+                "Đây là sơ đồ bố trí màn hình cho buổi Demo: màn hình phải tấn công, màn hình trái phát hiện. Nói ngắn gọn trong 20-30 giây để chuyển ngay vào màn hình Demo trực tiếp."
             ),
             "footer": "Sơ đồ kiến trúc diễn tập đối kháng độc lập do sinh viên thiết kế minh họa các khái niệm an ninh."
         },

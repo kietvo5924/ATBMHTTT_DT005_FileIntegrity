@@ -687,27 +687,25 @@ def create_deck():
     s10 = prs.slides.add_slide(blank_layout)
     add_bg(s10)
     add_header(s10, "PHƯƠNG PHÁP LUẬN & KHẢ NĂNG TÁI LẬP BÀI BÁO", "ĐÁNH GIÁ PHƯƠNG PHÁP LUẬN & HƯỚNG TIẾP CẬN THỰC NGHIỆM",
-               "Làm rõ tính khả thi tái lập đối với một công trình triết học và định hướng thí nghiệm độc lập")
+               "Làm rõ tính khả thi tái lập đối với công trình triết học và định hướng thí nghiệm độc lập")
 
     add_card(s10, Inches(0.8), Inches(1.85), Inches(5.7), Inches(4.8), COLOR_AMBER_BG, COLOR_AMBER_BORDER)
     t = s10.shapes.add_textbox(Inches(1.0), Inches(2.0), Inches(5.3), Inches(4.5))
     tf = t.text_frame
     tf.word_wrap = True
     p = tf.paragraphs[0]
-    p.text = "1. Đánh Giá Khả Năng Tái Lập (Replication Feasibility)"
+    p.text = "1. Đặc Thù Bài Báo & Tính Trung Thực Khoa Học"
     p.font.size = Pt(13)
     p.font.bold = True
     p.font.color.rgb = COLOR_ACCENT_AMBER
 
     replicate_pts = [
-        ("Bản chất công trình:", "Bài báo của TS. Harry Halpin là một luận văn tổng quan triết học và phân tích nhận thức luận, không phải là một công trình kỹ thuật phần mềm."),
-        ("Không có tài nguyên phần mềm:", "Bài báo HOÀN TOÀN KHÔNG có mã nguồn triển khai, không có tập dữ liệu thực nghiệm, không có các bảng đo thời gian (ms) hay dung lượng benchmark."),
-        ("Phương pháp thẩm định:", "Nhóm sinh viên thực hiện thẩm định học thuật (Scholarly Audit) đối chiếu toàn bộ 17 trang bản in PDF, 7 mục nội dung và 134 tài liệu tham khảo."),
-        ("Tính trung thực học thuật:", "Không bịa đặt số liệu gốc của tác giả; không tuyên bố 'tái lập 100% benchmark bài báo' khi tác giả không công bố benchmark.")
+        ("Khảo luận triết học thuần túy:", "Bài báo của TS. Harry Halpin là nghiên cứu nhận thức luận, hoàn toàn không có mã nguồn, không có tập dữ liệu hay bảng đo benchmark."),
+        ("Không tuyên bố sai lệch:", "Nhóm thẩm định toàn văn 17 trang PDF và 134 tài liệu tham khảo; tuyệt đối không bịa đặt số liệu hay tuyên bố 'tái lập 100% benchmark' của tác giả.")
     ]
     for h, b in replicate_pts:
         p_it = tf.add_paragraph()
-        p_it.space_before = Pt(8)
+        p_it.space_before = Pt(12)
         r1 = p_it.add_run()
         r1.text = f"• {h} "
         r1.font.bold = True
@@ -729,14 +727,12 @@ def create_deck():
     p.font.color.rgb = COLOR_ACCENT_EMERALD
 
     independent_pts = [
-        ("Mục tiêu thực nghiệm:", "Sinh viên tự xây dựng hệ thống kiểm tra toàn vẹn tệp nhằm chuyển hóa các luận điểm lý thuyết trừu tượng của Halpin thành các kịch bản quan sát được."),
-        ("Minh họa trực quan:", "Thiết kế các kịch bản kiểm thử: đối đầu toán học trên mã tuyến tính CRC32; can thiệp đường truyền Dolev-Yao; rò rỉ kênh kề thời gian so sánh chuỗi."),
-        ("Phân định ranh giới rõ ràng:", "Mã nguồn và hệ thống kiểm tra toàn vẹn là đóng góp kỹ thuật độc lập của sinh viên; không được nhầm lẫn là thuật toán do Halpin đề xuất."),
-        ("Kiểm toán khoa học:", "Tất cả quy trình kiểm toán mã nguồn và đối chiếu thực nghiệm được lưu vết kỹ thuật tại MIDTERM_CODE_AUDIT.md.")
+        ("Minh họa trực quan luận điểm:", "Sinh viên tự phát triển hệ thống kiểm tra toàn vẹn tệp để đưa các luận điểm đối kháng trừu tượng của Halpin vào kiểm chứng thực nghiệm."),
+        ("Phân định ranh giới rạch ròi:", "Mã nguồn và kịch bản đối kháng là sản phẩm độc lập của sinh viên, không phải thuật toán của Halpin (lưu vết tại MIDTERM_CODE_AUDIT.md).")
     ]
     for h, b in independent_pts:
         p_it = tf.add_paragraph()
-        p_it.space_before = Pt(8)
+        p_it.space_before = Pt(12)
         r1 = p_it.add_run()
         r1.text = f"• {h} "
         r1.font.bold = True
@@ -768,17 +764,17 @@ def create_deck():
 
     examples_data = [
         ("1. NHIỄU vs ĐỐI THỦ CHỦ ĐÍCH",
-         ("Luận điểm Halpin (Sec. 1–2):", "Đối thủ là tác nhân có chủ đích, không phải nhiễu ngẫu nhiên. Mã kiểm tra lỗi tuyến tính được thiết kế cho nhiễu ngẫu nhiên, không phòng vệ được trước đối thủ chủ đích."),
-         ("Minh họa độc lập (DT005):", "Thử nghiệm kịch bản bù 4 byte GF(2): Kẻ tấn công giải hệ phương trình tuyến tính để qua mặt CRC32 trong tệp bị can thiệp; hàm băm phi tuyến SHA-256 phát hiện tức thì."),
-         ("Giới hạn diễn giải:", "Chỉ minh họa tính phi tuyến của hàm băm trong kịch bản giả mạo đã kiểm thử; không kết luận CRC32 bất lực trong vai trò phát hiện lỗi ngẫu nhiên vật lý.")),
-        ("2. PHÂN TÁCH MIỀN NÚT LÁ (RFC 6962)",
-         ("Gốc lý thuyết bài báo:", "Halpin nhấn mạnh điểm mù khi triển khai cấu trúc dữ liệu trong thực tế, nhưng KHÔNG trực tiếp đề cập cấu trúc cây Merkle hay kỹ thuật phân tách miền."),
-         ("Minh họa độc lập (DT005):", "Sinh viên chủ động mở rộng bài toán toàn vẹn: Cài đặt phân tách miền theo chuẩn IETF RFC 6962 (tiền tố byte 0x00 cho lá, 0x01 cho nhánh) để phòng ngừa va chạm cấu trúc tầng cây."),
-         ("Giới hạn diễn giải:", "Kỹ thuật RFC 6962 do sinh viên tự nghiên cứu tích hợp, không phải đề xuất của Halpin; chỉ phòng ngừa va chạm cấu trúc, không thay đổi độ phức tạp 2^256 của SHA-256.")),
+         ("Luận điểm Halpin (Sec. 1–2):", "Mã kiểm tra tuyến tính chỉ bắt lỗi ngẫu nhiên, không cản được đối thủ có chủ đích."),
+         ("Minh họa độc lập (DT005):", "Giải hệ phương trình GF(2) bù 4 byte qua mặt CRC32; SHA-256 phát hiện ngay nhờ tính phi tuyến."),
+         ("Giới hạn diễn giải:", "Chỉ minh họa kịch bản giả mạo cụ thể; không phủ nhận vai trò bắt lỗi phần cứng của CRC32.")),
+        ("2. PHÂN TÁCH MIỀN NÚT LÁ",
+         ("Gốc lý thuyết bài báo:", "Halpin nhấn mạnh điểm mù cấu trúc dữ liệu, nhưng không đề cập cây Merkle."),
+         ("Minh họa độc lập (DT005):", "Cài đặt chuẩn RFC 6962 (tiền tố 0x00 cho lá, 0x01 cho nhánh) để tránh nhầm lẫn cấu trúc cây."),
+         ("Giới hạn diễn giải:", "Đây là giải pháp kỹ thuật độc lập do sinh viên tích hợp, không phải đề xuất của Halpin.")),
         ("3. RÒ RỈ KÊNH KỀ THỜI GIAN",
-         ("Luận điểm Halpin (Sec. 5):", "Mô hình toán học trừu tượng xem mật mã là hàm lý tưởng, nhưng thời gian thực thi thực tế làm rò rỉ dữ liệu bí mật (dẫn theo Paul Kocher 1996)."),
-         ("Minh họa độc lập (DT005):", "Sinh viên xây dựng kịch bản kiểm thử đo đạc thời gian so sánh chuỗi tuần tự (dừng sớm khi gặp byte lệch) so với việc sử dụng hàm thời gian hằng số hmac.compare_digest."),
-         ("Giới hạn diễn giải:", "Đo đạc trên môi trường máy tính đơn có jitter hệ điều hành; chỉ minh họa rò rỉ logic ở mức phần mềm ứng dụng, không đại diện cho kênh kề phần cứng chuyên sâu."))
+         ("Luận điểm Halpin (Sec. 5):", "Thời gian xử lý thực tế làm rò rỉ dữ liệu ngoài mô hình toán (dẫn Kocher 1996)."),
+         ("Minh họa độc lập (DT005):", "Đo đạc so sánh chuỗi ngắt sớm làm rò rỉ ký tự; áp dụng hàm thời gian hằng số hmac.compare_digest."),
+         ("Giới hạn diễn giải:", "Chỉ minh họa rò rỉ logic ở mức phần mềm ứng dụng; đo trên Python có độ trễ hệ điều hành."))
     ]
 
     for idx, (ex_title, (p1_title, ex_theory), (p2_title, ex_impl), (p3_title, ex_limit)) in enumerate(examples_data):
@@ -804,7 +800,7 @@ def create_deck():
 
         p1_b = tf.add_paragraph()
         p1_b.text = ex_theory
-        p1_b.font.size = Pt(9.2)
+        p1_b.font.size = Pt(9.5)
         p1_b.font.color.rgb = COLOR_TEXT_SECONDARY
         p1_b.space_after = Pt(6)
 
@@ -817,7 +813,7 @@ def create_deck():
 
         p2_b = tf.add_paragraph()
         p2_b.text = ex_impl
-        p2_b.font.size = Pt(9.2)
+        p2_b.font.size = Pt(9.5)
         p2_b.font.color.rgb = COLOR_TEXT_SECONDARY
         p2_b.space_after = Pt(6)
 
@@ -830,7 +826,7 @@ def create_deck():
 
         p3_b = tf.add_paragraph()
         p3_b.text = ex_limit
-        p3_b.font.size = Pt(9.2)
+        p3_b.font.size = Pt(9.5)
         p3_b.font.color.rgb = COLOR_TEXT_MUTED
 
     f_box = s11.shapes.add_textbox(Inches(0.8), Inches(6.8), Inches(11.7), Inches(0.4))
