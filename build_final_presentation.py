@@ -418,119 +418,25 @@ def create_deck():
     p_f.font.color.rgb = COLOR_TEXT_MUTED
 
     # =========================================================================
-    # SLIDE 5: SHANNON & MẠNG PHỨC HỢP (SƠ ĐỒ 2: MÔ HÌNH TRUYỀN THÔNG VECTOR)
+    # SLIDE 5: SHANNON & MẠNG PHỨC HỢP (SƠ ĐỒ 2: MÔ HÌNH TRUYỀN THÔNG)
     # =========================================================================
     s5 = prs.slides.add_slide(blank_layout)
     add_bg(s5)
     add_header(s5, "MÔ HÌNH TRUYỀN THÔNG CỦA SHANNON VÀ MẠNG THỰC TẾ", "SƠ ĐỒ 2: ĐỐI SÁNH MÔ HÌNH TRUYỀN THÔNG ĐIỂM-ĐIỂM VÀ MẠNG XÃ HỘI-KỸ THUẬT",
                "Khoảng cách giữa mô hình điểm-điểm đóng kín của Shannon và mạng phức hợp không đồng nhất")
 
-    # Panel Trái: Shannon Point-to-Point
-    add_card(s5, Inches(0.8), Inches(1.85), Inches(5.7), Inches(4.75), COLOR_BG_PANEL, COLOR_BORDER_BLUE)
-    t5_left = s5.shapes.add_textbox(Inches(1.0), Inches(1.95), Inches(5.3), Inches(0.4))
-    t5_left.text_frame.paragraphs[0].text = "1. Mô Hình Điểm - Điểm Cổ Điển Shannon (1949)"
-    t5_left.text_frame.paragraphs[0].font.size = Pt(12)
-    t5_left.text_frame.paragraphs[0].font.bold = True
-    t5_left.text_frame.paragraphs[0].font.color.rgb = COLOR_BRAND_BLUE
-
-    # Vector Shapes Diagram Shannon
-    b_alice = s5.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(1.1), Inches(2.45), Inches(1.4), Inches(0.65))
-    b_alice.fill.solid()
-    b_alice.fill.fore_color.rgb = RGBColor(239, 246, 255)
-    b_alice.line.color.rgb = COLOR_ACCENT_BLUE
-    set_shape_text(b_alice, ["Người gửi Alice", "(Bản rõ M)"], color=COLOR_BRAND_BLUE)
-
-    b_chan = s5.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(2.9), Inches(2.45), Inches(1.6), Inches(0.65))
-    b_chan.fill.solid()
-    b_chan.fill.fore_color.rgb = RGBColor(254, 242, 242)
-    b_chan.line.color.rgb = COLOR_ACCENT_ROSE
-    set_shape_text(b_chan, ["Kênh truyền", "C = Enc(K, M)"], color=RGBColor(185, 28, 28))
-
-    b_bob = s5.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(4.9), Inches(2.45), Inches(1.3), Inches(0.65))
-    b_bob.fill.solid()
-    b_bob.fill.fore_color.rgb = RGBColor(236, 253, 245)
-    b_bob.line.color.rgb = COLOR_ACCENT_EMERALD
-    set_shape_text(b_bob, ["Người nhận Bob", "(Dec(K, C))"], color=COLOR_ACCENT_EMERALD)
-
-    b_eve = s5.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(2.7), Inches(3.25), Inches(2.0), Inches(0.55))
-    b_eve.fill.solid()
-    b_eve.fill.fore_color.rgb = RGBColor(254, 226, 226)
-    b_eve.line.color.rgb = RGBColor(185, 28, 28)
-    set_shape_text(b_eve, ["Đối thủ Eve (Passive)", "Chỉ nghe lén đường truyền"], font_size=Pt(9), color=RGBColor(153, 27, 27))
-
-    t_s5_pts = s5.shapes.add_textbox(Inches(1.0), Inches(3.95), Inches(5.3), Inches(2.4))
-    tf_s5p = t_s5_pts.text_frame
-    tf_s5p.word_wrap = True
-    shannon_pts = [
-        ("Bí mật hoàn hảo:", "OTP an toàn tuyệt đối khi H(K) >= H(M), nhưng bất khả thi khi triển khai diện rộng."),
-        ("Giả định Shannon:", "Xem sai lệch dữ liệu là 'nhiễu ngẫu nhiên'. Đối thủ thực tế là tác nhân có chủ đích!"),
-        ("Hạn chế:", "Bỏ qua chi phí lưu trữ/phân phối khóa, rò rỉ kênh kề và ranh giới hệ thống vật lý.")
-    ]
-    for h, b in shannon_pts:
-        p_it = tf_s5p.add_paragraph()
-        p_it.space_before = Pt(4)
-        r1 = p_it.add_run()
-        r1.text = f"• {h} "
-        r1.font.bold = True
-        r1.font.size = Pt(10)
-        r1.font.color.rgb = COLOR_TEXT_PRIMARY
-        r2 = p_it.add_run()
-        r2.text = b
-        r2.font.size = Pt(9.5)
-        r2.font.color.rgb = COLOR_TEXT_SECONDARY
-
-    # Panel Phải: Complex Network
-    add_card(s5, Inches(6.8), Inches(1.85), Inches(5.7), Inches(4.75), COLOR_EMERALD_BG, COLOR_EMERALD_BORDER)
-    t5_right = s5.shapes.add_textbox(Inches(7.0), Inches(1.95), Inches(5.3), Inches(0.4))
-    t5_right.text_frame.paragraphs[0].text = "2. Thực Tế: Mạng Xã Hội - Kỹ Thuật Không Đồng Nhất"
-    t5_right.text_frame.paragraphs[0].font.size = Pt(12)
-    t5_right.text_frame.paragraphs[0].font.bold = True
-    t5_right.text_frame.paragraphs[0].font.color.rgb = COLOR_ACCENT_EMERALD
-
-    # Vector Shapes Complex
-    b_net1 = s5.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(7.1), Inches(2.45), Inches(2.4), Inches(0.65))
-    b_net1.fill.solid()
-    b_net1.fill.fore_color.rgb = COLOR_BG_WHITE
-    b_net1.line.color.rgb = COLOR_ACCENT_EMERALD
-    set_shape_text(b_net1, ["Nhóm Người Giữ Bí Mật", "(Duy trì chính sách Policy)"], color=COLOR_ACCENT_EMERALD)
-
-    b_net2 = s5.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(9.8), Inches(2.45), Inches(2.4), Inches(0.65))
-    b_net2.fill.solid()
-    b_net2.fill.fore_color.rgb = COLOR_BG_WHITE
-    b_net2.line.color.rgb = COLOR_ACCENT_BLUE
-    set_shape_text(b_net2, ["Hạ Tầng / ISP / Đám Mây", "(Môi trường mở không tin cậy)"], color=COLOR_BRAND_BLUE)
-
-    b_nsa = s5.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(7.1), Inches(3.25), Inches(5.1), Inches(0.55))
-    b_nsa.fill.solid()
-    b_nsa.fill.fore_color.rgb = RGBColor(254, 226, 226)
-    b_nsa.line.color.rgb = COLOR_ACCENT_ROSE
-    set_shape_text(b_nsa, ["Đối Thủ Thể Chế (NSA / Five Eyes) & Kênh Kề", "Tấn công chuỗi cung ứng, suy yếu chuẩn & Giám sát siêu dữ liệu"], font_size=Pt(9), color=RGBColor(153, 27, 27))
-
-    t_s5_cpts = s5.shapes.add_textbox(Inches(7.0), Inches(3.95), Inches(5.3), Inches(2.4))
-    tf_s5cp = t_s5_cpts.text_frame
-    tf_s5cp.word_wrap = True
-    complex_pts = [
-        ("Mạng phức hợp:", "Thông tin chảy qua nhiều thực thể: người dùng, ISP, cáp quang biển, đám mây."),
-        ("Đối thủ thể chế:", "NSA/Five Eyes tấn công chuỗi cung ứng, suy yếu chuẩn & giám sát siêu dữ liệu."),
-        ("Mục tiêu hiện đại:", "Bảo vệ siêu dữ liệu (Mixnet), kháng kênh kề thời gian và kiểm soát lỗi nội bộ.")
-    ]
-    for h, b in complex_pts:
-        p_it = tf_s5cp.add_paragraph()
-        p_it.space_before = Pt(4)
-        r1 = p_it.add_run()
-        r1.text = f"• {h} "
-        r1.font.bold = True
-        r1.font.size = Pt(10)
-        r1.font.color.rgb = COLOR_TEXT_PRIMARY
-        r2 = p_it.add_run()
-        r2.text = b
-        r2.font.size = Pt(9.5)
-        r2.font.color.rgb = COLOR_TEXT_SECONDARY
+    img_s5_path = os.path.join(os.path.dirname(__file__), "docs", "Slide6.drawio.png")
+    if os.path.exists(img_s5_path):
+        img_w = Inches(10.3)
+        img_h = Inches(4.84)
+        img_l = (prs.slide_width - img_w) / 2
+        img_t = Inches(1.82)
+        s5.shapes.add_picture(img_s5_path, img_l, img_t, img_w, img_h)
 
     f_box = s5.shapes.add_textbox(Inches(0.8), Inches(6.8), Inches(11.7), Inches(0.4))
     tf_f = f_box.text_frame
     p_f = tf_f.paragraphs[0]
-    p_f.text = "Sơ đồ tổng hợp dựa trên Shannon (1949) và Halpin (2025). [Mã nguồn sơ đồ draw.io lưu tại docs/diagram_slide_06_shannon.drawio]"
+    p_f.text = "Sơ đồ tổng hợp dựa trên Shannon (1949) và Harry Halpin (2025), Journal of Cybersecurity, tr. 3–5."
     p_f.font.size = Pt(10)
     p_f.font.italic = True
     p_f.font.color.rgb = COLOR_TEXT_MUTED
@@ -850,261 +756,162 @@ def create_deck():
     p_f.font.color.rgb = COLOR_TEXT_MUTED
 
     # =========================================================================
-    # SLIDE 11: MINH HỌA PAPER-TO-CODE ĐỘC LẬP (SƠ ĐỒ 4 & BẢNG ĐỐI SÁNH)
+    # SLIDE 11: MINH HỌA PAPER-TO-CODE ĐỘC LẬP & GIỚI HẠN DIỄN GIẢI
     # =========================================================================
     s11 = prs.slides.add_slide(blank_layout)
     add_bg(s11)
     add_header(s11, "MINH HỌA PAPER-TO-CODE ĐỘC LẬP & GIỚI HẠN DIỄN GIẢI", "SƠ ĐỒ 4: PHÂN ĐỊNH LÝ THUYẾT & THÍ NGHIỆM ĐỘC LẬP",
                "Đối sánh minh bạch giữa các luận điểm bài báo và thí nghiệm minh họa do sinh viên xây dựng")
 
-    # Top Stream Header
-    add_card(s11, Inches(0.8), Inches(1.85), Inches(5.7), Inches(0.85), COLOR_BG_PANEL, COLOR_BORDER_BLUE)
-    t = s11.shapes.add_textbox(Inches(0.9), Inches(1.9), Inches(5.5), Inches(0.75))
-    tf = t.text_frame
-    p = tf.paragraphs[0]
-    p.text = "LUỒNG LÝ THUYẾT BÀI BÁO (HARRY HALPIN 2025)"
-    p.font.size = Pt(11)
-    p.font.bold = True
-    p.font.color.rgb = COLOR_BRAND_BLUE
-    p_sub = tf.add_paragraph()
-    p_sub.text = "Khảo sát triết học, phê phán trừu tượng hóa, phân tích Dolev-Yao & NSA"
-    p_sub.font.size = Pt(9.5)
-    p_sub.font.color.rgb = COLOR_TEXT_MUTED
+    col_w11 = Inches(3.7)
+    gap11 = Inches(0.3)
 
-    # Bottom Stream Header
-    add_card(s11, Inches(6.8), Inches(1.85), Inches(5.7), Inches(0.85), COLOR_EMERALD_BG, COLOR_EMERALD_BORDER)
-    t = s11.shapes.add_textbox(Inches(6.9), Inches(1.9), Inches(5.5), Inches(0.75))
-    tf = t.text_frame
-    p = tf.paragraphs[0]
-    p.text = "LUỒNG THỰC NGHIỆM ĐỘC LẬP (SINH VIÊN DT005)"
-    p.font.size = Pt(11)
-    p.font.bold = True
-    p.font.color.rgb = COLOR_ACCENT_EMERALD
-    p_sub = tf.add_paragraph()
-    p_sub.text = "Hệ thống kiểm tra toàn vẹn tệp, 7 thí nghiệm minh họa, đối kháng Red/Blue"
-    p_sub.font.size = Pt(9.5)
-    p_sub.font.color.rgb = COLOR_TEXT_MUTED
-
-    add_card(s11, Inches(0.8), Inches(2.85), Inches(11.733), Inches(3.85), COLOR_BG_PANEL, COLOR_BORDER)
-    t = s11.shapes.add_textbox(Inches(1.0), Inches(2.95), Inches(11.333), Inches(3.65))
-    tf = t.text_frame
-    tf.word_wrap = True
-    p = tf.paragraphs[0]
-    p.text = "BẢNG ĐỐI CHIẾU BA MINH HỌA THỰC NGHIỆM TIÊU BIỂU VÀ GIỚI HẠN DIỄN GIẢI"
-    p.font.size = Pt(12)
-    p.font.bold = True
-    p.font.color.rgb = COLOR_TEXT_TITLE
-
-    table_data = [
-        ("1. Noise vs Adversary (Sec. 1 & 2)",
-         "Kẻ thù có chủ đích khác với nhiễu ngẫu nhiên; mã tuyến tính CRC32 bất lực.",
-         "Code giải mã bù đại số trên trường nhị phân GF(2), tìm 4 byte bù qua mặt CRC32 100%; SHA-256 phát hiện tức thì.",
-         "Bằng chứng đã chạy:", "orig_crc == forged_crc (Trùng 100%), SHA-256 lệch hoàn toàn.",
-         "Giới hạn diễn giải:", "Minh họa tính phi tuyến của hàm băm; không chứng minh an toàn toàn diện cho toàn hệ thống."),
-        ("2. Node-Leaf Confusion (Sec. 5)",
-         "Ghép chuỗi thô H(L||R) gây va chạm tiền ảnh cấp hai cấu trúc (nút cha bị nhầm với nút lá).",
-         "Triển khai phân tách miền chuẩn RFC 6962: Tiền tố 0x00 cho lá, 0x01 cho nhánh nội bộ.",
-         "Bằng chứng đã chạy:", "Standard Merkle Tree ghép thô bị va chạm; HD-Merkle phân tách miền chặn đứng hoàn toàn.",
-         "Giới hạn diễn giải:", "Chỉ giải quyết va chạm cấu trúc tầng cây; không loại trừ va chạm ngẫu nhiên 2^256 của SHA-256."),
-        ("3. Timing Side-Channel (Sec. 5)",
-         "Rò rỉ thông tin qua thời gian so sánh chuỗi (Early-return comparison leak - Kocher 1996).",
-         "Khảo sát đo lường 5 vòng so sánh chuỗi naive vs hàm thời gian hằng số hmac.compare_digest.",
-         "Bằng chứng đã chạy:", "Naive so sánh tuần tự lộ độ lệch trung vị ~0.08 µs; hmac.compare_digest triệt tiêu độ lệch.",
-         "Giới hạn diễn giải:", "Phép đo trên Python máy đơn có jitter; chỉ minh họa mức thư viện C, không chứng minh miễn nhiễm kênh kề phần cứng.")
+    examples_data = [
+        ("1. NHIỄU vs KẺ THÙ CHỦ ĐÍCH",
+         "Mật mã học khác lý thuyết Shannon: đối thủ có chủ đích, không phải nhiễu ngẫu nhiên. Mã toàn vẹn tuyến tính CRC32 hoàn toàn bất lực.",
+         "Giải hệ phương trình bù đại số GF(2), tìm 4 byte giả mạo qua mặt CRC32 100%. Hàm băm SHA-256 phát hiện thay đổi ngay lập tức.",
+         "Chỉ minh họa tính phi tuyến của hàm băm; không chứng minh an toàn toàn diện cho toàn bộ hệ thống."),
+        ("2. NHẬP NHẰNG NÚT LÁ MERKLE",
+         "Ghép chuỗi thô H(L || R) khiến kẻ thù có thể đánh tráo nút nhánh nội bộ thành nút lá, gây va chạm cấu trúc tầng cây.",
+         "Cài đặt phân tách miền chuẩn RFC 6962: gắn tiền tố 0x00 cho nút lá và 0x01 cho nút nhánh để triệt tiêu hoàn toàn nhập nhằng.",
+         "Chỉ giải quyết va chạm cấu trúc tầng cây Merkle; không loại trừ va chạm ngẫu nhiên 2^256 của SHA-256."),
+        ("3. KÊNH KỀ THỜI GIAN SO SÁNH",
+         "Lý thuyết xem mật mã là hàm toán học lý tưởng, nhưng thực tế việc dừng sớm (early-return) làm rò rỉ dữ liệu qua thời gian thực thi.",
+         "Đo đạc 5 vòng so sánh chuỗi tuần tự (lộ chênh lệch thời gian) so với hàm thời gian hằng số hmac.compare_digest triệt tiêu độ lệch.",
+         "Đo đạc trên máy tính đơn có nhiễu hệ điều hành; chỉ minh họa ở mức thư viện phần mềm, không phải phần cứng.")
     ]
 
-    for item in table_data:
-        p_row = tf.add_paragraph()
-        p_row.space_before = Pt(6)
-        r_t = p_row.add_run()
-        r_t.text = f"{item[0]} — "
-        r_t.font.bold = True
-        r_t.font.size = Pt(10.5)
-        r_t.font.color.rgb = COLOR_BRAND_BLUE
+    for idx, (ex_title, ex_theory, ex_impl, ex_limit) in enumerate(examples_data):
+        left_pos = Inches(0.8) + idx * (col_w11 + gap11)
+        add_card(s11, left_pos, Inches(1.85), col_w11, Inches(4.8), COLOR_BG_PANEL, COLOR_BORDER)
+        t = s11.shapes.add_textbox(left_pos + Inches(0.2), Inches(2.0), col_w11 - Inches(0.4), Inches(4.5))
+        tf = t.text_frame
+        tf.word_wrap = True
 
-        r_claim = p_row.add_run()
-        r_claim.text = f"Luận điểm Halpin: {item[1]} | "
-        r_claim.font.size = Pt(10)
-        r_claim.font.color.rgb = COLOR_TEXT_PRIMARY
+        p_t = tf.paragraphs[0]
+        p_t.text = ex_title
+        p_t.font.size = Pt(12)
+        p_t.font.bold = True
+        p_t.font.color.rgb = COLOR_BRAND_NAVY
+        p_t.space_after = Pt(10)
 
-        r_code = p_row.add_run()
-        r_code.text = f"Code DT005: {item[2]} "
-        r_code.font.size = Pt(10)
-        r_code.font.color.rgb = COLOR_TEXT_SECONDARY
+        # 1. Luận điểm bài báo Halpin
+        p1_h = tf.add_paragraph()
+        p1_h.text = "Luận điểm bài báo Halpin:"
+        p1_h.font.size = Pt(10.5)
+        p1_h.font.bold = True
+        p1_h.font.color.rgb = COLOR_TEXT_PRIMARY
 
-        p_sub = tf.add_paragraph()
-        p_sub.space_before = Pt(2)
-        r_ev = p_sub.add_run()
-        r_ev.text = f"   ► {item[3]} {item[4]}  |  "
-        r_ev.font.bold = True
-        r_ev.font.size = Pt(9.5)
-        r_ev.font.color.rgb = COLOR_ACCENT_EMERALD
+        p1_b = tf.add_paragraph()
+        p1_b.text = ex_theory
+        p1_b.font.size = Pt(9.5)
+        p1_b.font.color.rgb = COLOR_TEXT_SECONDARY
+        p1_b.space_after = Pt(8)
 
-        r_lim = p_sub.add_run()
-        r_lim.text = f"▲ {item[5]} {item[6]}"
-        r_lim.font.size = Pt(9.5)
-        r_lim.font.color.rgb = COLOR_ACCENT_AMBER
+        # 2. Minh họa thực nghiệm DT005
+        p2_h = tf.add_paragraph()
+        p2_h.text = "Minh họa thực nghiệm DT005:"
+        p2_h.font.size = Pt(10.5)
+        p2_h.font.bold = True
+        p2_h.font.color.rgb = COLOR_TEXT_PRIMARY
+
+        p2_b = tf.add_paragraph()
+        p2_b.text = ex_impl
+        p2_b.font.size = Pt(9.5)
+        p2_b.font.color.rgb = COLOR_TEXT_SECONDARY
+        p2_b.space_after = Pt(8)
+
+        # 3. Giới hạn diễn giải
+        p3_h = tf.add_paragraph()
+        p3_h.text = "Giới hạn diễn giải:"
+        p3_h.font.size = Pt(10.5)
+        p3_h.font.bold = True
+        p3_h.font.color.rgb = COLOR_TEXT_PRIMARY
+
+        p3_b = tf.add_paragraph()
+        p3_b.text = ex_limit
+        p3_b.font.size = Pt(9.5)
+        p3_b.font.color.rgb = COLOR_TEXT_MUTED
 
     f_box = s11.shapes.add_textbox(Inches(0.8), Inches(6.8), Inches(11.7), Inches(0.4))
     tf_f = f_box.text_frame
     p_f = tf_f.paragraphs[0]
-    p_f.text = "Sơ đồ và bảng đối chiếu do sinh viên tự xây dựng; chi tiết mã nguồn lưu tại MIDTERM_CODE_AUDIT.md."
+    p_f.text = "Bảng đối chiếu minh bạch do sinh viên tự xây dựng; chi tiết mã nguồn lưu tại MIDTERM_CODE_AUDIT.md."
     p_f.font.size = Pt(10)
     p_f.font.italic = True
     p_f.font.color.rgb = COLOR_TEXT_MUTED
 
     # =========================================================================
-    # SLIDE 12: SLIDE CHUYỂN TIẾP TỐI GIẢN: DEMO
+    # SLIDE 12: SLIDE CHUYỂN TIẾP TỐI GIẢN: DEMO (NỀN SÁNG TRANG NHÃ)
     # =========================================================================
     s12 = prs.slides.add_slide(blank_layout)
-    bg_demo = s12.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, prs.slide_width, prs.slide_height)
-    bg_demo.fill.solid()
-    bg_demo.fill.fore_color.rgb = COLOR_BRAND_NAVY
-    bg_demo.line.fill.background()
+    add_bg(s12)
 
-    t_demo = s12.shapes.add_textbox(Inches(1.5), Inches(2.2), Inches(10.333), Inches(3.0))
+    add_card(s12, Inches(1.5), Inches(1.5), Inches(10.333), Inches(4.5), COLOR_BG_PANEL, COLOR_BORDER_BLUE)
+
+    t_demo = s12.shapes.add_textbox(Inches(1.8), Inches(1.8), Inches(9.733), Inches(3.9))
     tf_demo = t_demo.text_frame
     tf_demo.word_wrap = True
 
     p_badge = tf_demo.paragraphs[0]
     p_badge.alignment = PP_ALIGN.CENTER
     p_badge.text = "DIỄN TẬP AN NINH MẠNG TRỰC TIẾP"
-    p_badge.font.size = Pt(13)
+    p_badge.font.size = Pt(12)
     p_badge.font.bold = True
-    p_badge.font.color.rgb = RGBColor(56, 189, 248)
+    p_badge.font.color.rgb = COLOR_BRAND_BLUE
 
     p_main = tf_demo.add_paragraph()
     p_main.alignment = PP_ALIGN.CENTER
-    p_main.space_before = Pt(16)
+    p_main.space_before = Pt(14)
     p_main.text = "DEMO"
     p_main.font.size = Pt(64)
     p_main.font.bold = True
-    p_main.font.color.rgb = RGBColor(255, 255, 255)
+    p_main.font.color.rgb = COLOR_BRAND_NAVY
 
     p_sub = tf_demo.add_paragraph()
     p_sub.alignment = PP_ALIGN.CENTER
-    p_sub.space_before = Pt(16)
+    p_sub.space_before = Pt(14)
     p_sub.text = "HỆ THỐNG GIÁM SÁT TOÀN VẸN TỆP & MÔ HÌNH ĐỐI KHÁNG RED TEAM VS BLUE TEAM"
     p_sub.font.size = Pt(15)
     p_sub.font.bold = True
-    p_sub.font.color.rgb = RGBColor(226, 232, 240)
+    p_sub.font.color.rgb = COLOR_TEXT_PRIMARY
 
     p_note = tf_demo.add_paragraph()
     p_note.alignment = PP_ALIGN.CENTER
-    p_note.space_before = Pt(8)
+    p_note.space_before = Pt(10)
     p_note.text = "Minh họa thực nghiệm các luận điểm lý thuyết: Can thiệp dữ liệu, Nhập nhằng nút lá RFC 6962, và So sánh chuỗi thời gian hằng số"
     p_note.font.size = Pt(11)
     p_note.font.italic = True
-    p_note.font.color.rgb = RGBColor(148, 163, 184)
+    p_note.font.color.rgb = COLOR_TEXT_SECONDARY
+
+    p_port = tf_demo.add_paragraph()
+    p_port.alignment = PP_ALIGN.CENTER
+    p_port.space_before = Pt(12)
+    p_port.text = "Blue Team Dashboard: http://localhost:8080   |   Red Team Adversary Engine: http://localhost:8081"
+    p_port.font.size = Pt(10.5)
+    p_port.font.bold = True
+    p_port.font.color.rgb = COLOR_BRAND_BLUE
 
     # =========================================================================
-    # SLIDE 13: KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG RED TEAM VS BLUE TEAM (SƠ ĐỒ VECTOR)
+    # SLIDE 13: KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG RED TEAM VS BLUE TEAM (SƠ ĐỒ HÌNH VẼ)
     # =========================================================================
     s13 = prs.slides.add_slide(blank_layout)
     add_bg(s13)
     add_header(s13, "KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG: RED TEAM VS BLUE TEAM", "SƠ ĐỒ 5: KIẾN TRÚC ĐỐI KHÁNG THỰC TẾ & BẰNG CHỨNG KIỂM ĐỊNH",
                "Mô hình đối kháng thực tế 2 màn hình trên tập dữ liệu kaggle_dataset (2.483 tệp tin)")
 
-    # Left Panel: Blue Team
-    add_card(s13, Inches(0.8), Inches(1.85), Inches(5.7), Inches(4.75), COLOR_BG_PANEL, COLOR_BORDER_BLUE)
-    t13_l = s13.shapes.add_textbox(Inches(1.0), Inches(1.95), Inches(5.3), Inches(0.4))
-    t13_l.text_frame.paragraphs[0].text = "BLUE TEAM — HỆ THỐNG PHÒNG THỦ (PORT 8080)"
-    t13_l.text_frame.paragraphs[0].font.size = Pt(12)
-    t13_l.text_frame.paragraphs[0].font.bold = True
-    t13_l.text_frame.paragraphs[0].font.color.rgb = COLOR_BRAND_BLUE
-
-    # Blue Team Vector Shapes
-    b_ds = s13.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(1.1), Inches(2.45), Inches(2.4), Inches(0.65))
-    b_ds.fill.solid()
-    b_ds.fill.fore_color.rgb = COLOR_BG_WHITE
-    b_ds.line.color.rgb = COLOR_ACCENT_BLUE
-    set_shape_text(b_ds, ["Tập Dữ Liệu Giám Sát", "(2.483 tệp / 112.81 MB)"], color=COLOR_BRAND_BLUE)
-
-    b_eng = s13.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(3.8), Inches(2.45), Inches(2.4), Inches(0.65))
-    b_eng.fill.solid()
-    b_eng.fill.fore_color.rgb = COLOR_BG_WHITE
-    b_eng.line.color.rgb = COLOR_BRAND_BLUE
-    set_shape_text(b_eng, ["Động Cơ Xác Thực", "(SHA-256 / HMAC / Merkle)"], color=COLOR_BRAND_BLUE)
-
-    b_root = s13.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(1.1), Inches(3.25), Inches(5.1), Inches(0.55))
-    b_root.fill.solid()
-    b_root.fill.fore_color.rgb = RGBColor(236, 253, 245)
-    b_root.line.color.rgb = COLOR_ACCENT_EMERALD
-    set_shape_text(b_root, ["Mốc Tin Cậy Ban Đầu: Root Hash H_0 (Trạng thái: 100% NGUYÊN VẸN)", "Định vị sai lệch O(log N) qua Dirty Path trong ~1.06 ms (2.325 tệp/giây)"], font_size=Pt(9), color=RGBColor(4, 120, 87))
-
-    t13_lpts = s13.shapes.add_textbox(Inches(1.0), Inches(3.95), Inches(5.3), Inches(2.5))
-    tf13_lp = t13_lpts.text_frame
-    tf13_lp.word_wrap = True
-    blue_scenarios = [
-        ("Kịch bản 1 (CRC32):", "Red Team bù 4 byte GF(2); Blue Team dùng SHA-256 bắt quả tang tức thì."),
-        ("Kịch bản 2 (In-place Tamper):", "Sửa nội dung tệp; Blue Team phát hiện và vẽ Dirty Path O(log N)."),
-        ("Kịch bản 3 (Dolev-Yao MitM):", "Đánh tráo Merkle Proof trên mạng; bộ xác thực từ chối 100% chữ ký.")
-    ]
-    for h, b in blue_scenarios:
-        p_it = tf13_lp.add_paragraph()
-        p_it.space_before = Pt(4)
-        r1 = p_it.add_run()
-        r1.text = f"• {h} "
-        r1.font.bold = True
-        r1.font.size = Pt(10)
-        r1.font.color.rgb = COLOR_TEXT_PRIMARY
-        r2 = p_it.add_run()
-        r2.text = b
-        r2.font.size = Pt(9.5)
-        r2.font.color.rgb = COLOR_TEXT_SECONDARY
-
-    # Right Panel: Red Team
-    add_card(s13, Inches(6.8), Inches(1.85), Inches(5.7), Inches(4.75), COLOR_EMERALD_BG, COLOR_EMERALD_BORDER)
-    t13_r = s13.shapes.add_textbox(Inches(7.0), Inches(1.95), Inches(5.3), Inches(0.4))
-    t13_r.text_frame.paragraphs[0].text = "RED TEAM — ĐỘNG CƠ TẤN CÔNG ĐỐI KHÁNG (PORT 8081)"
-    t13_r.text_frame.paragraphs[0].font.size = Pt(12)
-    t13_r.text_frame.paragraphs[0].font.bold = True
-    t13_r.text_frame.paragraphs[0].font.color.rgb = COLOR_ACCENT_EMERALD
-
-    b_adv = s13.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(7.1), Inches(2.45), Inches(2.4), Inches(0.65))
-    b_adv.fill.solid()
-    b_adv.fill.fore_color.rgb = RGBColor(254, 242, 242)
-    b_adv.line.color.rgb = COLOR_ACCENT_ROSE
-    set_shape_text(b_adv, ["Adversary Engine", "(6 Vector tấn công đối kháng)"], color=RGBColor(185, 28, 28))
-
-    b_roll = s13.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(9.8), Inches(2.45), Inches(2.4), Inches(0.65))
-    b_roll.fill.solid()
-    b_roll.fill.fore_color.rgb = RGBColor(236, 253, 245)
-    b_roll.line.color.rgb = COLOR_ACCENT_EMERALD
-    set_shape_text(b_roll, ["Cơ Chế Phục Hồi An Toàn", "(Nút ROLLBACK ALL 100%)"], color=RGBColor(4, 120, 87))
-
-    b_log = s13.shapes.add_shape(MSO_SHAPE.ROUNDED_RECTANGLE, Inches(7.1), Inches(3.25), Inches(5.1), Inches(0.55))
-    b_log.fill.solid()
-    b_log.fill.fore_color.rgb = COLOR_BG_WHITE
-    b_log.line.color.rgb = COLOR_BORDER
-    set_shape_text(b_log, ["[LOG KIỂM ĐỊNH TOÁN HỌC: 7/7 THÍ NGHIỆM ĐẠT CHUẨN]", "PPT Integrity: 100% phát hiện | RFC 6962: Chặn Node-Leaf | SAC: 50.00% | Time: 2,885 ms"], font_size=Pt(9), color=COLOR_BRAND_NAVY)
-    b_log.text_frame.paragraphs[0].alignment = PP_ALIGN.CENTER
-
-    t13_rpts = s13.shapes.add_textbox(Inches(7.0), Inches(3.95), Inches(5.3), Inches(2.5))
-    tf13_rp = t13_rpts.text_frame
-    tf13_rp.word_wrap = True
-    red_notes = [
-        ("Bản chất minh họa:", "Thực nghiệm độc lập kiểm chứng logic các khái niệm; không phải chạy lại số liệu bài báo."),
-        ("Môi trường đo đạc:", "CPU Intel i7, Windows 11; tốc độ duyệt đạt 2.325 tệp/giây trên kaggle_dataset."),
-        ("Kịch bản thao tác:", "Hướng dẫn lệnh chạy và quy trình demo 2 màn hình xem tại MIDTERM_DEMO.md.")
-    ]
-    for h, b in red_notes:
-        p_it = tf13_rp.add_paragraph()
-        p_it.space_before = Pt(4)
-        r1 = p_it.add_run()
-        r1.text = f"• {h} "
-        r1.font.bold = True
-        r1.font.size = Pt(10)
-        r1.font.color.rgb = COLOR_TEXT_PRIMARY
-        r2 = p_it.add_run()
-        r2.text = b
-        r2.font.size = Pt(9.5)
-        r2.font.color.rgb = COLOR_TEXT_SECONDARY
+    img_s13_path = os.path.join(os.path.dirname(__file__), "docs", "Slide14.drawio.png")
+    if os.path.exists(img_s13_path):
+        img_w = Inches(10.3)
+        img_h = Inches(4.84)
+        img_l = (prs.slide_width - img_w) / 2
+        img_t = Inches(1.82)
+        s13.shapes.add_picture(img_s13_path, img_l, img_t, img_w, img_h)
 
     f_box = s13.shapes.add_textbox(Inches(0.8), Inches(6.8), Inches(11.7), Inches(0.4))
     tf_f = f_box.text_frame
     p_f = tf_f.paragraphs[0]
-    p_f.text = "Số liệu thực tế đo đạc trực tiếp từ mã nguồn DT005. [Mã nguồn sơ đồ draw.io lưu tại docs/diagram_slide_14_adversary_architecture.drawio]"
+    p_f.text = "Sơ đồ kiến trúc kiểm thử đối kháng do sinh viên tự thiết kế minh họa các luận điểm của Halpin (2025)."
     p_f.font.size = Pt(10)
     p_f.font.italic = True
     p_f.font.color.rgb = COLOR_TEXT_MUTED
