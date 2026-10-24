@@ -842,28 +842,26 @@ def create_deck():
     p_f.font.color.rgb = COLOR_TEXT_MUTED
 
     # =========================================================================
-    # SLIDE 12: GIAO DIỆN BẢNG ĐIỀU KHIỂN GIÁM SÁT TOÀN VẸN THỰC TẾ (DEMO DASHBOARD)
+    # SLIDE 12: SLIDE CHUYỂN TIẾP: DEMO (NỀN SÁNG, ĐÚNG MỘ CHỮ "DEMO")
     # =========================================================================
     s12 = prs.slides.add_slide(blank_layout)
-    add_bg(s12)
-    add_header(s12, "GIAO DIỆN BẢNG ĐIỀU KHIỂN GIÁM SÁT TOÀN VẸN (BLUE TEAM)", "MINH HỌA THỰC NGHIỆM ĐỘC LẬP (LIVE DEMO)",
-               "Ảnh chụp thực tế từ hệ thống: Bắt quả tang tệp tin Resume/Resume.csv bị sửa đổi tại Port 8080")
+    bg12 = s12.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, prs.slide_width, prs.slide_height)
+    bg12.fill.solid()
+    bg12.fill.fore_color.rgb = RGBColor(248, 250, 252) # Nền sáng thanh lịch
+    bg12.line.fill.background()
 
-    img_s12_path = os.path.join(os.path.dirname(__file__), "docs", "dashboard_real_results.png")
-    if os.path.exists(img_s12_path):
-        img_w12 = Inches(10.2)
-        img_h12 = Inches(4.77)
-        img_l12 = (prs.slide_width - img_w12) / 2
-        img_t12 = Inches(1.85)
-        s12.shapes.add_picture(img_s12_path, img_l12, img_t12, img_w12, img_h12)
+    # Chỉ để đúng một chữ DEMO ở chính giữa slide
+    demo_box = s12.shapes.add_textbox(Inches(2.0), Inches(2.6), Inches(9.333), Inches(2.2))
+    tf12 = demo_box.text_frame
+    tf12.word_wrap = True
+    p12 = tf12.paragraphs[0]
+    p12.alignment = PP_ALIGN.CENTER
+    p12.text = "DEMO"
+    p12.font.name = "Calibri"
+    p12.font.size = Pt(88)
+    p12.font.bold = True
+    p12.font.color.rgb = RGBColor(30, 64, 175) # Royal Blue nổi bật
 
-    f_box12 = s12.shapes.add_textbox(Inches(0.8), Inches(6.8), Inches(11.7), Inches(0.4))
-    tf_f12 = f_box12.text_frame
-    p_f12 = tf_f12.paragraphs[0]
-    p_f12.text = "Ảnh chụp màn hình thực tế từ phiên chạy thử nghiệm của đề tài; không dùng hình ảnh giả lập."
-    p_f12.font.size = Pt(10)
-    p_f12.font.italic = True
-    p_f12.font.color.rgb = COLOR_TEXT_MUTED
 
     # =========================================================================
     # SLIDE 13: KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG RED TEAM VS BLUE TEAM (DEMO ARCHITECTURE)

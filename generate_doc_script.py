@@ -173,10 +173,10 @@ def create_document():
          "Sơ đồ 4 đối chiếu minh bạch ba ví dụ chuyển đổi từ luận điểm bài báo sang mã nguồn thực nghiệm, phân định rõ luận điểm gốc và đóng góp của sinh viên:\n• Ví dụ 1 (Nhiễu ngẫu nhiên vs Kẻ đối đầu có chủ đích): Halpin chỉ rõ mã kiểm tra tuyến tính chỉ được thiết kế để chống lại lỗi ngẫu nhiên. Nhóm sinh viên minh họa độc lập bằng kịch bản tấn công chủ đích: Giải hệ phương trình tuyến tính trên GF(2) để chèn 4 byte bù (patch), làm giả nội dung tệp mà giá trị CRC32 vẫn trùng khớp 100%. Ngược lại, hàm băm SHA-256 phát hiện thay đổi ngay lập tức nhờ tính phi tuyến. Giới hạn diễn giải: Không khẳng định CRC32 hoàn toàn bất lực trong mọi trường hợp (nó vẫn hiệu quả bắt lỗi ngẫu nhiên trong phần cứng/mạng); thí nghiệm chỉ mô tả đúng kịch bản can thiệp có chủ đích đã kiểm thử.\n• Ví dụ 2 (Cây Merkle & Phân tách miền): Halpin không đề xuất kỹ thuật này. Đây là phần minh họa độc lập do DT005 xây dựng, trích dẫn khuyến nghị từ IETF RFC 6962 (Certificate Transparency): Dùng tiền tố 0x00 cho nút lá và 0x01 cho nút nhánh nội bộ để triệt tiêu nguy cơ nhập nhằng nút lá (Node-leaf ambiguity). Giới hạn diễn giải: Kỹ thuật này giải quyết vấn đề cấu trúc cây, không triệt tiêu xác suất va chạm ngẫu nhiên của hàm băm nền tảng.\n• Ví dụ 3 (Tấn công kênh kề thời gian): Halpin dẫn chứng Paul Kocher (1996) về việc thời gian xử lý làm rò rỉ khóa. Nhóm sinh viên minh họa độc lập bằng việc so sánh chuỗi tuần tự có cơ chế ngắt sớm (early return) làm rò rỉ tiền tố, và áp dụng `hmac.compare_digest` để đạt thời gian thực thi hằng số. Giới hạn diễn giải: Phép đo trên Python chịu ảnh hưởng độ trễ lập lịch của hệ điều hành, chỉ minh họa ở mức thư viện phần mềm.",
          "Phân định rạch ròi giữa luận điểm Halpin và mã nguồn DT005; ghi rõ RFC 6962 là minh họa độc lập, không nói Halpin đề xuất; không khẳng định CRC32 bất lực trong mọi trường hợp."),
 
-        ("SLIDE 12: SLIDE CHUYỂN TIẾP: DEMO TRỰC TIẾP", "0:20",
+        ("SLIDE 12: SLIDE CHUYỂN TIẾP: DEMO", "0:15",
          "Nội dung trình bày:",
-         "Sau phần phân tích lý thuyết và đối chiếu phương pháp luận, nhóm chuyển sang phần Diễn tập An ninh Thực nghiệm trực tiếp: Mô hình đối kháng hai màn hình giữa Hệ thống phòng thủ Blue Team (Port 8080) và Động cơ tấn công đối kháng Red Team (Port 8081).\nTrên slide hiển thị ảnh chụp màn hình thực tế từ phiên chạy thử nghiệm thành công: Blue Team Dashboard tại cổng 8080 bắt quả tang tệp Resume/Resume.csv bị can thiệp trái phép, kích hoạt trạng thái cảnh báo đỏ và truy vết đường dẫn sai lệch.",
-         "Ảnh chụp giao diện thật từ lần chạy thành công, không dùng ảnh giả lập hay mockup."),
+         "Chuyển sang phần Diễn tập An ninh Thực nghiệm trực tiếp (Live Demo). Nhóm sử dụng mô hình đối kháng hai màn hình giữa Hệ thống phòng thủ Blue Team (Port 8080) và Động cơ tấn công đối kháng Red Team (Port 8081) để trực quan hóa và kiểm chứng thực tế các luận điểm triết học cốt lõi của bài báo Harry Halpin.",
+         "Slide chuyển tiếp tối giản nền sáng, chỉ hiển thị đúng một chữ DEMO ở chính giữa để tạo nhịp nghỉ trang trọng trước khi bắt đầu phần thực hành."),
 
         ("SLIDE 13: KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG RED TEAM VS BLUE TEAM [SƠ ĐỒ 5: DRAW.IO]", "1:00",
          "Nội dung trình bày:",
@@ -245,42 +245,48 @@ def create_document():
     h2.paragraph_format.space_after = Pt(10)
 
     p_intro_demo = doc.add_paragraph()
-    p_intro_demo.add_run("Hệ thống demo hỗ trợ 2 hình thức diễn tập tùy thuộc vào yêu cầu của buổi báo cáo: Giao diện Web Trực quan (Khuyến nghị ưu tiên) và Dòng lệnh Terminal CLI độc lập.")
+    p_intro_demo.add_run(
+        "Mục tiêu diễn tập giữa kỳ: Chỉ tập trung trình diễn các kịch bản đối kháng cốt lõi phản ánh trực tiếp luận điểm bài báo Harry Halpin (2025). "
+        "Các chức năng nghiên cứu mở rộng phục vụ đồ án cuối kỳ (như đánh tráo Merkle Proof phân tán, đo đạc độ sâu động, nén CompactProof) được lược bỏ để đảm bảo thời lượng và làm nổi bật trọng tâm khoa học."
+    )
 
     # PHƯƠNG ÁN 1: GIAO DIỆN WEB TRỰC QUAN
     p_opt1 = doc.add_paragraph()
     p_opt1.paragraph_format.space_before = Pt(8)
-    r_op1 = p_opt1.add_run("Phương án 1: Diễn tập Đối kháng 2 Màn hình trên Trình duyệt Web (Ưu tiên hàng đầu)")
+    r_op1 = p_opt1.add_run("Phương án 1: Diễn tập Đối kháng 2 Màn hình trên Trình duyệt Web (Khuyến nghị ưu tiên)")
     r_op1.font.bold = True
     r_op1.font.size = Pt(12)
     r_op1.font.color.rgb = RGBColor(15, 23, 42)
 
     demo_steps = [
-        ("Bước 1: Khởi động 2 máy chủ Web trong nền",
+        ("Bước 1: Khởi động 2 dịch vụ Web trong nền",
          "Mở terminal và kích hoạt song song 2 dịch vụ:\n"
          "• Blue Team Service:  python -m src.demo.web_demo --port 8080\n"
          "• Red Team Service:   python -m src.demo.red_team_web --port 8081\n"
-         "Mở 2 cửa sổ trình duyệt đặt cạnh nhau (Split Screen): Cửa sổ trái mở http://localhost:8080; cửa sổ phải mở http://localhost:8081."),
+         "Mở 2 cửa sổ trình duyệt chia đôi màn hình (Split Screen): Cửa sổ bên trái truy cập http://localhost:8080 (Blue Team); cửa sổ bên phải truy cập http://localhost:8081 (Red Team)."),
 
-        ("Bước 2: Thiết lập mốc tin cậy sạch tại Blue Team Dashboard (Port 8080)",
-         "Tại cổng 8080, chọn thư mục 'kaggle_dataset' (chứa tập dữ liệu thực tế ~112.8 MB).\n"
-         "Bấm nút 'Nạp & Tính toán Toàn vẹn'. Hệ thống tính toán và hiển thị Root Hash ban đầu H_0 sạch với trạng thái xanh: '100% NGUYÊN VẸN'."),
+        ("Bước 2: Thiết lập mốc tin cậy sạch ban đầu tại Blue Team (Port 8080)",
+         "Tại cổng 8080, chọn thư mục dữ liệu thực tế 'kaggle_dataset' (~112.8 MB).\n"
+         "Bấm nút 'Nạp & Tính toán Toàn vẹn'. Hệ thống tính toán và hiển thị Root Hash ban đầu H_0 với trạng thái màu xanh an toàn: '100% NGUYÊN VẸN'.\n"
+         "Ý nghĩa học thuật: Minh họa khái niệm 'đăng ký đối tượng' (registration of objects) theo Cantwell Smith và thiết lập trạng thái tin cậy khách quan theo Dretske."),
 
-        ("Bước 3: Phát động tấn công tại Red Team Adversary Engine (Port 8081)",
-         "Tại cổng 8081, thực hiện lần lượt các kịch bản tấn công đối kháng:\n"
-         "• Kịch bản 1 (In-place Tamper): Bấm nút 'Can thiệp tệp tin ngẫu nhiên'. Red Team tự động chọn một tệp (ví dụ: Resume/Resume.csv) và sửa đổi nội dung trực tiếp trên ổ đĩa.\n"
-         "• Kịch bản 2 (CRC32 Forge): Bấm nút 'Tấn công bù 4 byte GF(2)'. Hệ thống giải hệ phương trình tuyến tính, làm sai lệch tệp mà mã CRC32 vẫn giữ nguyên 100%.\n"
-         "• Kịch bản 3 (Dolev-Yao MitM): Bấm nút 'Đánh tráo Merkle Proof trên mạng'. Mô phỏng kẻ thù chặn và thay thế chuỗi chứng minh toàn vẹn."),
+        ("Bước 3: Phát động Kịch bản 1 — Can thiệp tệp tin có chủ đích tại Red Team (Port 8081)",
+         "Tại cổng 8081, bấm nút 'Can thiệp tệp tin ngẫu nhiên' (In-place Tampering). Red Team sửa đổi trực tiếp dữ liệu tệp tin trên ổ đĩa (ví dụ: Resume/Resume.csv).\n"
+         "Quay lại Blue Team (Port 8080), bấm nút 'Kiểm tra toàn vẹn':\n"
+         "• Hệ thống ngay lập tức đổi sang trạng thái cảnh báo đỏ: 'CẢNH BÁO: PHÁT HIỆN CAN THIỆP DỮ LIỆU!'.\n"
+         "• Bảng truy vết chỉ ra chính xác tệp tin Resume/Resume.csv bị tác động.\n"
+         "Ý nghĩa học thuật: Minh chứng luận điểm Halpin — Kẻ đối đầu mật mã học là tác nhân có chủ đích (intentional agent), hàm băm mật mã học lập tức bắt quả tang mọi sai lệch dù chỉ 1 bit."),
 
-        ("Bước 4: Kiểm tra và bắt quả tang tại Blue Team Dashboard (Port 8080)",
-         "Quay trở lại cổng 8080, bấm nút 'Kiểm tra toàn vẹn'.\n"
-         "• Hệ thống đổi sang trạng thái cảnh báo đỏ: 'CẢNH BÁO: PHÁT HIỆN CAN THIỆP DỮ LIỆU!'.\n"
-         "• Hệ thống chỉ ra chính xác đường dẫn tệp tin và nhánh cây bị sai lệch (ví dụ: Resume/Resume.csv).\n"
-         "• Bảng đối chứng hiển thị: Trong kịch bản tấn công bù GF(2), CRC32 bị qua mặt (báo khớp sai), trong khi SHA-256 và Merkle Tree phát hiện tức thì."),
+        ("Bước 4: Phát động Kịch bản 2 — Tấn công bù 4 byte GF(2) qua mặt CRC32 tại Red Team (Port 8081)",
+         "Tại cổng 8081, bấm nút 'Tấn công bù 4 byte GF(2)' (CRC32 Forge Attack). Động cơ Red Team giải hệ phương trình tuyến tính, làm sai lệch nội dung tệp nhưng bù 4 byte patch khiến cho mã CRC32 không đổi.\n"
+         "Quay lại Blue Team (Port 8080), bấm nút 'Kiểm tra toàn vẹn':\n"
+         "• Bảng đối chứng hiển thị rõ: Thuật toán kiểm tra lỗi CRC32 bị qua mặt hoàn toàn (báo khớp sai sự thật do tính chất tuyến tính của đa thức chia).\n"
+         "• Ngược lại, hàm băm SHA-256 phát hiện vi phạm ngay lập tức nhờ tính phi tuyến và hiệu ứng tuyết lở (~50%).\n"
+         "Ý nghĩa học thuật: Trực quan hóa luận điểm mấu chốt của bài báo Halpin — phân biệt rạch ròi giữa mã phát hiện lỗi ngẫu nhiên của Shannon và mật mã học trước kẻ thù có chủ đích."),
 
-        ("Bước 5: Hoàn nguyên dữ liệu sạch (Rollback All)",
-         "Tại giao diện Red Team (Port 8081), bấm nút 'ROLLBACK ALL'. Toàn bộ các tệp tin bị tác động trên đĩa được khôi phục nguyên vẹn từ thư mục sao lưu .adversary_backups/.\n"
-         "Tại Blue Team bấm kiểm tra lại: Hệ thống trở về trạng thái an toàn.")
+        ("Bước 5: Hoàn nguyên dữ liệu sạch 100% (Rollback All)",
+         "Tại giao diện Red Team (Port 8081), bấm nút 'ROLLBACK ALL'. Toàn bộ các tệp tin bị sửa đổi được khôi phục nguyên vẹn từ thư mục sao lưu an toàn .adversary_backups/.\n"
+         "Tại Blue Team bấm kiểm tra lại: Hệ thống trở về trạng thái an toàn màu xanh.")
     ]
 
     for s_title, s_desc in demo_steps:
@@ -301,7 +307,7 @@ def create_document():
         r_sd.font.size = Pt(10)
         r_sd.font.color.rgb = RGBColor(51, 65, 85)
 
-    # PHƯƠNG ÁN 2: DÒNG LỆNH CLI
+    # PHƯƠNG ÁN 2: DÒNG LỆNH CLI (DỰ PHÒNG)
     p_opt2 = doc.add_paragraph()
     p_opt2.paragraph_format.space_before = Pt(10)
     r_op2 = p_opt2.add_run("Phương án 2: Diễn tập Dòng lệnh Terminal CLI (Dự phòng trường hợp không dùng UI)")
@@ -312,12 +318,13 @@ def create_document():
     cli_text = (
         "1. Chạy Suite Kiểm định Toán học Đối kháng:\n"
         "   Lệnh: python -m src.proposed_model.security_games\n"
-        "   Kết quả: Thực hiện các phép đo bám sát luận điểm bài báo (tính phi tuyến, hiệu ứng tuyết lở SAC ~50%, can thiệp CRC32 trên GF(2), phân tách miền RFC 6962, và kênh kề thời gian so sánh chuỗi).\n\n"
+        "   Kết quả: Đo đạc thực tế tính phi tuyến của SHA-256, hiệu ứng tuyết lở SAC ~50%, kịch bản bẻ gãy mã tuyến tính CRC32 trên GF(2), và kênh kề thời gian so sánh chuỗi.\n\n"
         "2. Diễn tập 2 Terminal Red Team vs Blue Team:\n"
         "   • Terminal 1 (Red Team): Chạy 'python src/adversary/red_team_cli.py'. Bấm phím '1' để can thiệp tệp, hoặc phím '4' để bù mã CRC32.\n"
-        "   • Terminal 2 (Blue Team): Chạy 'python -m src.baselines.sha256_manifest --dir kaggle_dataset --verify'. Blue Team phát hiện vi phạm: MODIFIED_FILE: Resume/Resume.csv.\n"
+        "   • Terminal 2 (Blue Team): Chạy 'python -m src.baselines.sha256_manifest --dir kaggle_dataset --verify'. Blue Team phát hiện vi phạm ngay lập tức: MODIFIED_FILE: Resume/Resume.csv.\n"
         "   • Terminal 1: Bấm phím '9' để Rollback All khôi phục đĩa cứng an toàn."
     )
+
     p_cli = doc.add_paragraph()
     p_cli.paragraph_format.left_indent = Inches(0.2)
     r_c = p_cli.add_run(cli_text)
