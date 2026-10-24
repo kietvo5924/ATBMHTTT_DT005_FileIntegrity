@@ -25,22 +25,22 @@ Dự án hiện thực hóa trọn vẹn các luận điểm cốt lõi và tài
 
 ---
 
-## 2. BỘ KIỂM ĐỊNH AN NINH HÌNH THỨC (7 SECURITY GAMES)
+## 2. BỘ THÍ NGHIỆM MINH HỌA AN NINH ĐỘC LẬP (7 SECURITY EXPERIMENTS)
 
-Dự án trang bị bộ kiểm định an ninh hình thức bám sát 100% luận điểm bài báo Harry Halpin (Oxford 2025), thực thi qua lệnh:
+Dự án trang bị bộ thí nghiệm minh họa thực nghiệm độc lập do sinh viên tự xây dựng nhằm khảo sát các luận điểm lý thuyết về mô hình đối thủ được phân tích trong bài báo của Harry Halpin (Oxford 2025), thực thi qua lệnh:
 
 ```bash
 python -m src.proposed_model.security_games
 ```
 
-Toàn bộ 7 mô hình được thực nghiệm hóa 100% (không hardcode/mocked):
-1. **`IntegritySecurityGame`:** 100 lượt thử thách đa vector (`bit_flip`, `tail_append`, `zero_byte_sub`, `hash_extension`). Lợi thế Advantage triệt tiêu $\text{Adv}(A) = 0.0 \le 2^{-128}$.
-2. **`DolevYaoNetworkGame`:** Chặn đứng 3/3 kịch bản tấn công mạng thực tế; đối sánh cơ chế phân phối khóa đối xứng Shannon vs Cây Merkle.
-3. **`SecondPreimageGame`:** Kiểm chứng va chạm tiền ảnh thứ hai cấu trúc bằng biểu thức logic thực tế (`forged_leaf_hash == parent_unprefixed` trên Standard Merkle vs an toàn trên HD-Merkle).
-4. **`ConsistencyProofGame`:** Bằng chứng nhất quán chỉ-thêm $O(\log N)$ theo chuẩn RFC 6962 Certificate Transparency, phát hiện 100% sửa lén dữ liệu lịch sử.
-5. **`RandomOracleApproximationExperiment`:** Mô phỏng Monte Carlo 1.000 mẫu lật 1-bit ngẫu nhiên đạt tỷ lệ tuyết lở $49.72\% \approx 50.00\%$; giải đại số bù tuyến tính trên $\mathbb{F}_2$ chứng minh kẻ thù qua mặt CRC32 100% trong nháy mắt.
-6. **`BibaHierarchicalIntegrityModel`:** Bấm giờ lan truyền Dirty Path $O(\log N)$ thực tế ($\sim 0.015$ ms); tự động xóa sạch bộ nhớ đệm (Zeroization).
-7. **`MetadataLeakageAndSideChannelAudit`:** Đo lường dung lượng manifest và bằng chứng thực tế; thực nghiệm 20.000 chu kỳ đo Timing Side-Channel theo Kocher (1996).
+Toàn bộ 7 thí nghiệm minh họa thực nghiệm độc lập được kiểm chứng thực tế:
+1. **`IntegritySecurityGame`:** Thí nghiệm thách đấu phát hiện can thiệp dữ liệu (100 phép thử mẫu đa vector). Tỷ lệ phát hiện can thiệp thực nghiệm quan sát được đạt 100% trong phạm vi kiểm thử.
+2. **`DolevYaoNetworkGame`:** Minh họa đối thủ can thiệp đường truyền mạng; phát hiện và từ chối 3/3 kịch bản tấn công (Swap, Tamper, Replay).
+3. **`SecondPreimageGame`:** Minh họa nguyên lý va chạm tiền ảnh cấp hai cấu trúc (Node-Leaf Confusion) và hiệu quả của tiền tố phân tách miền RFC 6962 (`0x00`/`0x01`).
+4. **`ConsistencyProofGame`:** Kiểm chứng toán học bằng chứng nhất quán chỉ-thêm $O(\log N)$ theo chuẩn RFC 6962 Certificate Transparency; phát hiện mốc lịch sử bị sửa đổi.
+5. **`RandomOracleApproximationExperiment`:** Khảo sát hiệu ứng tuyết lở (SAC) qua 1.000 mẫu Monte Carlo lật 1-bit đạt tỷ lệ $49.72\% \approx 50.00\%$; giải đại số bù tuyến tính trên $\mathbb{F}_2$ chứng minh kẻ thù bẻ gãy mã CRC32 trong thời gian đa thức.
+6. **`BibaHierarchicalIntegrityModel`:** Minh họa tính chất toàn vẹn phân cấp qua cơ chế cập nhật băm cục bộ $O(\log N)$ tức thì khi nút lá thay đổi.
+7. **`MetadataLeakageAndSideChannelAudit`:** Khảo sát rò rỉ siêu dữ liệu kênh truyền và đo lường độ lệch thời gian so sánh chuỗi qua 5 vòng độc lập, minh họa giải pháp `hmac.compare_digest`.
 
 ---
 
@@ -142,9 +142,11 @@ python -m src.benchmark.deduplicate_dataset --dir "kaggle_dataset"
   python -m src.benchmark.run_benchmark --dir "kaggle_dataset" --runs 5 --results-dir results
   ```
 - **Hồ Sơ Báo Cáo & Thuyết Trình Giữa Kỳ:**
-  - [`docs/Bao_Cao_Giua_Ky_DT05_Replication.pptx`](docs/Bao_Cao_Giua_Ky_DT05_Replication.pptx): Slide thuyết trình PowerPoint 16:9 chuẩn 14 slide (chuyên sâu tái lập bài báo Halpin 2025 và giải trình mô hình đề xuất).
-  - [`docs/Kich_Ban_Thuyet_Trinh_Va_Demo_DT005.docx`](docs/Kich_Ban_Thuyet_Trinh_Va_Demo_DT005.docx): Kịch bản đọc thuyết trình từng slide, kịch bản demo đối kháng Red/Blue team và bộ câu hỏi phản biện bảo vệ trước hội đồng.
-  - [`AUDIT_PAPER_REPLICATION.md`](AUDIT_PAPER_REPLICATION.md): Báo cáo kiểm toán học thuật chi tiết 17 trang PDF, 7 mục lý thuyết, 134 tài liệu tham khảo và phương án tái lập toán học.
+  - [`docs/Bao_Cao_Giua_Ky_DT05_Final.pptx`](docs/Bao_Cao_Giua_Ky_DT05_Final.pptx) *(hoặc [`Bao_Cao_Giua_Ky_DT05_Final.pptx`](Bao_Cao_Giua_Ky_DT05_Final.pptx))*: Slide thuyết trình PowerPoint 16:9 chuẩn 14 slide (Light Academic Theme, 4 sơ đồ vector khoa học, phân định minh bạch nghiên cứu lý thuyết Halpin vs minh họa thực nghiệm độc lập).
+  - [`docs/Bao_Cao_Giua_Ky_DT05_Final.pdf`](docs/Bao_Cao_Giua_Ky_DT05_Final.pdf): Bản xuất PDF chất lượng cao kiểm tra trực quan toàn bộ 14 slide.
+  - [`MIDTERM_CODE_AUDIT.md`](MIDTERM_CODE_AUDIT.md): Báo cáo kiểm toán kỹ thuật nội bộ xử lý 8 vấn đề trọng yếu (D1–D8), xác minh ranh giới toán học và mã nguồn.
+  - [`MIDTERM_DEMO.md`](MIDTERM_DEMO.md): Kịch bản và lệnh thực thi diễn tập đối kháng Red Team vs Blue Team trên tập dữ liệu thực tế.
+  - [`AUDIT_PAPER_REPLICATION.md`](AUDIT_PAPER_REPLICATION.md): Báo cáo kiểm toán học thuật đối chiếu toàn văn 17 trang PDF, 7 mục lý thuyết, 134 tài liệu tham khảo bài báo Halpin (2025).
 
 ---
 

@@ -30,12 +30,17 @@ def resolve_secret_key(
     allow_testing_fallback: bool = True
 ) -> Optional[bytes]:
     """
-    Tải khóa bí mật HMAC an toàn:
+    Tải khóa bí mật HMAC an toàn theo thứ tự ưu tiên:
     1. Từ file khóa cục bộ (--key-file)
     2. Từ đối số dòng lệnh (--key)
     3. Từ biến môi trường (HMAC_SECRET_KEY)
     4. Dự phòng cho môi trường kiểm thử cô lập (nếu allow_testing_fallback=True)
+    
+    LƯU Ý AN NINH:
+    Khóa dự phòng 'dt005_test_hmac_secret_key_32bytes' chỉ được dùng cho mục đích
+    chạy thử nghiệm kiểm thử (test/demo). Tuyệt đối không dùng làm mặc định trong vận hành thực tế.
     """
+    import warnings
     if key_file and os.path.isfile(key_file):
         with open(key_file, "rb") as f:
             k = f.read().strip()
@@ -47,6 +52,13 @@ def resolve_secret_key(
     if env_val:
         return env_val.encode("utf-8")
     if allow_testing_fallback:
+        warnings.warn(
+            "CẢNH BÁO AN NINH: Đang sử dụng khóa bí mật kiểm thử mặc định ('dt005_test_hmac_secret_key_32bytes'). "
+            "Khóa này chỉ phục vụ mục đích kiểm thử/demo tự động. "
+            "Trong môi trường sản xuất thực tế, bắt buộc cung cấp khóa qua biến môi trường HMAC_SECRET_KEY hoặc --key-file.",
+            UserWarning,
+            stacklevel=2
+        )
         return b"dt005_test_hmac_secret_key_32bytes"
     return None
 

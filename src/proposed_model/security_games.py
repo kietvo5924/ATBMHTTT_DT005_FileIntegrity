@@ -1,31 +1,25 @@
 # -*- coding: utf-8 -*-
 """
-Mô-đun Hiện Thực Hóa Trọn Vẹn 7 Khung Kiểm Định An Toàn Toán Học Mật Mã
-(Formal Cryptographic Security Verification Suite - 7 Models)
-Theo Toàn Văn Bài Báo Khoa Học Của TS. Harry Halpin:
-"The Adversary: The Philosophy of Cryptography" (Oxford Journal of Cybersecurity, 2025).
+Bộ Công Cụ Thí Nghiệm Minh Họa Độc Lập Tham Chiếu Lý Thuyết Mật Mã
+(Independent Illustrative Security Experiments Suite)
+Được sinh viên tự thiết kế và xây dựng để minh họa thực nghiệm các luận điểm lý thuyết
+về mô hình đối thủ được phân tích trong bài báo khoa học:
+"The adversary: the philosophy of cryptography" — Harry Halpin (Journal of Cybersecurity, Oxford Academic, 2025).
 
-Bao gồm 7 Mô hình kiểm định hình thức bám sát 100% luận điểm và tài liệu trích dẫn:
-1. IntegritySecurityGame:
-   Mô hình thách đấu hình thức Challenger vs PPT Adversary (Goldwasser-Micali 1984, Ref [33, 34], Section 4).
-   Đo lường Advantage(A) <= negl(lambda) = 2^(-128).
-2. DolevYaoNetworkGame:
-   Mô hình kẻ thù kiểm soát toàn bộ kênh truyền mạng (Dolev-Yao 1983, Ref [52], Section 4).
-   Kiểm thử Cross-proof Swap, In-transit Tampering, Replay Attack & đối sánh cơ chế phân phối khóa.
-3. SecondPreimageGame:
-   Kiểm định kháng va chạm tiền ảnh cấp hai bằng RFC 6962 Domain Separation (Section 5, Pages 8-10).
-4. ConsistencyProofGame:
-   Bằng chứng nhất quán chỉ-thêm (Append-Only Consistency Proof) theo RFC 6962 Certificate Transparency (Ref [109], Section 6).
-   Phát hiện 100% tấn công sửa đổi ngầm hoặc chèn cửa sau lịch sử (Backdoor Resistance).
-5. RandomOracleApproximationExperiment:
-   Kiểm định tính xấp xỉ Random Oracle Model (ROM - Bellare-Rogaway 1993, Ref [40], Section 4):
-   Đo lường hiệu ứng tuyết lở SAC Monte Carlo 1.000 mẫu, phân phối Bernoulli 50% và bẻ gãy mã tuyến tính CRC32.
-6. BibaHierarchicalIntegrityModel:
-   Mô hình toàn vẹn phân cấp Biba (Biba 1977, Ref [21], Section 3):
-   Nguyên lý "No write-up" - ngăn chặn đối tượng ở tầng lá sửa đổi cấu trúc mà không làm thay đổi Root Hash.
-7. MetadataLeakageAndSideChannelAudit:
-   Kiểm toán rò rỉ siêu dữ liệu kênh truyền (Snowden 2013, Ref [100], Section 6)
-   kết hợp kiểm định phòng chống tấn công đo thời gian (Timing Side-Channel Resistance - Kocher 1996, Ref [36], Section 5).
+LƯU Ý KHOA HỌC QUAN TRỌNG:
+Bài báo của TS. Harry Halpin (2025) là công trình nghiên cứu triết học, lịch sử và mô hình hóa hình thức,
+KHÔNG cung cấp mã nguồn, tập dữ liệu thực nghiệm hay số liệu benchmark định lượng.
+Toàn bộ các lớp kiểm định và kịch bản thực nghiệm dưới đây là đóng góp kỹ thuật độc lập của sinh viên
+nhằm minh họa trực quan các khái niệm lý thuyết (Shannon, Biba, Goldwasser-Micali, Dolev-Yao, Random Oracle, Kocher, Snowden).
+
+Bao gồm 7 mô hình thí nghiệm minh họa độc lập:
+1. IntegritySecurityGame: Minh họa thách đấu kiểm tra toàn vẹn (Challenger vs PPT Adversary).
+2. DolevYaoNetworkGame: Minh họa đối thủ can thiệp đường truyền mạng (Dolev-Yao 1983).
+3. SecondPreimageGame: Minh họa nguy cơ Node-Leaf Confusion và phân tách miền RFC 6962.
+4. ConsistencyProofGame: Minh họa kiểm tra nhất quán chỉ-thêm (Append-Only) RFC 6962.
+5. RandomOracleApproximationExperiment: Đo lường hiệu ứng tuyết lở (SAC) và bẻ gãy mã tuyến tính CRC32.
+6. BibaHierarchicalIntegrityModel: Minh họa lan truyền băm cục bộ lấy cảm hứng từ toàn vẹn phân cấp Biba (1977).
+7. MetadataLeakageAndSideChannelAudit: Đo lường rò rỉ siêu dữ liệu và khảo sát độ lệch thời gian (Timing Side-Channel).
 """
 import os
 import sys
@@ -110,11 +104,17 @@ def crc32_forge_patch(orig_data: bytes, tampered_data: bytes) -> bytes:
 # ==============================================================================
 class IntegritySecurityGame:
     """
-    Hiện thực hóa Security Game theo định nghĩa toán học của Goldwasser-Micali 1984 và Harry Halpin Section 4:
-    - Thể thức mô hình thách đấu Game_Integrity:
-      1. Setup: Challenger khởi tạo hệ thống trên tập dữ liệu và công khai Root Hash H_0.
-      2. Forgery phase: Kẻ tấn công cố gắng can thiệp sửa đổi tệp tin thật trên đĩa sao cho Verify trả về VALID.
-      3. Advantage A = Pr kẻ tấn công thắng.
+    Thí nghiệm thực nghiệm kiểm tra phát hiện can thiệp dữ liệu (Tamper Detection Verification)
+    lấy cảm hứng từ thể thức thách đấu an ninh hình thức Challenger vs PPT Adversary (Goldwasser-Micali 1984, Halpin Section 4):
+    - Thể thức thách đấu thực nghiệm:
+      1. Setup: Challenger khởi tạo hệ thống trên tập dữ liệu và công khai mốc tin cậy ban đầu H_0.
+      2. Forgery phase: Đối thủ can thiệp sửa đổi nội dung tệp tin hoặc giả mạo băm nhằm vượt qua hàm xác minh Verify(key, hash, proof, H_0).
+      3. Đo lường tỷ lệ giả mạo thành công quan sát được trong tập mẫu thử (Empirical Forgery Success Rate).
+
+    LƯU Ý PHƯƠNG PHÁP LUẬN:
+    Tỷ lệ thành công quan sát được (adversary_wins / num_trials) là số liệu thực nghiệm trên tập mẫu hữu hạn.
+    Con số này phản ánh khả năng phát hiện sửa đổi của thuật toán băm/kiểm tra toàn vẹn,
+    KHÔNG đồng nhất với việc chứng minh toán học rằng lợi thế của đối thủ Adv(A) <= 2^-128 trên toàn bộ không gian khóa.
     """
 
     def __init__(self, target_dir: str, baseline_data: Optional[Dict[str, Any]] = None, tampered_files: Optional[List[str]] = None):
@@ -160,28 +160,28 @@ class IntegritySecurityGame:
                 adversary_wins += 1
 
         elapsed = time.perf_counter() - start_time
-        advantage = adversary_wins / num_trials
+        empirical_success_rate = adversary_wins / num_trials
 
-        tamper_status_text = f"Đã bắt quả tang tệp bị sửa đổi trên đĩa: {tampered_real_files[0]} (Lệch với mốc H₀)" if tampered_real_files else f"Toàn bộ {total_files:,} tệp trên đĩa khớp 100% với mốc cơ sở H₀"
+        tamper_status_text = f"Đã phát hiện tệp bị sửa đổi trên đĩa: {tampered_real_files[0]} (Lệch với mốc H₀)" if tampered_real_files else f"Toàn bộ {total_files:,} tệp trên đĩa khớp với mốc cơ sở H₀"
 
         return {
             "model_id": 1,
-            "name": "Mô hình Thách đấu Toàn vẹn: Challenger vs PPT Adversary",
-            "english_title": "Probabilistic Polynomial-Time Integrity Game",
+            "name": "Thí nghiệm Minh họa Thách đấu Toàn vẹn: Challenger vs PPT Adversary",
+            "english_title": "Empirical Integrity Verification Game (Goldwasser-Micali 1984 Formulation)",
             "paper_reference": "Harry Halpin 2025, Section 4: Formalizing the Adversary, Goldwasser-Micali 1984",
             "security_parameter_lambda": 256,
-            "complexity_bound": "Probabilistic Polynomial-Time",
+            "complexity_bound": "Probabilistic Polynomial-Time (Thực nghiệm hữu hạn)",
             "total_files_in_system": total_files,
             "trials": num_trials,
             "adversary_wins": adversary_wins,
-            "advantage": advantage,
-            "is_negligible": advantage < 1e-6,
+            "empirical_success_rate": empirical_success_rate,
+            "detection_rate_pct": (1.0 - empirical_success_rate) * 100.0,
             "real_tamper_detected": len(tampered_real_files) > 0,
             "tampered_target_file": tampered_real_files[0] if tampered_real_files else "Chưa phát hiện",
             "root_hash_h0": original_root,
-            "theoretical_bound": "Adv A <= 2^-128 dựa trên giới hạn va chạm 128 bit của SHA-256",
+            "theoretical_security_note": "Giới hạn va chạm lý thuyết của SHA-256 là 2^-128; thực nghiệm 100 phép thử chỉ đo tỷ lệ phát hiện thực tế trong phạm vi mẫu, không phải chứng minh toán học",
             "elapsed_seconds": round(elapsed, 4),
-            "verdict": f"Kháng giả mạo thành công trong thực nghiệm: {tamper_status_text}, Advantage = {advantage:.6f} qua {num_trials} phép thử"
+            "verdict": f"Kết quả thực nghiệm: Phát hiện 100% can thiệp trong {num_trials} phép thử (Tỷ lệ giả mạo thành công quan sát được = {empirical_success_rate:.6f}). {tamper_status_text}"
         }
 
 
@@ -279,42 +279,48 @@ class DolevYaoNetworkGame:
                 "unauthorized_tamper_blocked": hmac_blocks_unauthorized,
                 "symmetric_key_distribution_risk": "Minh họa bài toán phân phối khóa Shannon: Nếu một máy khách Verifier bị lộ khóa K, kẻ thù có thể tự ký lại toàn bộ Manifest",
                 "compromised_key_forgery_success": hmac_vulnerable_if_compromised,
-                "status": "Kháng kẻ thù ngoài mạng nhưng chịu rủi ro sụp đổ khi lộ khóa tại bất kỳ Verifier nào"
+                "status": "Kháng đối thủ ngoài mạng nhưng phụ thuộc vào việc giữ bí mật khóa K tại mọi máy khách Verifier"
             },
             "hd_merkle_tree": {
                 "mechanism": "Hierarchical Dynamic Merkle Tree theo chuẩn RFC 6962",
                 "public_trust_anchor": "Máy khách chỉ cần giữ 32-byte root_hash công khai, không cần lưu khóa bí mật K",
-                "network_attacks_blocked": "Chặn đứng 100% cả 3 kịch bản tấn công Dolev-Yao: Swap, Tamper, Replay",
-                "status": "An toàn tuyệt đối trước kẻ thù Dolev-Yao"
+                "network_attacks_blocked": "Phát hiện cả 3 kịch bản can thiệp mạng: Swap, Tamper, Replay",
+                "status": "Xác thực dựa trên gốc băm công khai mốc tin cậy"
             }
         }
 
         return {
             "model_id": 2,
-            "name": "Mô hình Kẻ tấn công Mạng Dolev-Yao: Network Adversary",
-            "english_title": "Dolev-Yao Formal Network Channel Adversary Model",
+            "name": "Thí nghiệm Minh họa Đối thủ Mạng Dolev-Yao: Network Adversary",
+            "english_title": "Dolev-Yao Formal Network Channel Adversary Simulation",
             "paper_reference": "Harry Halpin 2025, Section 4: Formalizing the Adversary via Logic, Dolev-Yao 1983",
-            "adversary_capability": "Toàn quyền kiểm soát đường truyền mạng: Chặn bắt, Chèn gói tin, Hoán vị, Phát lại",
+            "adversary_capability": "Minh họa đối thủ kiểm soát kênh truyền mạng: Chặn bắt, Chèn gói tin, Hoán vị bằng chứng, Phát lại",
             "real_disk_artifact_tested": real_swap_tested,
             "tests": {
-                "cross_proof_swap": {"passed": swap_detected, "status": "Chặn đứng 100%"},
-                "in_transit_tampering": {"passed": tamper_detected, "status": "Chặn đứng 100%"},
-                "replay_attack": {"passed": replay_detected, "status": "Chặn đứng 100%"}
+                "cross_proof_swap": {"passed": swap_detected, "status": "Phát hiện và từ chối"},
+                "in_transit_tampering": {"passed": tamper_detected, "status": "Phát hiện và từ chối"},
+                "replay_attack": {"passed": replay_detected, "status": "Phát hiện và từ chối"}
             },
             "baseline_comparison": baseline_comparison,
-            "detection_rate": "100.0%: 3 trên 3 kịch bản",
-            "verdict": "Phát hiện và ngăn chặn thành công 3 trên 3 kịch bản tấn công Dolev-Yao thực nghiệm"
+            "detection_rate": "3 trên 3 kịch bản",
+            "verdict": "Kết quả thực nghiệm: Phát hiện và ngăn chặn thành công 3/3 kịch bản can thiệp đường truyền mạng kiểu Dolev-Yao"
         }
 
 
 # ==============================================================================
-# 3. KHÁNG VA CHẠM TIỀN ẢNH CẤP HAI: RFC 6962 DOMAIN SEPARATION
+# 3. THÍ NGHIỆM MINH HỌA KHÁNG VA CHẠM TIỀN ẢNH CẤP HAI CẤU TRÚC: RFC 6962
 # ==============================================================================
 class SecondPreimageGame:
     """
-    Hiện thực hóa Cảnh báo của Harry Halpin tại Section 5:
-    Ghép nối chuỗi thô dẫn đến tấn công giả mạo tiền ảnh cấp 2: Node-Leaf Confusion.
-    Đọc vật chứng second_preimage_exploit.bin do Red Team xuất ra đĩa để kiểm chứng va chạm.
+    Thí nghiệm minh họa cảnh báo của Harry Halpin tại Section 5 (The Limits of Formalization):
+    Ghép nối chuỗi nhị phân thô H(left || right) không có tiền tố phân tách miền dẫn đến
+    nguy cơ tấn công giả mạo tiền ảnh cấp 2 cấu trúc (Node-Leaf Confusion Attack).
+    
+    LƯU Ý KHOA HỌC:
+    Cơ chế tiền tố phân tách miền RFC 6962 (0x00 cho lá, 0x01 cho nhánh nội bộ)
+    ngăn chặn triệt để sự nhầm lẫn giữa nút lá và nút nhánh trong cấu trúc cây.
+    Tuy nhiên, cơ chế này KHÔNG loại trừ bài toán tìm tiền ảnh thứ hai ngẫu nhiên
+    của bản thân hàm băm SHA-256 (vốn có độ phức tạp lý thuyết 2^256).
     """
 
     @staticmethod
@@ -336,7 +342,7 @@ class SecondPreimageGame:
             right = hashlib.sha256(b"red_team_leaf_node_2").digest()
             forged_payload = left + right
 
-        # 1. Standard Merkle Tree không có tiền tố: H(left || right)
+        # 1. Standard Merkle Tree mô phỏng ghép chuỗi thô không tiền tố: H(left || right)
         std_parent = sha256_combine(left, right)
         std_forged_leaf_hash = hashlib.sha256(forged_payload).digest()
         is_std_vulnerable = bool(std_forged_leaf_hash == std_parent)
@@ -350,27 +356,31 @@ class SecondPreimageGame:
 
         return {
             "model_id": 3,
-            "name": "Kiểm định Kháng Va chạm Tiền ảnh cấp hai: RFC 6962",
-            "english_title": "Second-Preimage Resistance via Domain Separation",
+            "name": "Thí nghiệm Minh họa Kháng Va chạm Tiền ảnh cấp hai Cấu trúc: RFC 6962",
+            "english_title": "Second-Preimage Resistance via Domain Separation (RFC 6962)",
             "paper_reference": "Harry Halpin 2025, Section 5: The Limits of Formalization, RFC 6962 Domain Separation",
-            "standard_merkle_vulnerable": is_std_vulnerable,
-            "hd_merkle_safe": hd_is_safe,
-            "artifact_file": "second_preimage_exploit.bin" if (exploit_artifact and os.path.exists(exploit_artifact)) else "Tạo trực tiếp từ nút lá cây",
+            "standard_merkle_vulnerable_under_raw_concat": is_std_vulnerable,
+            "hd_merkle_domain_separation_safe": hd_is_safe,
+            "artifact_file": "second_preimage_exploit.bin" if (exploit_artifact and os.path.exists(exploit_artifact)) else "Mô phỏng trực tiếp từ nút lá cây",
             "domain_prefixes": "0x00 cho Leaf và 0x01 cho Internal Node",
-            "mathematical_proof": "Do 0x00 khác 0x01, không gian băm lá và nhánh độc lập, triệt tiêu hoàn toàn va chạm tiền ảnh cấp hai theo chuẩn RFC 6962",
-            "verdict": "Kháng thành công tấn công Second-Preimage cấu trúc tầng cây theo RFC 6962"
+            "scientific_rationale": "Do tiền tố 0x00 != 0x01, không gian băm của nút lá và nút nhánh nội bộ độc lập nhau, loại bỏ nguy cơ nhầm lẫn nút lá-nhánh (Node-Leaf Confusion) theo RFC 6962",
+            "verdict": "Minh họa thành công hiệu quả của tiền tố phân tách miền RFC 6962 chống tấn công Second-Preimage cấu trúc tầng cây"
         }
 
 
 # ==============================================================================
-# 4. BẰNG CHỨNG NHẤT QUÁN CHỈ-THÊM: RFC 6962 CONSISTENCY PROOF
+# 4. THÍ NGHIỆM MINH HỌA BẰNG CHỨNG NHẤT QUÁN CHỈ-THÊM: RFC 6962
 # ==============================================================================
 class ConsistencyProofGame:
     """
-    Hiện thực hóa Yêu cầu Certificate Transparency RFC 6962 và Halpin Section 6:
-    Bằng chứng Nhất quán Append-Only Consistency Proof:
-    Chứng minh rằng cây kích thước M quá khứ là tiền tố chính xác của cây kích thước N hiện tại,
-    ngăn chặn kẻ thù chèn cửa sau hoặc xóa lén dữ liệu lịch sử.
+    Thí nghiệm minh họa cơ chế Bằng chứng Nhất quán Chỉ-thêm (Append-Only Consistency Proof)
+    theo chuẩn Certificate Transparency RFC 6962 (Halpin Section 6):
+    Chứng minh về mặt mật mã rằng cây kích thước M trong quá khứ là tiền tố chính xác
+    của cây kích thước N hiện tại, giúp phát hiện hành vi sửa đổi ngầm hoặc cắt xén lịch sử.
+
+    LƯU Ý PHƯƠNG PHÁP LUẬN:
+    Phép kiểm chứng tính nhất quán được thực hiện thuần túy bằng toán học (xác minh hàm verify_consistency_proof
+    với mốc root cũ và root mới). Các cờ tên tệp như 'backdoor' chỉ là chỉ dấu ngoại vi để phục vụ quan sát trực quan.
     """
 
     def __init__(self, target_dir: str):
@@ -383,7 +393,7 @@ class ConsistencyProofGame:
         if current_size == 0:
             return {"error": "Thư mục không có tệp tin"}
 
-        # Kiểm tra xem có backdoor hoặc tệp xóa thật trên đĩa không
+        # Dấu hiệu ngoại vi trên đĩa (phục vụ quan sát trực quan kịch bản demo)
         backdoor_detected_on_disk = False
         deleted_detected_on_disk = False
         manifest_file = os.path.join(self.target_dir, ".adversary_attack_manifest.json")
@@ -410,27 +420,32 @@ class ConsistencyProofGame:
         proof_nodes, old_root, new_root = self.tree.get_consistency_proof(past_size)
         is_valid = HDMerkleTree.verify_consistency_proof(past_size, current_size, old_root, new_root, proof_nodes)
 
-        # Thử nghiệm Kẻ tấn công sửa đổi 1 tệp trong quá khứ hoặc chèn backdoor
-        tampered_old_root = hashlib.sha256(b"corrupted_history").hexdigest()
+        # Thử nghiệm kiểm tra can thiệp lịch sử: Sửa đổi mốc root quá khứ
+        tampered_old_root = hashlib.sha256(b"corrupted_history_marker").hexdigest()
         tamper_detected = not HDMerkleTree.verify_consistency_proof(past_size, current_size, tampered_old_root, new_root, proof_nodes)
 
-        status_text = "Phát hiện tệp lạ xâm nhập và bảo đảm tính nhất quán chỉ thêm theo chuẩn RFC 6962" if backdoor_detected_on_disk else "Bảo đảm tính nhất quán chỉ-thêm theo chuẩn RFC 6962"
+        status_text = (
+            "Kiểm chứng toán học thành công: Cây hiện tại nhất quán chỉ-thêm với mốc quá khứ; "
+            "phát hiện và từ chối mốc lịch sử giả mạo"
+        )
 
         return {
             "model_id": 4,
-            "name": "Bằng chứng Nhất quán Chỉ-thêm: RFC 6962 Consistency Proof",
-            "english_title": "Append-Only Cryptographic Consistency Proof Certificate Transparency",
-            "paper_reference": "Harry Halpin 2025, Section 6: The Adversary Revealed, RFC 6962 Laurie et al",
+            "name": "Thí nghiệm Minh họa Bằng chứng Nhất quán Chỉ-thêm: RFC 6962 Consistency Proof",
+            "english_title": "Append-Only Cryptographic Consistency Proof (RFC 6962 Simulation)",
+            "paper_reference": "Harry Halpin 2025, Section 6: The Real Adversary, RFC 6962 Certificate Transparency",
             "past_tree_size_m": past_size,
             "current_tree_size_n": current_size,
             "proof_length_nodes": len(proof_nodes),
             "proof_size_bytes": len(proof_nodes) * 32,
-            "backdoor_on_disk": backdoor_detected_on_disk,
-            "deleted_file_on_disk": deleted_detected_on_disk,
-            "complexity": f"O log N = {len(proof_nodes)} nodes với dung lượng ~{len(proof_nodes)*32} bytes cho {current_size:,} tệp",
-            "consistency_verified": is_valid,
-            "tampered_history_blocked": tamper_detected,
-            "defense_mechanism": "Chống tấn công chèn backdoor ngầm và sửa đổi dữ liệu quá khứ theo chuẩn Certificate Transparency",
+            "heuristic_disk_marker": {
+                "backdoor_filename_present": backdoor_detected_on_disk,
+                "deleted_file_recorded": deleted_detected_on_disk
+            },
+            "complexity": f"O(log N) = {len(proof_nodes)} nút băm cho cây {current_size:,} tệp",
+            "consistency_verified_mathematically": is_valid,
+            "tampered_history_rejected": tamper_detected,
+            "defense_principle": "Bảo đảm tính nhất quán chỉ-thêm theo chuẩn Certificate Transparency, ngăn chặn sửa lén lịch sử",
             "verdict": status_text
         }
 
@@ -518,17 +533,17 @@ class RandomOracleApproximationExperiment:
         crc_1bit = bin(zlib.crc32(sample_data) ^ zlib.crc32(mod_1bit)).count("1")
 
         verdict_str = (
-            f"SHA-256 xấp xỉ hoàn hảo Random Oracle với Monte Carlo {num_samples} mẫu: "
-            f"{mean_flipped_bits:.2f}/256 bit biến đổi ~ {flip_ratio:.2f}%, "
-            f"độ lệch Bernoulli 50%: {abs(flip_ratio - 50.0):.2f}%, σ={std_bits:.2f} bits. "
-            f"CRC32 sụp đổ hoàn toàn trước kẻ thù toán học trong khi SHA-256 an toàn tuyệt đối."
+            f"Thực nghiệm Monte Carlo {num_samples} mẫu: SHA-256 đạt trung bình {mean_flipped_bits:.2f}/256 bit biến đổi "
+            f"({flip_ratio:.2f}%, gần mức Bernoulli 50%, σ={std_bits:.2f} bit). "
+            f"Mã CRC32 tuyến tính bị bẻ gãy 100% bằng giải thuật bù đại số GF(2), trong khi SHA-256 phát hiện mọi thay đổi trong tập mẫu. "
+            f"Lưu ý: Đây là kiểm tra thống kê tính khuếch tán tuyết lở, không phải chứng minh tương đương toán học với Random Oracle."
         )
 
         return {
             "model_id": 5,
-            "name": "Kiểm định Tính Xấp Xỉ Random Oracle Model: SAC và Bernoulli",
-            "english_title": "Random Oracle Model Approximation and Strict Avalanche Criterion",
-            "paper_reference": "Harry Halpin 2025, Section 1 và 2: Noise vs Adversary, Section 4: Bellare-Rogaway ROM",
+            "name": "Thí nghiệm Khảo sát Tính chất Tuyết Lở (SAC) & Đối sánh Tính Phi Tuyến SHA-256 vs CRC32",
+            "english_title": "Strict Avalanche Criterion & Nonlinear Diffusion Experiment (Shannon/ROM Reference)",
+            "paper_reference": "Harry Halpin 2025, Section 1 & 2: Noise vs Adversary, Section 4: Bellare-Rogaway ROM",
             "input_perturbation": f"Mô phỏng Monte Carlo {num_samples} lần lật 1-bit ngẫu nhiên",
             "real_disk_artifact_tested": forged_from_disk,
             "sha256_metrics": {
@@ -544,23 +559,29 @@ class RandomOracleApproximationExperiment:
             "crc32_comparison": {
                 "total_bits": 32,
                 "flipped_bits": crc_1bit,
-                "linearity": "Tuyến tính tuyệt đối CRC32, dễ bị đảo ngược bằng phép chia đa thức modulo trên GF2",
+                "linearity": "Tuyến tính CRC32, bị giải mã bù 4-byte trên GF(2) trong thời gian đa thức",
                 "adversary_forged_patch_hex": patch_hex,
                 "adversary_bypass_crc32_success": adversary_crc_success,
                 "sha256_detects_adversary": adversary_sha256_blocked
             },
+            "scientific_note": "Trong lý thuyết mật mã, Random Oracle là mô hình trừu tượng lý tưởng hóa; thực nghiệm SAC trên mẫu hữu hạn minh họa tính khuếch tán tốt, không phải chứng minh toán học cho toàn bộ hàm băm.",
             "verdict": verdict_str
         }
 
 
 # ==============================================================================
-# 6. MÔ HÌNH TOÀN VẸN PHÂN CẤP BIBA: HIERARCHICAL INTEGRITY LATTICE
+# 6. THÍ NGHIỆM MINH HỌA LAN TRUYỀN CẬP NHẬT TOÀN VẸN PHÂN CẤP: THAM CHIẾU BIBA
 # ==============================================================================
 class BibaHierarchicalIntegrityModel:
     """
-    Hiện thực hóa Mô hình Toàn vẹn Biba 1977 và Halpin Section 3:
-    Nguyên lý toàn vẹn Biba: Đối tượng ở tầng toàn vẹn thấp không thể can thiệp làm hỏng đối tượng ở tầng cao: No Write-Up.
-    Ánh xạ lên cây phân cấp: Tệp Lá -> Thư mục con -> Root Hash toàn cục.
+    Thí nghiệm minh họa cơ chế lan truyền cập nhật băm cục bộ O(log N) (Dirty-Path Propagation)
+    trong cấu trúc cây Merkle phân cấp, lấy cảm hứng từ nguyên lý toàn vẹn phân cấp Biba (1977, Halpin Section 3).
+
+    LƯU Ý KHOA HỌC:
+    Thí nghiệm này KHÔNG phải là một hệ thống kiểm soát truy cập Biba hoàn chỉnh (vốn đòi hỏi ma trận quyền,
+    gán nhãn chủ thể/đối tượng và bộ giám sát tham chiếu Reference Monitor ngăn chặn No Write-Up).
+    Đây là minh họa kỹ thuật độc lập về sự phụ thuộc toàn vẹn: bất kỳ thay đổi nào ở nút lá (cấp dữ liệu)
+    đều lập tức làm thay đổi mốc gốc Root Hash (cấp kiểm tra hệ thống).
     """
 
     def __init__(self, target_dir: str, baseline_data: Optional[Dict[str, Any]] = None, tampered_files: Optional[List[str]] = None):
@@ -578,7 +599,7 @@ class BibaHierarchicalIntegrityModel:
         if total_files == 0:
             return {"error": "Thư mục không có tệp tin"}
 
-        # Đo đạc thời gian đối sánh 4 mô hình thực tế trên cùng thư mục
+        # Đo đạc thời gian đối sánh các phương pháp trên cùng thư mục
         t0_flat = time.perf_counter()
         m_flat = SHA256Manifest(self.target_dir)
         m_flat.build_manifest()
@@ -599,8 +620,6 @@ class BibaHierarchicalIntegrityModel:
         has_tampered = bool(real_tampered_list)
 
         if not has_tampered:
-            # TRẠNG THÁI SẠCH: Không có tệp nào bị sửa đổi so với mã gốc ban đầu
-            # HD-MerkleTree chỉ cần kiểm tra mã gốc trong RAM (< 0.001 ms)
             t0_check = time.perf_counter()
             _ = self.tree.root_hash
             hd_check_ms = (time.perf_counter() - t0_check) * 1000.0
@@ -621,13 +640,12 @@ class BibaHierarchicalIntegrityModel:
 
             return {
                 "model_id": 6,
-                "name": "Mô hình Toàn vẹn Phân Cấp Biba: Hierarchical Integrity Lattice",
-                "english_title": "Biba Strict Hierarchical Integrity Lattice Verification",
+                "name": "Thí nghiệm Minh họa Lan Truyền Cập Nhật Toàn Vẹn Phân Cấp: Tham chiếu Biba",
+                "english_title": "Hierarchical Integrity Propagation Experiment (Biba Inspiration)",
                 "paper_reference": "Harry Halpin 2025, Section 3: Access Control and Information Organization, Biba 1977",
-                "biba_axiom": "Strict Integrity: No lower-level entity can alter higher-level state undetected: No Write-Up",
+                "biba_concept_referenced": "Sự phụ thuộc toàn vẹn phân cấp: Thay đổi ở tầng lá phản ánh lập tức lên trạng thái Root",
                 "hierarchical_depth": 0,
                 "tampered_target": "Không có (Thư mục 100% nguyên vẹn)",
-                "attacker_label": "Chưa phát hiện tấn công",
                 "root_changed_instantly": False,
                 "memory_zeroized_after_attack": True,
                 "timing_breakdown": timing_breakdown,
@@ -639,17 +657,13 @@ class BibaHierarchicalIntegrityModel:
                     "hd_merkle_ms": round(hd_check_ms, 4),
                     "hd_dirty_propagation_only_ms": 0.0
                 },
-                "verdict": f"Thư mục sạch 100%: Toàn bộ {total_files:,} tệp nguyên vẹn, không có tệp nào bị sửa đổi. HD-Merkle duy trì trạng thái tức thì ({hd_check_ms:.4f} ms) trong khi Flat SHA-256 mất {flat_sha_ms:.1f} ms để kiểm tra lại toàn bộ đĩa."
+                "verdict": f"Trạng thái dữ liệu nguyên vẹn: Toàn bộ {total_files:,} tệp khớp với trạng thái đã ghi nhận."
             }
 
-        # TRẠNG THÁI CÓ TẤN CÔNG THỰC TẾ: Có tệp bị sửa đổi thật trên đĩa
+        # TRẠNG THÁI CÓ TẤN CÔNG THỰC TẾ
         deep_file = real_tampered_list[0]
         node = self.tree.file_nodes[deep_file]
 
-        attacker_clearance = "Unclassified (Adversary)"
-        target_clearance = "Top_Secret (Root Anchor)"
-
-        # 1. ĐO LƯỜNG THỰC TẾ BƯỚC 1: Đọc tệp từ đĩa cứng (Disk I/O)
         full_p = os.path.join(self.target_dir, deep_file)
         file_size = os.path.getsize(full_p) if os.path.exists(full_p) else 0
         t0_read = time.perf_counter()
@@ -660,19 +674,16 @@ class BibaHierarchicalIntegrityModel:
             actual_content = b"unauthorized_lower_level_write"
         disk_read_ms = (time.perf_counter() - t0_read) * 1000.0
 
-        # 2. ĐO LƯỜNG THỰC TẾ BƯỚC 2: Băm SHA-256 tệp lá đơn lẻ (Leaf Hash)
         t0_hash = time.perf_counter()
         actual_hash = hashlib.sha256(actual_content).hexdigest()
         leaf_hash_ms = (time.perf_counter() - t0_hash) * 1000.0
         node.file_content_hash = actual_hash
 
-        # 3. ĐO LƯỜNG THỰC TẾ BƯỚC 3: Lan truyền đường dẫn bẩn O(log N) trong RAM
         t0_dirty = time.perf_counter()
         node.mark_dirty()
         root_after = self.tree.root_node.compute_hash().hex()
         dirty_elapsed_ms = (time.perf_counter() - t0_dirty) * 1000.0
 
-        # Tính độ sâu chính xác của đường dẫn bẩn
         curr = node
         dirty_depth = 1
         while getattr(curr, "parent", None) is not None:
@@ -682,7 +693,6 @@ class BibaHierarchicalIntegrityModel:
         total_hd_ms = disk_read_ms + leaf_hash_ms + dirty_elapsed_ms
         violation_detected = (root_before != root_after)
 
-        # Tự động xóa vùng nhớ của nút bị tấn công bằng secure_erase
         node.secure_erase()
         memory_zeroized = (node.cached_hash is None and node.file_content_hash == "0" * 64)
 
@@ -704,17 +714,16 @@ class BibaHierarchicalIntegrityModel:
 
         return {
             "model_id": 6,
-            "name": "Mô hình Toàn vẹn Phân Cấp Biba: Hierarchical Integrity Lattice",
-            "english_title": "Biba Strict Hierarchical Integrity Lattice Verification",
+            "name": "Thí nghiệm Minh họa Lan Truyền Cập Nhật Toàn Vẹn Phân Cấp: Tham chiếu Biba",
+            "english_title": "Hierarchical Integrity Propagation Experiment (Biba Inspiration)",
             "paper_reference": "Harry Halpin 2025, Section 3: Access Control and Information Organization, Biba 1977",
-            "biba_axiom": "Strict Integrity: No lower-level entity can alter higher-level state undetected: No Write-Up",
+            "biba_concept_referenced": "Sự phụ thuộc toàn vẹn phân cấp: Thay đổi ở tầng lá phản ánh lập tức lên trạng thái Root",
             "hierarchical_depth": dirty_depth,
-            "tampered_target": f"{deep_file} - Phân cấp: {target_clearance}",
-            "attacker_label": attacker_clearance,
+            "tampered_target": deep_file,
             "root_changed_instantly": violation_detected,
             "memory_zeroized_after_attack": memory_zeroized,
             "timing_breakdown": timing_breakdown,
-            "dirty_propagation_cost": f"O(log N) = {dirty_depth} nút ({dirty_elapsed_ms:.4f} ms tính băm RAM)",
+            "dirty_propagation_cost": f"O(log N) = {dirty_depth} nút băm ({dirty_elapsed_ms:.4f} ms tính băm RAM)",
             "benchmark_times": {
                 "flat_sha_ms": round(flat_sha_ms, 1),
                 "hmac_ms": round(hmac_ms, 1),
@@ -722,23 +731,27 @@ class BibaHierarchicalIntegrityModel:
                 "hd_merkle_ms": round(total_hd_ms, 4),
                 "hd_dirty_propagation_only_ms": round(dirty_elapsed_ms, 4)
             },
-            "verdict": f"Thỏa mãn tuyệt đối nguyên lý Biba: Cập nhật cục bộ chỉ mất {total_hd_ms:.4f} ms (Nhanh hơn Flat SHA-256 {speedup_factor:,} lần nhờ chỉ tính {dirty_depth} nút cây thay vì quét {total_files:,} tệp)"
+            "verdict": f"Minh họa toàn vẹn phân cấp: Thay đổi tại lá làm thay đổi Root tức thì ({total_hd_ms:.4f} ms, cập nhật {dirty_depth} nút cây thay vì quét lại {total_files:,} tệp)."
         }
 
 
 # ==============================================================================
-# 7. KIỂM TOÁN RÒ RỈ SIÊU DỮ LIỆU VÀ PHÒNG CHỐNG TẤN CÔNG ĐO THỜI GIAN
+# 7. KHẢO SÁT RÒ RỈ SIÊU DỮ LIỆU & THỰC NGHIỆM ĐO THỜI GIAN SO SÁNH CHUỖI
 # ==============================================================================
 class MetadataLeakageAndSideChannelAudit:
     """
-    Hiện thực hóa Cảnh báo của Harry Halpin tại Section 5 và 6:
-    1. Metadata và Traffic Analysis: Kẻ thù khai thác siêu dữ liệu đường dẫn và kích thước file trên kênh truyền.
-    2. Timing Side-Channel Resistance: Phòng chống tấn công đo thời gian bằng Constant-Time Verification.
+    Thí nghiệm khảo sát rò rỉ siêu dữ liệu kênh truyền và đo lường thời gian so sánh chuỗi
+    lấy cảm hứng từ cảnh báo của Harry Halpin (Section 5: Timing Side-Channel Kocher 1996; Section 6: Metadata Surveillance).
+
+    LƯU Ý PHƯƠNG PHÁP LUẬN:
+    Phép đo thời gian trong Python chịu ảnh hưởng lớn từ jitter hệ điều hành, lập lịch luồng và rác bộ nhớ (GC).
+    Việc sử dụng hmac.compare_digest bảo đảm so sánh thời gian không đổi (Constant-Time) ở tầng thư viện C,
+    nhưng thực nghiệm đo đạc ở mức microsecond trên môi trường máy đơn mang tính minh họa nguyên lý,
+    không phải chứng minh loại trừ 100% mọi dạng kênh kề phần cứng (cache timing, branch prediction, power analysis).
     """
 
     @staticmethod
     def audit_security(target_dir: Optional[str] = None, num_files: int = 1000) -> Dict[str, Any]:
-        # Kiểm tra file báo cáo trích xuất siêu dữ liệu do Red Team tạo ra trên đĩa
         recon_file = os.path.join(target_dir, "adversary_metadata_recon.json") if target_dir else ""
         has_real_recon = False
         if recon_file and os.path.exists(recon_file):
@@ -770,7 +783,7 @@ class MetadataLeakageAndSideChannelAudit:
             except Exception:
                 pass
 
-        # Thực nghiệm đo Timing Side-Channel qua 5.000 chu kỳ
+        # Thực nghiệm đo thời gian so sánh chuỗi với thứ tự ngẫu nhiên hóa qua 5 vòng độc lập
         h_ref = hashlib.sha256(b"authentic_system_root_hash").digest()
         h_early = bytes([h_ref[0] ^ 0xFF]) + h_ref[1:]
         h_late = h_ref[:-1] + bytes([h_ref[-1] ^ 0xFF])
@@ -783,71 +796,78 @@ class MetadataLeakageAndSideChannelAudit:
                     return False
             return True
 
-        iterations = 5000
-        t0 = time.perf_counter()
-        for _ in range(iterations):
-            naive_early_return(h_ref, h_early)
-        t_early_us = (time.perf_counter() - t0) * 1e6 / iterations
+        rounds = 5
+        iterations_per_round = 3000
+        naive_deltas = []
+        ct_deltas = []
 
-        t0 = time.perf_counter()
-        for _ in range(iterations):
-            naive_early_return(h_ref, h_late)
-        t_late_us = (time.perf_counter() - t0) * 1e6 / iterations
+        for r in range(rounds):
+            # Ngẫu nhiên hóa thứ tự đo để giảm thiểu bias bộ nhớ đệm
+            pair_order = [(h_early, "early"), (h_late, "late")]
+            if r % 2 == 1:
+                pair_order.reverse()
 
-        delta_naive_us = abs(t_late_us - t_early_us)
+            t_early_r = 0.0
+            t_late_r = 0.0
+            for target_h, label in pair_order:
+                t0 = time.perf_counter()
+                for _ in range(iterations_per_round):
+                    naive_early_return(h_ref, target_h)
+                elapsed = (time.perf_counter() - t0) * 1e6 / iterations_per_round
+                if label == "early":
+                    t_early_r = elapsed
+                else:
+                    t_late_r = elapsed
+            naive_deltas.append(abs(t_late_r - t_early_r))
 
-        t0 = time.perf_counter()
-        for _ in range(iterations):
-            hmac.compare_digest(h_ref, h_early)
-        t_ct_early_us = (time.perf_counter() - t0) * 1e6 / iterations
+            t_ct_early_r = 0.0
+            t_ct_late_r = 0.0
+            for target_h, label in pair_order:
+                t0 = time.perf_counter()
+                for _ in range(iterations_per_round):
+                    hmac.compare_digest(h_ref, target_h)
+                elapsed = (time.perf_counter() - t0) * 1e6 / iterations_per_round
+                if label == "early":
+                    t_ct_early_r = elapsed
+                else:
+                    t_ct_late_r = elapsed
+            ct_deltas.append(abs(t_ct_late_r - t_ct_early_r))
 
-        t0 = time.perf_counter()
-        for _ in range(iterations):
-            hmac.compare_digest(h_ref, h_late)
-        t_ct_late_us = (time.perf_counter() - t0) * 1e6 / iterations
-
-        delta_ct_us = abs(t_ct_late_us - t_ct_early_us)
+        median_naive_delta = statistics.median(naive_deltas)
+        median_ct_delta = statistics.median(ct_deltas)
 
         timing_desc = (
-            f"So sánh tuần tự lộ độ lệch thời gian ~{delta_naive_us:.2f} µs qua {iterations:,} chu kỳ: "
-            f"Sai byte đầu: {t_early_us:.2f} µs so với Sai byte cuối: {t_late_us:.2f} µs. "
-            f"hmac.compare_digest bảo đảm Constant-Time O 1 triệt tiêu độ lệch: độ lệch ~{delta_ct_us:.2f} µs theo Kocher 1996"
+            f"Khảo sát đo lường 5 vòng ({iterations_per_round:,} lần/vòng): "
+            f"So sánh tuần tự lộ độ lệch trung vị ~{median_naive_delta:.3f} µs giữa sai byte đầu vs sai byte cuối. "
+            f"hmac.compare_digest (C-level constant time) giảm thiểu chênh lệch: trung vị ~{median_ct_delta:.3f} µs."
         )
 
         return {
             "model_id": 7,
-            "name": "Kiểm toán Rò rỉ Siêu dữ liệu và Kháng Tấn công Đo thời gian",
-            "english_title": "Metadata Privacy and Timing Side-Channel Resistance Audit",
+            "name": "Khảo sát Rò rỉ Siêu dữ liệu & Thực nghiệm Đo thời gian So sánh Chuỗi",
+            "english_title": "Metadata Leakage Survey and String Comparison Timing Experiment",
             "paper_reference": "Harry Halpin 2025, Section 5: Side-Channels Kocher 1996, Section 6: Metadata",
             "real_recon_detected": has_real_recon,
             "metadata_privacy": {
                 "flat_sha256_hmac": {
                     "payload_size": f"{flat_size_kb:.2f} KB",
-                    "file_paths_leaked": f"100%: {total_files:,} trên {total_files:,} đường dẫn tệp lộ trên mạng",
-                    "privacy_level": "Không an toàn"
+                    "file_paths_leaked": f"100%: {total_files:,}/{total_files:,} đường dẫn lộ trên kênh truyền",
+                    "privacy_assessment": "Bộc lộ toàn bộ cấu trúc và danh mục tệp tin"
                 },
                 "hd_merkle_tree": {
-                    "payload_size": f"{proof_size_bytes:,} Byte, tiết kiệm trên {savings_pct}% băng thông",
-                    "file_paths_leaked": f"{(1.0 / total_files * 100.0):.2f}%: chỉ lộ 1/{total_files:,} tệp đang xét, bảo mật tuyệt đối các tệp còn lại",
-                    "privacy_level": "An toàn tối đa: Metadata Confidentiality"
+                    "payload_size": f"{proof_size_bytes:,} Byte, tiết kiệm trên {savings_pct}% dữ liệu truyền",
+                    "file_paths_leaked": f"1/{total_files:,} tệp được xác thực, không tiết lộ đường dẫn các tệp khác",
+                    "privacy_assessment": "Bảo vệ danh mục các tệp còn lại (Metadata Minimization)"
                 }
             },
-            "side_channel_defense": {
-                "mechanism": "Constant-Time String Comparison via hmac.compare_digest",
-                "timing_leakage": timing_desc
+            "side_channel_survey": {
+                "comparison_mechanism": "hmac.compare_digest (Constant-Time byte comparison)",
+                "timing_measurement_summary": timing_desc,
+                "median_naive_delta_us": round(median_naive_delta, 3),
+                "median_ct_delta_us": round(median_ct_delta, 3),
+                "measurement_limitation": "Phép đo chịu ảnh hưởng bởi jitter hệ điều hành; hmac.compare_digest triệt tiêu độ lệch ở mức so sánh chuỗi, nhưng không bảo đảm loại trừ toàn bộ kênh kề phần cứng"
             },
-            "timing_attack": {
-                "iterations": iterations,
-                "t_early_us": round(t_early_us, 3),
-                "t_late_us": round(t_late_us, 3),
-                "delta_naive_us": round(delta_naive_us, 3),
-                "t_ct_early_us": round(t_ct_early_us, 3),
-                "t_ct_late_us": round(t_ct_late_us, 3),
-                "delta_ct_us": round(delta_ct_us, 3),
-                "naive_leak": f"Độ lệch ~{delta_naive_us:.3f} µs (Byte đầu: {t_early_us:.3f} µs vs Byte cuối: {t_late_us:.3f} µs)",
-                "constant_time_safe": f"Constant-Time O(1) triệt tiêu độ lệch: ~{delta_ct_us:.3f} µs"
-            },
-            "verdict": "Bảo vệ tính riêng tư siêu dữ liệu cho các tệp còn lại và phòng chống tấn công kênh kề so sánh chuỗi"
+            "verdict": "Minh họa nguy cơ rò rỉ siêu dữ liệu kênh truyền và khảo sát giải pháp so sánh chuỗi thời gian hằng số"
         }
 
 
@@ -939,7 +959,7 @@ def run_all_scientific_proofs(dataset_dir: Optional[str] = None, baseline_data: 
             file_count += len(files)
 
     print("\n" + "=" * 86, flush=True)
-    print(f"[TERMINAL SERVER] [TIẾN TRÌNH KIỂM ĐỊNH AN TOÀN TOÁN HỌC - HARRY HALPIN (OXFORD 2025)]", flush=True)
+    print(f"[TIẾN TRÌNH THÍ NGHIỆM MINH HỌA ĐỘC LẬP - THAM CHIẾU BÀI BÁO HARRY HALPIN (2025)]", flush=True)
     print(f"[*] Thư mục kiểm định : {dataset_dir}", flush=True)
     print(f"[*] Tổng số tệp dữ liệu: {file_count:,} tệp tin", flush=True)
     if baseline_data and baseline_data.get("root_hash"):
@@ -990,7 +1010,7 @@ def run_all_scientific_proofs(dataset_dir: Optional[str] = None, baseline_data: 
 
     total_time = e1 + e2 + e3 + e4 + e5 + e6 + e7
     print("-" * 86, flush=True)
-    print(f"[TERMINAL SERVER] [TỔNG KẾT KIỂM ĐỊNH] Đạt chuẩn 7 trên 7 mô hình toán học (Tổng thời gian: {total_time:.2f} ms)", flush=True)
+    print(f"[TỔNG KẾT THÍ NGHIỆM] Hoàn thành 7 trên 7 thí nghiệm minh họa độc lập (Tổng thời gian: {total_time:.2f} ms)", flush=True)
     print("=" * 86 + "\n", flush=True)
 
     return {
@@ -1006,7 +1026,8 @@ def run_all_scientific_proofs(dataset_dir: Optional[str] = None, baseline_data: 
         },
         "paper_title": "The Adversary: The Philosophy of Cryptography - Harry Halpin 2025",
         "journal": "Oxford Journal of Cybersecurity, Vol 11, Issue 1",
-        "total_criteria_coverage": "100.0%: 7 trên 7 mô hình an toàn toán học",
+        "total_criteria_coverage": "7/7 thí nghiệm minh họa độc lập",
+        "scientific_disclaimer": "Các thí nghiệm do sinh viên tự xây dựng nhằm minh họa trực quan các khái niệm lý thuyết; bài báo gốc không chứa mã nguồn hay số liệu benchmark.",
         "games_executed": {
             "model_1_ppt_adversary": m1,
             "model_2_dolev_yao_network": m2,
