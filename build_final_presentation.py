@@ -462,9 +462,9 @@ def create_deck():
     tf_s5p = t_s5_pts.text_frame
     tf_s5p.word_wrap = True
     shannon_pts = [
-        ("Nguồn gốc tối mật:", "Lý thuyết thông tin Shannon (1948) bắt nguồn từ báo cáo mật mã tối mật năm 1945 ('A Mathematical Theory of Cryptography')."),
-        ("Bí mật hoàn hảo:", "Shannon chứng minh OTP là hệ mật hoàn hảo duy nhất, nhưng đòi hỏi khóa ngẫu nhiên dài bằng thông điệp ($H(K) >= H(M)$)."),
-        ("Giả định giới hạn:", "Shannon xem sự sai lệch là 'nhiễu ngẫu nhiên' (noise). Tuy nhiên, kẻ thù là tác nhân có chủ đích (intentional agent), không phải nhiễu!")
+        ("Bí mật hoàn hảo:", "OTP an toàn tuyệt đối khi H(K) >= H(M), nhưng bất khả thi khi triển khai diện rộng."),
+        ("Giả định Shannon:", "Xem sai lệch dữ liệu là 'nhiễu ngẫu nhiên'. Đối thủ thực tế là tác nhân có chủ đích!"),
+        ("Hạn chế:", "Bỏ qua chi phí lưu trữ/phân phối khóa, rò rỉ kênh kề và ranh giới hệ thống vật lý.")
     ]
     for h, b in shannon_pts:
         p_it = tf_s5p.add_paragraph()
@@ -506,13 +506,13 @@ def create_deck():
     b_nsa.line.color.rgb = COLOR_ACCENT_ROSE
     set_shape_text(b_nsa, ["Đối Thủ Thể Chế (NSA / Five Eyes) & Kênh Kề", "Tấn công chuỗi cung ứng, suy yếu chuẩn & Giám sát siêu dữ liệu"], font_size=Pt(9), color=RGBColor(153, 27, 27))
 
-    t_s5_cpts = s5.shapes.add_textbox(Inches(7.0), Inches(4.0), Inches(5.3), Inches(2.4))
+    t_s5_cpts = s5.shapes.add_textbox(Inches(7.0), Inches(3.95), Inches(5.3), Inches(2.4))
     tf_s5cp = t_s5_cpts.text_frame
     tf_s5cp.word_wrap = True
     complex_pts = [
-        ("Vượt qua kênh đơn:", "Thông tin chảy qua mạng lưới phức tạp gồm người dùng, thiết bị, hệ điều hành và hạ tầng cáp quang toàn cầu."),
-        ("Tổ chức thông tin:", "Bảo toàn bí mật là duy trì bất biến chính sách trước các lỗi Byzantine và hành vi làm rò rỉ của người bên trong (insider / Snowden)."),
-        ("Điểm mù của Shannon:", "Bỏ qua hoàn toàn chi phí lưu trữ khóa, phân phối khóa, lỗi phần mềm và sự can thiệp vào hành vi của người giữ bí mật.")
+        ("Mạng phức hợp:", "Thông tin chảy qua nhiều thực thể: người dùng, ISP, cáp quang biển, đám mây."),
+        ("Đối thủ thể chế:", "NSA/Five Eyes tấn công chuỗi cung ứng, suy yếu chuẩn & giám sát siêu dữ liệu."),
+        ("Mục tiêu hiện đại:", "Bảo vệ siêu dữ liệu (Mixnet), kháng kênh kề thời gian và kiểm soát lỗi nội bộ.")
     ]
     for h, b in complex_pts:
         p_it = tf_s5cp.add_paragraph()
@@ -1036,9 +1036,9 @@ def create_deck():
     tf13_lp = t13_lpts.text_frame
     tf13_lp.word_wrap = True
     blue_scenarios = [
-        ("Kịch bản 1 (CRC32 Forge):", "Red Team bù 4 byte GF(2) qua mặt CRC32; Blue Team dùng SHA-256 bắt quả tang tức thì."),
-        ("Kịch bản 2 (In-place Tamper):", "Sửa nội dung tệp; Blue Team phát hiện FILE_MODIFIED và vẽ Dirty Path O(log N)."),
-        ("Kịch bản 3 (Dolev-Yao MitM):", "Đánh tráo Merkle Proof trên đường truyền mạng; bộ xác thực từ chối 100% chữ ký bằng chứng.")
+        ("Kịch bản 1 (CRC32):", "Red Team bù 4 byte GF(2); Blue Team dùng SHA-256 bắt quả tang tức thì."),
+        ("Kịch bản 2 (In-place Tamper):", "Sửa nội dung tệp; Blue Team phát hiện và vẽ Dirty Path O(log N)."),
+        ("Kịch bản 3 (Dolev-Yao MitM):", "Đánh tráo Merkle Proof trên mạng; bộ xác thực từ chối 100% chữ ký.")
     ]
     for h, b in blue_scenarios:
         p_it = tf13_lp.add_paragraph()
@@ -1084,9 +1084,9 @@ def create_deck():
     tf13_rp = t13_rpts.text_frame
     tf13_rp.word_wrap = True
     red_notes = [
-        ("Mục đích minh họa:", "Thực nghiệm được thiết kế độc lập nhằm kiểm chứng tính đúng đắn logic của các khái niệm; không phải là chạy lại số liệu của tác giả."),
-        ("Môi trường kiểm thử:", "Đo đạc trên máy tính cá nhân (Intel Core i7, Windows 11). Các phép đo thời gian vi mô chịu ảnh hưởng của jitter hệ điều hành."),
-        ("Kịch bản tương tác:", "Toàn bộ mã nguồn và kịch bản demo 2 màn hình được hướng dẫn chi tiết tại file MIDTERM_DEMO.md.")
+        ("Bản chất minh họa:", "Thực nghiệm độc lập kiểm chứng logic các khái niệm; không phải chạy lại số liệu bài báo."),
+        ("Môi trường đo đạc:", "CPU Intel i7, Windows 11; tốc độ duyệt đạt 2.325 tệp/giây trên kaggle_dataset."),
+        ("Kịch bản thao tác:", "Hướng dẫn lệnh chạy và quy trình demo 2 màn hình xem tại MIDTERM_DEMO.md.")
     ]
     for h, b in red_notes:
         p_it = tf13_rp.add_paragraph()
