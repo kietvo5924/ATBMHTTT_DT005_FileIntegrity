@@ -7,13 +7,13 @@ Script Xây Dựng Slide Thuyết Trình Báo Cáo Giữa Kỳ Chuẩn Khoa Họ
 Quy chuẩn thiết kế:
 - Khổ 16:9 widescreen (13.333 x 7.5 inch).
 - Light Academic Theme (nền sáng, card slate/blue/emerald/amber, chữ sắc nét).
-- Đúng 15 slide hoàn chỉnh:
+- Đúng 13 slide tinh gọn, hoàn chỉnh:
   + Slide 1: Bìa chuẩn nhận diện (Thanh dọc xanh, Trường, Khoa, Báo cáo đồ án, Tên đề tài, GVHD, SV Võ Anh Kiệt).
-  + Slide 2-11: Nội dung học thuật bài báo Halpin, Cơ sở triết học, Sơ đồ Timeline, Sơ đồ Shannon, Mô hình đối thủ, Snowden, 4 Câu hỏi mở, Giới hạn tái lập, Ánh xạ Paper-to-Code.
-  + Slide 12: Slide chuyển tiếp tối giản: DEMO.
-  + Slide 13: Kiến trúc Diễn tập Đối kháng Red Team vs Blue Team (Sơ đồ vector trực quan).
-  + Slide 14: Tổng kết Báo cáo & Lộ trình Nghiên cứu Cuối kỳ.
-  + Slide 15: Slide Cảm Ơn & Q&A (Đồng bộ nhận diện với Slide 1).
+  + Slide 2-9: Nội dung học thuật bài báo Halpin (Bối cảnh, Dretske, Shannon, Dolev-Yao, Tiến hóa đối thủ, Giới hạn hình thức hóa, Snowden, 4 Câu hỏi mở).
+  + Slide 10: Kiến trúc Diễn tập Đối kháng Red Team vs Blue Team (Sơ đồ trực quan + Ghi chú minh họa độc lập).
+  + Slide 11: Slide chuyển tiếp tối giản: DEMO.
+  + Slide 12: Bảng Tổng Kết Đóng Góp Học Thuật & Bài Học An Ninh Thực Tế (Bảng đối sánh tổng hợp).
+  + Slide 13: Slide Cảm Ơn & Q&A (Đồng bộ nhận diện với Slide 1).
 """
 import os
 import sys
@@ -26,7 +26,7 @@ except Exception:
 
 from pptx import Presentation
 from pptx.util import Inches, Pt
-from pptx.enum.text import PP_ALIGN
+from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
 from pptx.dml.color import RGBColor
 from pptx.enum.shapes import MSO_SHAPE
 
@@ -682,275 +682,166 @@ def create_deck():
     p_f.font.color.rgb = COLOR_TEXT_MUTED
 
     # =========================================================================
-    # SLIDE 10: PHƯƠNG PHÁP LUẬN & GIỚI HẠN TÁI LẬP BÀI BÁO
+    # SLIDE 10: KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG RED TEAM VS BLUE TEAM (PRE-DEMO)
     # =========================================================================
     s10 = prs.slides.add_slide(blank_layout)
     add_bg(s10)
-    add_header(s10, "PHƯƠNG PHÁP LUẬN & KHẢ NĂNG TÁI LẬP BÀI BÁO", "ĐÁNH GIÁ PHƯƠNG PHÁP LUẬN & HƯỚNG TIẾP CẬN THỰC NGHIỆM",
-               "Làm rõ tính khả thi tái lập đối với công trình triết học và định hướng thí nghiệm độc lập")
+    add_header(s10, "KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG: RED TEAM VS BLUE TEAM", "SƠ ĐỒ 4: KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG (PRE-DEMO ARCHITECTURE)",
+               "Mô hình đối kháng 2 màn hình trên tập dữ liệu kaggle_dataset (2.485 tệp tin) kiểm chứng trực quan luận điểm bài báo")
 
-    add_card(s10, Inches(0.8), Inches(1.85), Inches(5.7), Inches(4.8), COLOR_AMBER_BG, COLOR_AMBER_BORDER)
-    t = s10.shapes.add_textbox(Inches(1.0), Inches(2.0), Inches(5.3), Inches(4.5))
-    tf = t.text_frame
-    tf.word_wrap = True
-    p = tf.paragraphs[0]
-    p.text = "1. Đặc Thù Bài Báo & Tính Trung Thực Khoa Học"
-    p.font.size = Pt(13)
-    p.font.bold = True
-    p.font.color.rgb = COLOR_ACCENT_AMBER
-
-    replicate_pts = [
-        ("Khảo luận triết học thuần túy:", "Bài báo của TS. Harry Halpin là nghiên cứu nhận thức luận, hoàn toàn không có mã nguồn, không có tập dữ liệu hay bảng đo benchmark."),
-        ("Không tuyên bố sai lệch:", "Nhóm thẩm định toàn văn 17 trang PDF và 134 tài liệu tham khảo; tuyệt đối không bịa đặt số liệu hay tuyên bố 'tái lập 100% benchmark' của tác giả.")
-    ]
-    for h, b in replicate_pts:
-        p_it = tf.add_paragraph()
-        p_it.space_before = Pt(12)
-        r1 = p_it.add_run()
-        r1.text = f"• {h} "
-        r1.font.bold = True
-        r1.font.size = Pt(11)
-        r1.font.color.rgb = COLOR_TEXT_PRIMARY
-        r2 = p_it.add_run()
-        r2.text = b
-        r2.font.size = Pt(10.5)
-        r2.font.color.rgb = COLOR_TEXT_SECONDARY
-
-    add_card(s10, Inches(6.8), Inches(1.85), Inches(5.7), Inches(4.8), COLOR_EMERALD_BG, COLOR_EMERALD_BORDER)
-    t = s10.shapes.add_textbox(Inches(7.0), Inches(2.0), Inches(5.3), Inches(4.5))
-    tf = t.text_frame
-    tf.word_wrap = True
-    p = tf.paragraphs[0]
-    p.text = "2. Định Hướng Thí Nghiệm Minh Họa Độc Lập"
-    p.font.size = Pt(13)
-    p.font.bold = True
-    p.font.color.rgb = COLOR_ACCENT_EMERALD
-
-    independent_pts = [
-        ("Minh họa trực quan luận điểm:", "Sinh viên tự phát triển hệ thống kiểm tra toàn vẹn tệp để đưa các luận điểm đối kháng trừu tượng của Halpin vào kiểm chứng thực nghiệm."),
-        ("Phân định ranh giới rạch ròi:", "Mã nguồn và kịch bản đối kháng là sản phẩm độc lập của sinh viên, không phải thuật toán của Halpin (lưu vết tại MIDTERM_CODE_AUDIT.md).")
-    ]
-    for h, b in independent_pts:
-        p_it = tf.add_paragraph()
-        p_it.space_before = Pt(12)
-        r1 = p_it.add_run()
-        r1.text = f"• {h} "
-        r1.font.bold = True
-        r1.font.size = Pt(11)
-        r1.font.color.rgb = COLOR_TEXT_PRIMARY
-        r2 = p_it.add_run()
-        r2.text = b
-        r2.font.size = Pt(10.5)
-        r2.font.color.rgb = COLOR_TEXT_SECONDARY
-
-    f_box = s10.shapes.add_textbox(Inches(0.8), Inches(6.8), Inches(11.7), Inches(0.4))
-    tf_f = f_box.text_frame
-    p_f = tf_f.paragraphs[0]
-    p_f.text = "Báo cáo phân định phương pháp luận độc lập của nhóm nghiên cứu đề tài DT005."
-    p_f.font.size = Pt(10)
-    p_f.font.italic = True
-    p_f.font.color.rgb = COLOR_TEXT_MUTED
-
-    # =========================================================================
-    # SLIDE 11: MINH HỌA PAPER-TO-CODE ĐỘC LẬP & GIỚI HẠN DIỄN GIẢI
-    # =========================================================================
-    s11 = prs.slides.add_slide(blank_layout)
-    add_bg(s11)
-    add_header(s11, "MINH HỌA PAPER-TO-CODE ĐỘC LẬP & GIỚI HẠN DIỄN GIẢI", "SƠ ĐỒ 4: PHÂN ĐỊNH LÝ THUYẾT & THÍ NGHIỆM ĐỘC LẬP",
-               "Đối sánh minh bạch giữa các luận điểm bài báo và thí nghiệm minh họa do sinh viên xây dựng")
-
-    col_w11 = Inches(3.7)
-    gap11 = Inches(0.3)
-
-    examples_data = [
-        ("1. NHIỄU vs ĐỐI THỦ CHỦ ĐÍCH",
-         ("Luận điểm Halpin (Sec. 1–2):", "Mã kiểm tra tuyến tính chỉ bắt lỗi ngẫu nhiên, không cản được đối thủ có chủ đích."),
-         ("Minh họa độc lập (DT005):", "Giải hệ phương trình GF(2) bù 4 byte qua mặt CRC32; SHA-256 phát hiện ngay nhờ tính phi tuyến."),
-         ("Giới hạn diễn giải:", "Chỉ minh họa kịch bản giả mạo cụ thể; không phủ nhận vai trò bắt lỗi phần cứng của CRC32.")),
-        ("2. PHÂN TÁCH MIỀN NÚT LÁ",
-         ("Gốc lý thuyết bài báo:", "Halpin nhấn mạnh điểm mù cấu trúc dữ liệu, nhưng không đề cập cây Merkle."),
-         ("Minh họa độc lập (DT005):", "Cài đặt chuẩn RFC 6962 (tiền tố 0x00 cho lá, 0x01 cho nhánh) để tránh nhầm lẫn cấu trúc cây."),
-         ("Giới hạn diễn giải:", "Đây là giải pháp kỹ thuật độc lập do sinh viên tích hợp, không phải đề xuất của Halpin.")),
-        ("3. RÒ RỈ KÊNH KỀ THỜI GIAN",
-         ("Luận điểm Halpin (Sec. 5):", "Thời gian xử lý thực tế làm rò rỉ dữ liệu ngoài mô hình toán (dẫn Kocher 1996)."),
-         ("Minh họa độc lập (DT005):", "Đo đạc so sánh chuỗi ngắt sớm làm rò rỉ ký tự; áp dụng hàm thời gian hằng số hmac.compare_digest."),
-         ("Giới hạn diễn giải:", "Chỉ minh họa rò rỉ logic ở mức phần mềm ứng dụng; đo trên Python có độ trễ hệ điều hành."))
-    ]
-
-    for idx, (ex_title, (p1_title, ex_theory), (p2_title, ex_impl), (p3_title, ex_limit)) in enumerate(examples_data):
-        left_pos = Inches(0.8) + idx * (col_w11 + gap11)
-        add_card(s11, left_pos, Inches(1.85), col_w11, Inches(4.8), COLOR_BG_PANEL, COLOR_BORDER)
-        t = s11.shapes.add_textbox(left_pos + Inches(0.2), Inches(2.0), col_w11 - Inches(0.4), Inches(4.5))
-        tf = t.text_frame
-        tf.word_wrap = True
-
-        p_t = tf.paragraphs[0]
-        p_t.text = ex_title
-        p_t.font.size = Pt(11.5)
-        p_t.font.bold = True
-        p_t.font.color.rgb = COLOR_BRAND_NAVY
-        p_t.space_after = Pt(8)
-
-        # 1. Luận điểm bài báo Halpin
-        p1_h = tf.add_paragraph()
-        p1_h.text = p1_title
-        p1_h.font.size = Pt(10)
-        p1_h.font.bold = True
-        p1_h.font.color.rgb = COLOR_TEXT_PRIMARY
-
-        p1_b = tf.add_paragraph()
-        p1_b.text = ex_theory
-        p1_b.font.size = Pt(9.5)
-        p1_b.font.color.rgb = COLOR_TEXT_SECONDARY
-        p1_b.space_after = Pt(6)
-
-        # 2. Minh họa thực nghiệm DT005
-        p2_h = tf.add_paragraph()
-        p2_h.text = p2_title
-        p2_h.font.size = Pt(10)
-        p2_h.font.bold = True
-        p2_h.font.color.rgb = COLOR_TEXT_PRIMARY
-
-        p2_b = tf.add_paragraph()
-        p2_b.text = ex_impl
-        p2_b.font.size = Pt(9.5)
-        p2_b.font.color.rgb = COLOR_TEXT_SECONDARY
-        p2_b.space_after = Pt(6)
-
-        # 3. Giới hạn diễn giải
-        p3_h = tf.add_paragraph()
-        p3_h.text = p3_title
-        p3_h.font.size = Pt(10)
-        p3_h.font.bold = True
-        p3_h.font.color.rgb = COLOR_TEXT_PRIMARY
-
-        p3_b = tf.add_paragraph()
-        p3_b.text = ex_limit
-        p3_b.font.size = Pt(9.5)
-        p3_b.font.color.rgb = COLOR_TEXT_MUTED
-
-    f_box = s11.shapes.add_textbox(Inches(0.8), Inches(6.8), Inches(11.7), Inches(0.4))
-    tf_f = f_box.text_frame
-    p_f = tf_f.paragraphs[0]
-    p_f.text = "Bảng đối chiếu minh bạch do sinh viên tự xây dựng; chi tiết mã nguồn lưu tại MIDTERM_CODE_AUDIT.md."
-    p_f.font.size = Pt(10)
-    p_f.font.italic = True
-    p_f.font.color.rgb = COLOR_TEXT_MUTED
-
-    # =========================================================================
-    # SLIDE 12: SLIDE CHUYỂN TIẾP: DEMO (NỀN SÁNG, ĐÚNG MỘ CHỮ "DEMO")
-    # =========================================================================
-    s12 = prs.slides.add_slide(blank_layout)
-    bg12 = s12.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, prs.slide_width, prs.slide_height)
-    bg12.fill.solid()
-    bg12.fill.fore_color.rgb = RGBColor(248, 250, 252) # Nền sáng thanh lịch
-    bg12.line.fill.background()
-
-    # Chỉ để đúng một chữ DEMO ở chính giữa slide
-    demo_box = s12.shapes.add_textbox(Inches(2.0), Inches(2.6), Inches(9.333), Inches(2.2))
-    tf12 = demo_box.text_frame
-    tf12.word_wrap = True
-    p12 = tf12.paragraphs[0]
-    p12.alignment = PP_ALIGN.CENTER
-    p12.text = "DEMO"
-    p12.font.name = "Calibri"
-    p12.font.size = Pt(88)
-    p12.font.bold = True
-    p12.font.color.rgb = RGBColor(30, 64, 175) # Royal Blue nổi bật
-
-
-    # =========================================================================
-    # SLIDE 13: KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG RED TEAM VS BLUE TEAM (DEMO ARCHITECTURE)
-    # =========================================================================
-    s13 = prs.slides.add_slide(blank_layout)
-    add_bg(s13)
-    add_header(s13, "KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG: RED TEAM VS BLUE TEAM", "SƠ ĐỒ 5: KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG (DEMO ARCHITECTURE)",
-               "Mô hình đối kháng thực tế 2 màn hình trên tập dữ liệu kaggle_dataset (2.485 tệp tin / ~112,81 MiB theo benchmark)")
-
-    img_s13_path = os.path.join(os.path.dirname(__file__), "docs", "Slide14.drawio.png")
-    if os.path.exists(img_s13_path):
-        img_w = Inches(10.3)
-        img_h = Inches(4.84)
+    img_s10_path = os.path.join(os.path.dirname(__file__), "docs", "Slide14.drawio.png")
+    if os.path.exists(img_s10_path):
+        img_w = Inches(9.6)
+        img_h = Inches(4.15)
         img_l = (prs.slide_width - img_w) / 2
-        img_t = Inches(1.82)
-        s13.shapes.add_picture(img_s13_path, img_l, img_t, img_w, img_h)
+        img_t = Inches(1.72)
+        s10.shapes.add_picture(img_s10_path, img_l, img_t, img_w, img_h)
 
-    f_box = s13.shapes.add_textbox(Inches(0.8), Inches(6.8), Inches(11.7), Inches(0.4))
+    # Khối ghi chú tích hợp phương pháp luận & 3 kịch bản kiểm chứng (gọn gàng, tinh tế)
+    add_card(s10, Inches(0.8), Inches(5.98), Inches(11.733), Inches(0.82), COLOR_BG_PANEL, COLOR_BORDER_BLUE)
+    t_note = s10.shapes.add_textbox(Inches(1.0), Inches(6.02), Inches(11.333), Inches(0.74))
+    tf_n = t_note.text_frame
+    tf_n.word_wrap = True
+    
+    p_n1 = tf_n.paragraphs[0]
+    r_n1 = p_n1.add_run()
+    r_n1.text = "Mô hình hóa thực nghiệm độc lập: "
+    r_n1.font.bold = True
+    r_n1.font.size = Pt(10.5)
+    r_n1.font.color.rgb = COLOR_BRAND_BLUE
+    r_n2 = p_n1.add_run()
+    r_n2.text = "Bài báo Halpin là khảo luận triết học thuần túy (không có mã nguồn). Nhóm tự phát triển hệ thống kiểm tra toàn vẹn trên tập dữ liệu kaggle_dataset để kiểm chứng trực quan 3 luận điểm cốt lõi:"
+    r_n2.font.size = Pt(9.5)
+    r_n2.font.color.rgb = COLOR_TEXT_PRIMARY
+
+    p_n2 = tf_n.add_paragraph()
+    p_n2.space_before = Pt(2)
+    r_n3 = p_n2.add_run()
+    r_n3.text = "• (1) Nhiễu vs Kẻ thù (Mã CRC32 bị qua mặt trên GF(2) vs SHA-256 phi tuyến) | • (2) Phân tách miền nút lá RFC 6962 | • (3) Rò rỉ kênh kề thời gian (Kocher 1996)."
+    r_n3.font.size = Pt(9.5)
+    r_n3.font.color.rgb = COLOR_TEXT_SECONDARY
+
+    f_box = s10.shapes.add_textbox(Inches(0.8), Inches(6.88), Inches(11.7), Inches(0.35))
     tf_f = f_box.text_frame
     p_f = tf_f.paragraphs[0]
     p_f.text = "Sơ đồ kiến trúc diễn tập đối kháng độc lập do sinh viên thiết kế minh họa các khái niệm an ninh."
-    p_f.font.size = Pt(10)
+    p_f.font.size = Pt(9.5)
     p_f.font.italic = True
     p_f.font.color.rgb = COLOR_TEXT_MUTED
 
     # =========================================================================
-    # SLIDE 14: KẾT LUẬN & ĐỊNH HƯỚNG BÁO CÁO GIỮA KỲ
+    # SLIDE 11: SLIDE CHUYỂN TIẾP: DEMO (NỀN SÁNG, ĐÚNG MỘ CHỮ "DEMO")
     # =========================================================================
-    s14 = prs.slides.add_slide(blank_layout)
-    add_bg(s14)
-    add_header(s14, "TỔNG KẾT BÁO CÁO GIỮA KỲ & ĐỊNH HƯỚNG NGHIÊN CỨU", "SECTION 7 — KẾT LUẬN & THÔNG ĐIỆP HỌC THUẬT",
-               "Tổng kết các đóng góp lý thuyết của Halpin và định hướng nghiên cứu tiếp theo")
+    s11 = prs.slides.add_slide(blank_layout)
+    bg11 = s11.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, prs.slide_width, prs.slide_height)
+    bg11.fill.solid()
+    bg11.fill.fore_color.rgb = RGBColor(248, 250, 252) # Nền sáng thanh lịch
+    bg11.line.fill.background()
 
-    # Left: Đóng góp bài báo Halpin
-    add_card(s14, Inches(0.8), Inches(1.85), Inches(5.7), Inches(4.6), COLOR_BG_PANEL, COLOR_BORDER_BLUE)
-    t = s14.shapes.add_textbox(Inches(1.0), Inches(2.0), Inches(5.3), Inches(4.3))
-    tf = t.text_frame
-    tf.word_wrap = True
-    p = tf.paragraphs[0]
-    p.text = "1. Thông Điệp Học Thuật Cốt Lõi (Harry Halpin 2025)"
-    p.font.size = Pt(13)
-    p.font.bold = True
-    p.font.color.rgb = COLOR_BRAND_BLUE
+    demo_box = s11.shapes.add_textbox(Inches(2.0), Inches(2.6), Inches(9.333), Inches(2.2))
+    tf11 = demo_box.text_frame
+    tf11.word_wrap = True
+    p11 = tf11.paragraphs[0]
+    p11.alignment = PP_ALIGN.CENTER
+    p11.text = "DEMO"
+    p11.font.name = "Calibri"
+    p11.font.size = Pt(88)
+    p11.font.bold = True
+    p11.font.color.rgb = RGBColor(30, 64, 175) # Royal Blue nổi bật
 
-    conclusions = [
-        ("Vượt qua sự trừu tượng hóa:", "Mật mã học không chỉ là toán học thuần túy trên giấy tờ. Các hệ thống an toàn trong thế giới thực phải nhận thức rõ khoảng cách giữa mô hình lý tưởng và thực tế vật lý (kênh kề, siêu dữ liệu, chuỗi cung ứng, áp lực thể chế)."),
-        ("Bản chất của đối thủ:", "Đối thủ không phải là 'nhiễu ngẫu nhiên' mà là tác nhân có chủ đích, liên tục tìm kiếm các kênh rò rỉ bị mô hình toán học bỏ qua."),
-        ("Chương trình nghiên cứu mở:", "Halpin đặt nền móng triết học và vạch ra 4 câu hỏi nghiên cứu liên ngành nhằm mở rộng mật mã học thành một khoa học an ninh hoàn chỉnh.")
+    # =========================================================================
+    # SLIDE 12: BẢNG TỔNG KẾT ĐÓNG GÓP HỌC THUẬT (HARRY HALPIN 2025)
+    # =========================================================================
+    s12 = prs.slides.add_slide(blank_layout)
+    add_bg(s12)
+    add_header(s12, "TỔNG KẾT BÁO CÁO: ĐÓNG GÓP HỌC THUẬT & BÀI HỌC AN NINH", "SECTION 7 — TỔNG KẾT TOÀN VĂN BÀI BÁO (HARRY HALPIN 2025)",
+               "Bảng đối sánh giữa các giả định hình thức truyền thống và nhận thức luận của Harry Halpin")
+
+    # Tạo bảng tổng kết 5 hàng x 4 cột
+    rows_cnt = 5
+    cols_cnt = 4
+    tbl_shape = s12.shapes.add_table(rows_cnt, cols_cnt, Inches(0.8), Inches(1.85), Inches(11.733), Inches(4.7))
+    tbl = tbl_shape.table
+
+    # Độ rộng 4 cột
+    tbl.columns[0].width = Inches(2.1)
+    tbl.columns[1].width = Inches(3.1)
+    tbl.columns[2].width = Inches(3.3)
+    tbl.columns[3].width = Inches(3.233)
+
+    # Tiêu đề các cột
+    headers_text = [
+        "Trụ Cột Khảo Cứu",
+        "Mô Hình Toán Hình Thức\n(Shannon & Hộp Đen)",
+        "Phê Phán Nhận Thức Luận\n(Harry Halpin 2025)",
+        "Bài Học & Định Hướng\nAn Ninh Thực Tế"
     ]
-    for h, b in conclusions:
-        p_it = tf.add_paragraph()
-        p_it.space_before = Pt(8)
-        r1 = p_it.add_run()
-        r1.text = f"• {h} "
-        r1.font.bold = True
-        r1.font.size = Pt(11)
-        r1.font.color.rgb = COLOR_TEXT_PRIMARY
-        r2 = p_it.add_run()
-        r2.text = b
-        r2.font.size = Pt(10.5)
-        r2.font.color.rgb = COLOR_TEXT_SECONDARY
+    for c_idx, h_text in enumerate(headers_text):
+        c = tbl.cell(0, c_idx)
+        c.fill.solid()
+        c.fill.fore_color.rgb = COLOR_BRAND_BLUE
+        c.vertical_anchor = MSO_ANCHOR.MIDDLE
+        tf_c = c.text_frame
+        tf_c.word_wrap = True
+        tf_c.margin_left = Inches(0.08)
+        tf_c.margin_right = Inches(0.08)
+        tf_c.margin_top = Inches(0.05)
+        tf_c.margin_bottom = Inches(0.05)
+        p_c = tf_c.paragraphs[0]
+        p_c.alignment = PP_ALIGN.CENTER
+        p_c.text = h_text
+        p_c.font.bold = True
+        p_c.font.size = Pt(10.5)
+        p_c.font.color.rgb = RGBColor(255, 255, 255)
 
-    # Right: Kết quả giữa kỳ & Định hướng cuối kỳ
-    add_card(s14, Inches(6.8), Inches(1.85), Inches(5.7), Inches(4.6), COLOR_EMERALD_BG, COLOR_EMERALD_BORDER)
-    t = s14.shapes.add_textbox(Inches(7.0), Inches(2.0), Inches(5.3), Inches(4.3))
-    tf = t.text_frame
-    tf.word_wrap = True
-    p = tf.paragraphs[0]
-    p.text = "2. Hoàn Thành Giữa Kỳ & Lộ Trình Cuối Kỳ (Nhóm DT005)"
-    p.font.size = Pt(13)
-    p.font.bold = True
-    p.font.color.rgb = COLOR_ACCENT_EMERALD
+    # Dữ liệu 4 hàng nội dung
+    table_data = [
+        ("1. Bản chất thông tin &\nBí mật an toàn (Sec 1–2)",
+         "Coi thông tin là xác suất thống kê; kênh truyền chỉ chịu nhiễu ngẫu nhiên; an toàn tuyệt đối là One-Time Pad.",
+         "Thông tin mang ngữ nghĩa khách quan (Dretske); đối thủ là tác nhân có chủ đích, liên tục tìm cách khai thác.",
+         "Phân định rạch ròi giữa bắt lỗi ngẫu nhiên và an ninh đối kháng; mã tuyến tính (CRC32) không thể thay thế hàm băm phi tuyến (SHA-256)."),
 
-    next_steps = [
-        ("Nghiệm thu tiến độ giữa kỳ:", "Hoàn thành thẩm định học thuật sâu sắc toàn văn bài báo gốc (17 trang PDF), phân tích đầy đủ 7 mục nội dung và làm rõ khoảng cách giữa lý thuyết trừu tượng với an ninh thực tế."),
-        ("Minh bạch phương pháp luận:", "Không ngụy tạo số liệu tác giả; phân định rõ ràng giữa công trình khảo cứu triết học của Halpin và các kịch bản thực nghiệm minh họa độc lập do sinh viên tự xây dựng."),
-        ("Định hướng nghiên cứu cuối kỳ:", "Tiếp tục nghiên cứu và hoàn thiện mô hình cấu trúc cây phân cấp tối ưu cho bài toán kiểm tra toàn vẹn dữ liệu, tiến hành đo đạc và đánh giá thực nghiệm toàn diện.")
+        ("2. Giới hạn của sự\nhình thức hóa (Sec 5)",
+         "Coi thuật toán mật mã là hộp đen toán học lý tưởng; thời gian và phần cứng thực thi là vô hình.",
+         "Sự trừu tượng hóa làm mật mã học mù quáng trước thế giới vật lý: bỏ qua thời gian CPU, năng lượng, lỗi cài đặt.",
+         "Xây dựng hệ thống an toàn đa tầng; áp dụng hàm so sánh thời gian hằng số (hmac.compare_digest) triệt tiêu rò rỉ kênh kề."),
+
+        ("3. Đối thủ trong\nthế giới thực (Sec 6)",
+         "Đối thủ bị giới hạn trong năng lực tính toán đa thức (PPT) hoặc tấn công vào đường truyền (Dolev-Yao).",
+         "Snowden tiết lộ đối thủ thể chế (NSA) có nguồn lực khổng lồ: khai thác siêu dữ liệu, cài cửa sau chuẩn NIST.",
+         "Mở rộng nghiên cứu mật mã chống cửa sau (Cliptography); bảo vệ siêu dữ liệu và cấu trúc dữ liệu minh bạch (RFC 6962)."),
+
+        ("4. Chương trình nghiên cứu\ntương lai (Sec 7)",
+         "Mật mã học là phân nhánh độc lập thuần túy của toán học rời rạc và khoa học máy tính lý thuyết.",
+         "Đặt ra 4 câu hỏi mở: tích hợp phương pháp liên ngành, dùng thống kê lượng hóa đối thủ, mô hình hóa hệ thống phức hợp.",
+         "Kết hợp toán học với triết học nhận thức và dữ liệu thực nghiệm để xây dựng một khoa học an ninh hoàn chỉnh.")
     ]
-    for h, b in next_steps:
-        p_it = tf.add_paragraph()
-        p_it.space_before = Pt(8)
-        r1 = p_it.add_run()
-        r1.text = f"• {h} "
-        r1.font.bold = True
-        r1.font.size = Pt(11)
-        r1.font.color.rgb = COLOR_TEXT_PRIMARY
-        r2 = p_it.add_run()
-        r2.text = b
-        r2.font.size = Pt(10.5)
-        r2.font.color.rgb = COLOR_TEXT_SECONDARY
 
-    # Footer nhỏ gọn ghi chú tài liệu tham khảo chính
-    f_box = s14.shapes.add_textbox(Inches(0.8), Inches(6.6), Inches(11.7), Inches(0.55))
+    for r_idx, (col0, col1, col2, col3) in enumerate(table_data, start=1):
+        bg_row = RGBColor(248, 250, 252) if r_idx % 2 == 1 else RGBColor(255, 255, 255)
+        row_vals = [col0, col1, col2, col3]
+        for c_idx, val in enumerate(row_vals):
+            cell = tbl.cell(r_idx, c_idx)
+            cell.fill.solid()
+            cell.fill.fore_color.rgb = bg_row
+            cell.vertical_anchor = MSO_ANCHOR.MIDDLE
+            tf_cell = cell.text_frame
+            tf_cell.word_wrap = True
+            tf_cell.margin_left = Inches(0.08)
+            tf_cell.margin_right = Inches(0.08)
+            tf_cell.margin_top = Inches(0.05)
+            tf_cell.margin_bottom = Inches(0.05)
+            p_cell = tf_cell.paragraphs[0]
+            p_cell.text = val
+            if c_idx == 0:
+                p_cell.font.bold = True
+                p_cell.font.size = Pt(10)
+                p_cell.font.color.rgb = COLOR_BRAND_BLUE
+            else:
+                p_cell.font.size = Pt(9.5)
+                p_cell.font.color.rgb = COLOR_TEXT_PRIMARY
+
+    f_box = s12.shapes.add_textbox(Inches(0.8), Inches(6.8), Inches(11.7), Inches(0.4))
     tf_f = f_box.text_frame
     p_f = tf_f.paragraphs[0]
     p_f.text = "Tài liệu tham khảo chính: Halpin (2025), Shannon (1949), Goldwasser-Micali (1984), Dolev-Yao (1983), Kocher (1996), RFC 6962."
@@ -959,38 +850,38 @@ def create_deck():
     p_f.font.color.rgb = COLOR_TEXT_MUTED
 
     # =========================================================================
-    # SLIDE 15: SLIDE CẢM ƠN & Q&A (ĐỒNG BỘ THIẾT KẾ 100% VỚI SLIDE BÌA)
+    # SLIDE 13: SLIDE CẢM ƠN & Q&A (ĐỒNG BỘ THIẾT KẾ 100% VỚI SLIDE BÌA)
     # =========================================================================
-    s15 = prs.slides.add_slide(blank_layout)
-    add_bg(s15)
+    s13 = prs.slides.add_slide(blank_layout)
+    add_bg(s13)
 
     # Dải màu xanh dương dọc bên lề trái đồng bộ nhận diện
-    left_bar15 = s15.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.4), Inches(0.8), Inches(0.18), Inches(5.9))
-    left_bar15.fill.solid()
-    left_bar15.fill.fore_color.rgb = COLOR_ACCENT_BLUE
-    left_bar15.line.fill.background()
+    left_bar13 = s13.shapes.add_shape(MSO_SHAPE.RECTANGLE, Inches(0.4), Inches(0.8), Inches(0.18), Inches(5.9))
+    left_bar13.fill.solid()
+    left_bar13.fill.fore_color.rgb = COLOR_ACCENT_BLUE
+    left_bar13.line.fill.background()
 
     # Khối tiêu đề Trường & Khoa ở phần trên
-    t_inst15 = s15.shapes.add_textbox(Inches(1.2), Inches(1.2), Inches(11.0), Inches(0.9))
-    tf_inst15 = t_inst15.text_frame
-    tf_inst15.word_wrap = True
-    p_uni15 = tf_inst15.paragraphs[0]
-    p_uni15.alignment = PP_ALIGN.CENTER
-    p_uni15.text = "Trường Đại học Tài nguyên và Môi trường TP. Hồ Chí Minh"
-    p_uni15.font.size = Pt(15)
-    p_uni15.font.bold = True
-    p_uni15.font.color.rgb = COLOR_TEXT_PRIMARY
+    t_inst13 = s13.shapes.add_textbox(Inches(1.2), Inches(1.2), Inches(11.0), Inches(0.9))
+    tf_inst13 = t_inst13.text_frame
+    tf_inst13.word_wrap = True
+    p_uni13 = tf_inst13.paragraphs[0]
+    p_uni13.alignment = PP_ALIGN.CENTER
+    p_uni13.text = "Trường Đại học Tài nguyên và Môi trường TP. Hồ Chí Minh"
+    p_uni13.font.size = Pt(15)
+    p_uni13.font.bold = True
+    p_uni13.font.color.rgb = COLOR_TEXT_PRIMARY
 
-    p_fac15 = tf_inst15.add_paragraph()
-    p_fac15.alignment = PP_ALIGN.CENTER
-    p_fac15.space_before = Pt(4)
-    p_fac15.text = "Khoa Công nghệ thông tin"
-    p_fac15.font.size = Pt(14)
-    p_fac15.font.bold = True
-    p_fac15.font.color.rgb = COLOR_TEXT_SECONDARY
+    p_fac13 = tf_inst13.add_paragraph()
+    p_fac13.alignment = PP_ALIGN.CENTER
+    p_fac13.space_before = Pt(4)
+    p_fac13.text = "Khoa Công nghệ thông tin"
+    p_fac13.font.size = Pt(14)
+    p_fac13.font.bold = True
+    p_fac13.font.color.rgb = COLOR_TEXT_SECONDARY
 
     # Khối cảm ơn & Q&A ở giữa
-    t_thank = s15.shapes.add_textbox(Inches(1.2), Inches(2.6), Inches(11.0), Inches(2.0))
+    t_thank = s13.shapes.add_textbox(Inches(1.2), Inches(2.6), Inches(11.0), Inches(2.0))
     tf_thank = t_thank.text_frame
     tf_thank.word_wrap = True
 
@@ -1010,43 +901,43 @@ def create_deck():
     p_qa.font.color.rgb = COLOR_TEXT_SECONDARY
 
     # Khối thông tin đề tài & sinh viên ở góc dưới
-    t_info15 = s15.shapes.add_textbox(Inches(1.4), Inches(4.9), Inches(10.0), Inches(1.8))
-    tf_info15 = t_info15.text_frame
-    tf_info15.word_wrap = True
+    t_info13 = s13.shapes.add_textbox(Inches(1.4), Inches(4.9), Inches(10.0), Inches(1.8))
+    tf_info13 = t_info13.text_frame
+    tf_info13.word_wrap = True
 
-    p_t15 = tf_info15.paragraphs[0]
-    p_t15.text = "Đề tài DT005: Hệ thống kiểm tra toàn vẹn tệp bằng SHA-256, HMAC và cây Merkle phân cấp động"
-    p_t15.font.size = Pt(13)
-    p_t15.font.bold = True
-    p_t15.font.color.rgb = COLOR_TEXT_TITLE
+    p_t13 = tf_info13.paragraphs[0]
+    p_t13.text = "Đề tài DT005: Hệ thống kiểm tra toàn vẹn tệp bằng SHA-256, HMAC và cây Merkle phân cấp động"
+    p_t13.font.size = Pt(13)
+    p_t13.font.bold = True
+    p_t13.font.color.rgb = COLOR_TEXT_TITLE
 
-    p_c15 = tf_info15.add_paragraph()
-    p_c15.space_before = Pt(4)
-    p_c15.text = "Học phần: An toàn và bảo mật hệ thống thông tin"
-    p_c15.font.size = Pt(12.5)
-    p_c15.font.color.rgb = COLOR_TEXT_PRIMARY
+    p_c13 = tf_info13.add_paragraph()
+    p_c13.space_before = Pt(4)
+    p_c13.text = "Học phần: An toàn và bảo mật hệ thống thông tin"
+    p_c13.font.size = Pt(12.5)
+    p_c13.font.color.rgb = COLOR_TEXT_PRIMARY
 
-    p_lec15 = tf_info15.add_paragraph()
-    p_lec15.space_before = Pt(4)
-    p_lec15.text = "Giảng viên hướng dẫn: ThS. Phạm Trọng Huynh"
-    p_lec15.font.size = Pt(12.5)
-    p_lec15.font.color.rgb = COLOR_TEXT_PRIMARY
+    p_lec13 = tf_info13.add_paragraph()
+    p_lec13.space_before = Pt(4)
+    p_lec13.text = "Giảng viên hướng dẫn: ThS. Phạm Trọng Huynh"
+    p_lec13.font.size = Pt(12.5)
+    p_lec13.font.color.rgb = COLOR_TEXT_PRIMARY
 
-    p_stu15 = tf_info15.add_paragraph()
-    p_stu15.space_before = Pt(4)
-    r15_1 = p_stu15.add_run()
-    r15_1.text = "Sinh viên thực hiện: "
-    r15_1.font.size = Pt(12.5)
-    r15_1.font.color.rgb = COLOR_TEXT_PRIMARY
-    r15_2 = p_stu15.add_run()
-    r15_2.text = "Võ Anh Kiệt"
-    r15_2.font.bold = True
-    r15_2.font.size = Pt(12.5)
-    r15_2.font.color.rgb = COLOR_BRAND_BLUE
-    r15_3 = p_stu15.add_run()
-    r15_3.text = " — MSSV: 1150080143 — Lớp: 11_CNPM2"
-    r15_3.font.size = Pt(12.5)
-    r15_3.font.color.rgb = COLOR_TEXT_PRIMARY
+    p_stu13 = tf_info13.add_paragraph()
+    p_stu13.space_before = Pt(4)
+    r13_1 = p_stu13.add_run()
+    r13_1.text = "Sinh viên thực hiện: "
+    r13_1.font.size = Pt(12.5)
+    r13_1.font.color.rgb = COLOR_TEXT_PRIMARY
+    r13_2 = p_stu13.add_run()
+    r13_2.text = "Võ Anh Kiệt"
+    r13_2.font.bold = True
+    r13_2.font.size = Pt(12.5)
+    r13_2.font.color.rgb = COLOR_BRAND_BLUE
+    r13_3 = p_stu13.add_run()
+    r13_3.text = " — MSSV: 1150080143 — Lớp: 11_CNPM2"
+    r13_3.font.size = Pt(12.5)
+    r13_3.font.color.rgb = COLOR_TEXT_PRIMARY
 
     # Lưu file
     out_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "docs")

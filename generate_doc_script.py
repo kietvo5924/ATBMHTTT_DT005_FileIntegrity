@@ -291,46 +291,26 @@ def create_document():
         # SLIDE 10
         {
             "num": 10,
-            "title": "PHƯƠNG PHÁP LUẬN & KHẢ NĂNG TÁI LẬP BÀI BÁO",
-            "time": "1:00",
-            "header": "ĐÁNH GIÁ PHƯƠNG PHÁP LUẬN & HƯỚNG TIẾP CẬN THỰC NGHIỆM",
-            "lead": "Làm rõ tính khả thi tái lập đối với công trình triết học và định hướng thí nghiệm độc lập",
+            "title": "KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG: RED TEAM VS BLUE TEAM",
+            "time": "0:45",
+            "header": "SƠ ĐỒ 4: KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG (PRE-DEMO ARCHITECTURE)",
+            "lead": "Mô hình đối kháng 2 màn hình trên tập dữ liệu kaggle_dataset (2.485 tệp tin) kiểm chứng trực quan luận điểm bài báo",
             "bullets": [
-                ("Khảo luận triết học thuần túy:", "Bài báo của TS. Harry Halpin là nghiên cứu nhận thức luận, hoàn toàn không có mã nguồn, không có tập dữ liệu hay bảng đo benchmark."),
-                ("Không tuyên bố sai lệch:", "Nhóm thẩm định toàn văn 17 trang PDF và 134 tài liệu tham khảo; tuyệt đối không bịa đặt số liệu hay tuyên bố 'tái lập 100% benchmark' của tác giả."),
-                ("Minh họa trực quan luận điểm:", "Sinh viên tự phát triển hệ thống kiểm tra toàn vẹn tệp để đưa các luận điểm đối kháng trừu tượng của Halpin vào kiểm chứng thực nghiệm."),
-                ("Phân định ranh giới rạch ròi:", "Mã nguồn và kịch bản đối kháng là sản phẩm độc lập của sinh viên, không phải thuật toán của Halpin (lưu vết tại MIDTERM_CODE_AUDIT.md).")
+                ("1. Sơ đồ diễn tập 2 màn hình:", "Màn hình trái là Blue Team (Port 8080) giám sát toàn vẹn tệp; màn hình phải là Red Team (Port 8081) thực hiện can thiệp."),
+                ("2. Dữ liệu thực nghiệm:", "Thư mục kaggle_dataset (2.485 tệp tin) đóng vai trò môi trường kiểm thử thực tế để đo kiểm tra toàn vẹn."),
+                ("3. Cầu nối minh họa độc lập (Paper-to-Code):", "Bài báo Halpin là khảo luận triết học thuần túy (không có code). Hệ thống kiểm chứng trực quan 3 luận điểm: (1) Mã CRC32 bị qua mặt trên GF(2) vs SHA-256 phi tuyến; (2) Phân tách miền nút lá RFC 6962; (3) Kênh kề thời gian so sánh chuỗi."),
+                ("4. Cơ chế hoàn nguyên an toàn:", "Thư mục .adversary_backups/ phục hồi nguyên trạng 100% dữ liệu với nút Rollback All.")
             ],
             "explanation": (
-                "Giải thích dễ hiểu:\n"
-                "Tại sao bài báo không có code mà đề tài lại có demo? Bài báo là nghiên cứu triết học, không có mã nguồn hay số liệu sẵn. Nhóm tự xây dựng phần mềm để minh họa các luận điểm của tác giả, chứ không bịa đặt số liệu của bài báo."
+                "Hướng dẫn thuyết minh ngắn gọn:\n"
+                "Đây là sơ đồ bố trí màn hình trước khi Demo: màn hình phải tấn công, màn hình trái phát hiện. Nhóm tự phát triển phần mềm này để minh họa trực quan cho các luận điểm của tác giả. Nói ngắn gọn trong 30 giây để chuyển ngay vào màn hình Demo trực tiếp."
             ),
-            "footer": "Báo cáo phân định phương pháp luận độc lập của nhóm nghiên cứu đề tài DT005."
+            "footer": "Sơ đồ kiến trúc diễn tập đối kháng độc lập do sinh viên thiết kế minh họa các khái niệm an ninh."
         },
 
         # SLIDE 11
         {
             "num": 11,
-            "title": "MINH HỌA PAPER-TO-CODE ĐỘC LẬP & GIỚI HẠN DIỄN GIẢI",
-            "time": "1:15",
-            "header": "SƠ ĐỒ 4: PHÂN ĐỊNH LÝ THUYẾT & THÍ NGHIỆM ĐỘC LẬP",
-            "lead": "Đối sánh minh bạch giữa các luận điểm bài báo và thí nghiệm minh họa do sinh viên xây dựng",
-            "bullets": [
-                ("1. Nhiễu vs Đối thủ chủ đích:", "Halpin (Sec. 1–2): Mã tuyến tính chỉ bắt lỗi ngẫu nhiên, không cản được đối thủ có chủ đích. Minh họa DT005: Giải hệ GF(2) bù 4 byte qua mặt CRC32; SHA-256 phát hiện ngay nhờ tính phi tuyến. Giới hạn: Chỉ minh họa kịch bản giả mạo cụ thể; không phủ nhận vai trò bắt lỗi phần cứng của CRC32."),
-                ("2. Phân tách miền nút lá:", "Lý thuyết bài báo: Halpin nhấn mạnh điểm mù cấu trúc dữ liệu, nhưng không đề cập cây Merkle. Minh họa DT005: Cài đặt chuẩn RFC 6962 (tiền tố 0x00 cho lá, 0x01 cho nhánh) để tránh nhầm lẫn cấu trúc cây. Giới hạn: Đây là giải pháp kỹ thuật độc lập do sinh viên tích hợp, không phải đề xuất của Halpin."),
-                ("3. Rò rỉ kênh kề thời gian:", "Halpin (Sec. 5): Thời gian xử lý thực tế làm rò rỉ dữ liệu ngoài mô hình toán (dẫn Kocher 1996). Minh họa DT005: Đo đạc so sánh chuỗi ngắt sớm làm rò rỉ ký tự; áp dụng hàm thời gian hằng số hmac.compare_digest. Giới hạn: Chỉ minh họa rò rỉ logic ở mức phần mềm ứng dụng; đo trên Python có độ trễ hệ điều hành.")
-            ],
-            "explanation": (
-                "Giải thích dễ hiểu:\n"
-                "• CRC32 vs SHA-256: CRC32 chỉ bắt lỗi đường truyền ngẫu nhiên. Kẻ tấn công tính được 4 byte bù để sửa tệp mà mã CRC32 không đổi. Còn SHA-256 đổi 1 bit là mã băm đổi hoàn toàn nên không làm giả được.\n"
-                "• Phân tách miền RFC 6962: Gắn nhãn 0x00 cho lá và 0x01 cho nhánh để cây không bị nhầm lẫn dữ liệu."
-            ),
-            "footer": "Bảng đối chiếu minh bạch do sinh viên tự xây dựng; chi tiết mã nguồn lưu tại MIDTERM_CODE_AUDIT.md."
-        },
-
-        # SLIDE 12
-        {
-            "num": 12,
             "title": "SLIDE CHUYỂN TIẾP: DEMO",
             "time": "0:15",
             "header": "GIAO DIỆN TỐI GIẢN NỀN SÁNG CHUẨN BỊ DIỄN TẬP TRỰC TIẾP",
@@ -345,46 +325,33 @@ def create_document():
             "footer": "Slide chuyển tiếp phần diễn tập thực hành đối kháng an ninh."
         },
 
-        # SLIDE 13
+        # SLIDE 12
         {
-            "num": 13,
-            "title": "KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG: RED TEAM VS BLUE TEAM",
-            "time": "0:45",
-            "header": "SƠ ĐỒ 5: KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG (DEMO ARCHITECTURE)",
-            "lead": "Mô hình đối kháng thực tế 2 màn hình trên tập dữ liệu kaggle_dataset (2.485 tệp tin / ~112,81 MiB theo benchmark)",
+            "num": 12,
+            "title": "BẢNG TỔNG KẾT BÁO CÁO: ĐÓNG GÓP HỌC THUẬT & BÀI HỌC AN NINH",
+            "time": "1:00",
+            "header": "SECTION 7 — TỔNG KẾT TOÀN VĂN BÀI BÁO (HARRY HALPIN 2025)",
+            "lead": "Bảng đối sánh giữa các giả định hình thức truyền thống và nhận thức luận của Harry Halpin",
             "bullets": [
-                ("1. Mô hình diễn tập 2 màn hình:", "Màn hình trái là Blue Team (Port 8080) giám sát toàn vẹn tệp; màn hình phải là Red Team (Port 8081) thực hiện can thiệp."),
-                ("2. Dữ liệu thực nghiệm:", "Thư mục kaggle_dataset (2.485 tệp tin) mô phỏng cấu trúc tệp thực tế để đo kiểm tra toàn vẹn."),
-                ("3. Kịch bản minh họa & Hoàn nguyên:", "Red Team sửa tệp hoặc bù byte qua mặt CRC32; Blue Team phát hiện gian lận và có nút Rollback All để hoàn nguyên dữ liệu gốc an toàn.")
+                ("1. Bản chất thông tin & Bí mật (Sec 1–2):", "Từ bỏ giả định nhiễu ngẫu nhiên của Shannon; đối thủ là tác nhân có chủ đích; mã tuyến tính CRC32 không thể thay thế hàm băm phi tuyến SHA-256."),
+                ("2. Giới hạn trừu tượng hóa (Sec 5):", "Vượt qua hộp đen toán học lý tưởng; xây dựng hệ thống an toàn đa tầng; triệt tiêu kênh kề thời gian bằng hàm hằng số (hmac.compare_digest)."),
+                ("3. Đối thủ thế giới thực (Sec 6):", "Snowden chứng minh đối thủ thể chế (NSA) tấn công chuỗi cung ứng và cài cửa sau; cần nghiên cứu Cliptography và phân tách miền minh bạch (RFC 6962)."),
+                ("4. Chương trình nghiên cứu tương lai (Sec 7):", "Liên ngành hóa mật mã học: kết hợp toán học, thống kê lượng hóa đối thủ, hệ thống phức hợp và triết học nhận thức.")
             ],
             "explanation": (
-                "Hướng dẫn thuyết minh:\n"
-                "Đây là sơ đồ bố trí màn hình cho buổi Demo: màn hình phải tấn công, màn hình trái phát hiện. Nói ngắn gọn trong 20-30 giây để chuyển ngay vào màn hình Demo trực tiếp."
-            ),
-            "footer": "Sơ đồ kiến trúc diễn tập đối kháng độc lập do sinh viên thiết kế minh họa các khái niệm an ninh."
-        },
-
-        # SLIDE 14
-        {
-            "num": 14,
-            "title": "TỔNG KẾT BÁO CÁO GIỮA KỲ & ĐỊNH HƯỚNG NGHIÊN CỨU",
-            "time": "0:45",
-            "header": "SECTION 7 — KẾT LUẬN & THÔNG ĐIỆP HỌC THUẬT",
-            "lead": "Tổng kết các đóng góp lý thuyết của Halpin và định hướng nghiên cứu tiếp theo",
-            "bullets": [
-                ("1. Đóng góp bài báo (Halpin 2025):", "Vượt qua sự trừu tượng hóa toán học để nhìn nhận đúng đối thủ thực tế; xác định đối thủ là tác nhân có chủ đích; mở ra chương trình nghiên cứu an ninh liên ngành."),
-                ("2. Kết quả giữa kỳ & Lộ trình (DT005):", "Hoàn thành thẩm định bài báo gốc 17 trang; minh bạch ranh giới giữa lý thuyết và phần mềm minh họa độc lập; định hướng cuối kỳ tiếp tục nghiên cứu cấu trúc cây xác thực phân cấp.")
-            ],
-            "explanation": (
-                "Tổng kết ngắn gọn:\n"
-                "Đề tài hoàn thành thẩm định lý thuyết bài báo và xây dựng xong bộ demo đối kháng minh họa. Cuối kỳ sẽ tập trung tối ưu hóa cấu trúc cây cho dữ liệu lớn."
+                "Hướng dẫn thuyết minh Bảng tổng kết:\n"
+                "Bảng này đúc kết 4 trụ cột cốt lõi của toàn văn bài báo Halpin:\n"
+                "• Trụ cột 1: Đối thủ là tác nhân có chủ đích, không phải nhiễu ngẫu nhiên.\n"
+                "• Trụ cột 2: Mật mã học trên giấy không bảo vệ được trước các đòn tấn công kênh kề vật lý.\n"
+                "• Trụ cột 3: Đối thủ thể chế tấn công vào chuỗi cung ứng chứ không phá toán học.\n"
+                "• Trụ cột 4: Mật mã học tương lai cần liên ngành với thống kê và triết học."
             ),
             "footer": "Tài liệu tham khảo chính: Halpin (2025), Shannon (1949), Goldwasser-Micali (1984), Dolev-Yao (1983), Kocher (1996), RFC 6962."
         },
 
-        # SLIDE 15
+        # SLIDE 13
         {
-            "num": 15,
+            "num": 13,
             "title": "CẢM ƠN & PHIÊN PHẢN BIỆN (Q&A)",
             "time": "0:15",
             "header": "Trường ĐH Tài nguyên và Môi trường TP.HCM — Khoa Công nghệ thông tin",
@@ -520,7 +487,7 @@ def create_document():
         ("Bước 2: Thiết lập mốc tin cậy sạch tại Blue Team (Port 8080)",
          "Tại cổng 8080, chọn thư mục 'kaggle_dataset' (~112.8 MB).\n"
          "Bấm 'Nạp & Tính toán Toàn vẹn'. Hệ thống sinh Root Hash ban đầu H_0 sạch với trạng thái xanh: '100% NGUYÊN VẸN'.\n"
-         "Ý nghĩa: Minh họa việc thiết lập trạng thái tin cậy khách quan theo Dretske."),
+         "Điểm nói lý thuyết (Paper-to-Code): Minh họa việc thiết lập trạng thái tin cậy khách quan theo Dretske. Hệ thống áp dụng chuẩn RFC 6962 (tiền tố 0x00 cho lá, 0x01 cho nhánh) khi băm cây dữ liệu, giải quyết triệt để điểm mù nhập nhằng cấu trúc dữ liệu mà Halpin cảnh báo tại Mục 5."),
 
         ("Bước 3: Phát động Kịch bản 1 — Can thiệp tệp tin tại Red Team (Port 8081)",
          "Tại cổng 8081, bấm 'Can thiệp tệp tin ngẫu nhiên' (In-place Tampering) để sửa đổi tệp Resume/Resume.csv trên đĩa.\n"
@@ -534,7 +501,7 @@ def create_document():
          "Quay lại Blue Team (Port 8080), bấm 'Kiểm tra toàn vẹn':\n"
          "• Bảng đối chứng hiển thị: Thuật toán CRC32 bị qua mặt (báo khớp sai do tính chất tuyến tính).\n"
          "• Ngược lại, hàm băm SHA-256 phát hiện gian lận ngay lập tức nhờ tính phi tuyến.\n"
-         "Ý nghĩa: Phân biệt rõ mã phát hiện lỗi ngẫu nhiên và mật mã học trước đối thủ có chủ đích."),
+         "Điểm nói lý thuyết (Paper-to-Code): Minh họa trực tiếp luận điểm Halpin (Mục 1 & 2): Mã kiểm tra tuyến tính (CRC32) chỉ bắt được nhiễu ngẫu nhiên trong truyền dẫn, hoàn toàn bất lực trước kẻ thù có chủ đích. Ngược lại, hàm băm mật mã SHA-256 có tính phi tuyến và hiệu ứng tuyết lở (~50% bit đảo khi sửa 1 bit), ngăn chặn kẻ thù bẻ gãy bằng đại số."),
 
         ("Bước 5: Hoàn nguyên dữ liệu sạch (Rollback All)",
          "Tại giao diện Red Team (Port 8081), bấm 'ROLLBACK ALL' để khôi phục toàn bộ tệp từ thư mục sao lưu .adversary_backups/.\n"
@@ -570,7 +537,7 @@ def create_document():
     cli_text = (
         "1. Chạy Suite Kiểm định Toán học Đối kháng:\n"
         "   Lệnh: python -m src.proposed_model.security_games\n"
-        "   Kết quả: Đo đạc tính phi tuyến của SHA-256, hiệu ứng tuyết lở SAC ~50%, kịch bản bẻ gãy mã tuyến tính CRC32 trên GF(2), và kênh kề thời gian so sánh chuỗi.\n\n"
+        "   Kết quả & Điểm nói lý thuyết: Đo đạc tính phi tuyến của SHA-256, hiệu ứng tuyết lở SAC ~50%, kịch bản bẻ gãy mã tuyến tính CRC32 trên GF(2), và kiểm chứng rò rỉ kênh kề thời gian (Kocher 1996 - Mục 5 bài báo) khi so sánh chuỗi ngắt sớm so với hàm thời gian hằng số hmac.compare_digest.\n\n"
         "2. Diễn tập 2 Terminal Red Team vs Blue Team:\n"
         "   • Terminal 1 (Red Team): Chạy 'python src/adversary/red_team_cli.py'. Chọn phím '1' can thiệp tệp, hoặc phím '4' bù mã CRC32.\n"
         "   • Terminal 2 (Blue Team): Chạy 'python -m src.baselines.sha256_manifest --dir kaggle_dataset --verify'. Blue Team phát hiện vi phạm: MODIFIED_FILE: Resume/Resume.csv.\n"
