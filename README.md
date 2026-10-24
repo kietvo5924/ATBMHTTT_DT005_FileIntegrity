@@ -3,7 +3,7 @@
 **Môn học:** An Toàn và Bảo Mật Hệ Thống Thông Tin  
 **Mã đề tài:** DT005  
 **Bài báo tham chiếu lý thuyết:** *The adversary: the philosophy of cryptography*, Harry Halpin (*Journal of Cybersecurity*, Oxford Academic, DOI: [10.1093/cybsec/tyaf006](https://doi.org/10.1093/cybsec/tyaf006), 2025).  
-*Ghi chú khoa học:* Bài báo của Harry Halpin (2025) là công trình nghiên cứu triết học và mô hình hóa hình thức về Kẻ tấn công (The Adversary, Dolev-Yao, Random Oracle, Biba Integrity), không chứa mã nguồn hay số liệu benchmark định lượng. Toàn bộ kiến trúc kỹ thuật, mã nguồn thực nghiệm, bộ kiểm định an toàn toán học và số liệu benchmark trong đề tài DT005 là nghiên cứu thực nghiệm độc lập của nhóm sinh viên trên tập dữ liệu thực tế.
+*Ghi chú khoa học:* Bài báo của Harry Halpin (2025) là công trình nghiên cứu triết học và mô hình hóa hình thức về Kẻ tấn công (The Adversary, Dolev-Yao, Random Oracle, Biba Integrity), không chứa mã nguồn hay số liệu benchmark định lượng. Toàn bộ kiến trúc kỹ thuật, mã nguồn thực nghiệm, bộ kiểm định an toàn toán học và số liệu benchmark trong đề tài DT005 là nghiên cứu thực nghiệm độc lập của sinh viên trên tập dữ liệu thực tế.
 
 ---
 
@@ -141,8 +141,10 @@ python -m src.benchmark.deduplicate_dataset --dir "kaggle_dataset"
   ```bash
   python -m src.benchmark.run_benchmark --dir "kaggle_dataset" --runs 5 --results-dir results
   ```
-- **Slide Báo Cáo Thuyết Trình Giữa Kỳ:**
-  - `docs/Bao_Cao_Giua_Ky_DT05.pptx`: Slide PowerPoint 16:9 chuẩn 10 slide phục vụ báo cáo hội đồng.
+- **Hồ Sơ Báo Cáo & Thuyết Trình Giữa Kỳ:**
+  - [`docs/Bao_Cao_Giua_Ky_DT05_Replication.pptx`](docs/Bao_Cao_Giua_Ky_DT05_Replication.pptx): Slide thuyết trình PowerPoint 16:9 chuẩn 14 slide (chuyên sâu tái lập bài báo Halpin 2025 và giải trình mô hình đề xuất).
+  - [`docs/Kich_Ban_Thuyet_Trinh_Va_Demo_DT005.docx`](docs/Kich_Ban_Thuyet_Trinh_Va_Demo_DT005.docx): Kịch bản đọc thuyết trình từng slide, kịch bản demo đối kháng Red/Blue team và bộ câu hỏi phản biện bảo vệ trước hội đồng.
+  - [`AUDIT_PAPER_REPLICATION.md`](AUDIT_PAPER_REPLICATION.md): Báo cáo kiểm toán học thuật chi tiết 17 trang PDF, 7 mục lý thuyết, 134 tài liệu tham khảo và phương án tái lập toán học.
 
 ---
 

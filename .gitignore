@@ -32,7 +32,7 @@ kaggle_dataset/
 *.tar.gz
 
 # Documentation
-docs/
+# docs/
 
 # Benchmark Results (Được lưu trữ để phục vụ báo cáo và nộp bài theo yêu cầu đề tài)
 # results/
