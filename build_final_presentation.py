@@ -1023,16 +1023,62 @@ def create_deck():
     p_f.font.color.rgb = COLOR_TEXT_MUTED
 
     # =========================================================================
-    # SLIDE 13: DEMO THỰC NGHIỆM ĐỐI KHÁNG (RED TEAM VS BLUE TEAM)
+    # SLIDE 13: SLIDE CHUYỂN TIẾP: DEMO THỰC NGHIỆM
     # =========================================================================
     s13 = prs.slides.add_slide(blank_layout)
-    add_bg(s13)
-    add_header(s13, "DEMO THỰC NGHIỆM ĐỐI KHÁNG: RED TEAM VS BLUE TEAM", "THÍ NGHIỆM MINH HỌA ĐỘC LẬP DO SINH VIÊN THIẾT KẾ",
+    # Background trang nhã Dark Navy tạo điểm nhấn chuyển giao mạnh mẽ
+    bg_demo = s13.shapes.add_shape(MSO_SHAPE.RECTANGLE, 0, 0, prs.slide_width, prs.slide_height)
+    bg_demo.fill.solid()
+    bg_demo.fill.fore_color.rgb = COLOR_BRAND_NAVY
+    bg_demo.line.fill.background()
+
+    # Thẻ trung tâm
+    t_demo = s13.shapes.add_textbox(Inches(1.5), Inches(2.2), Inches(10.333), Inches(3.0))
+    tf_demo = t_demo.text_frame
+    tf_demo.word_wrap = True
+
+    p_badge = tf_demo.paragraphs[0]
+    p_badge.alignment = PP_ALIGN.CENTER
+    p_badge.text = "DIỄN TẬP AN NINH MẠNG TRỰC TIẾP"
+    p_badge.font.size = Pt(13)
+    p_badge.font.bold = True
+    p_badge.font.color.rgb = RGBColor(56, 189, 248)
+
+    p_main = tf_demo.add_paragraph()
+    p_main.alignment = PP_ALIGN.CENTER
+    p_main.space_before = Pt(16)
+    p_main.text = "DEMO"
+    p_main.font.size = Pt(64)
+    p_main.font.bold = True
+    p_main.font.color.rgb = RGBColor(255, 255, 255)
+
+    p_sub = tf_demo.add_paragraph()
+    p_sub.alignment = PP_ALIGN.CENTER
+    p_sub.space_before = Pt(16)
+    p_sub.text = "HỆ THỐNG GIÁM SÁT TOÀN VẸN TỆP & MÔ HÌNH ĐỐI KHÁNG RED TEAM VS BLUE TEAM"
+    p_sub.font.size = Pt(15)
+    p_sub.font.bold = True
+    p_sub.font.color.rgb = RGBColor(226, 232, 240)
+
+    p_note = tf_demo.add_paragraph()
+    p_note.alignment = PP_ALIGN.CENTER
+    p_note.space_before = Pt(8)
+    p_note.text = "Minh họa thực nghiệm các luận điểm lý thuyết: Can thiệp dữ liệu, Nhập nhằng nút lá RFC 6962, và So sánh chuỗi thời gian hằng số"
+    p_note.font.size = Pt(11)
+    p_note.font.italic = True
+    p_note.font.color.rgb = RGBColor(148, 163, 184)
+
+    # =========================================================================
+    # SLIDE 14: KẾT QUẢ THỰC NGHIỆM MINH HỌA ĐỘC LẬP (RED TEAM VS BLUE TEAM)
+    # =========================================================================
+    s14 = prs.slides.add_slide(blank_layout)
+    add_bg(s14)
+    add_header(s14, "KẾT QUẢ THỰC NGHIỆM MINH HỌA ĐỘC LẬP: RED TEAM VS BLUE TEAM", "THÍ NGHIỆM MINH HỌA ĐỘC LẬP DO SINH VIÊN THIẾT KẾ",
                "Diễn tập an ninh mạng trực quan minh họa các luận điểm đối thủ trên tập dữ liệu thực tế")
 
     # Left: Architecture & Scenarios
-    add_card(s13, Inches(0.8), Inches(1.85), Inches(5.7), Inches(4.8), COLOR_BG_PANEL, COLOR_BORDER_BLUE)
-    t = s13.shapes.add_textbox(Inches(1.0), Inches(2.0), Inches(5.3), Inches(4.5))
+    add_card(s14, Inches(0.8), Inches(1.85), Inches(5.7), Inches(4.8), COLOR_BG_PANEL, COLOR_BORDER_BLUE)
+    t = s14.shapes.add_textbox(Inches(1.0), Inches(2.0), Inches(5.3), Inches(4.5))
     tf = t.text_frame
     tf.word_wrap = True
 
@@ -1069,8 +1115,8 @@ def create_deck():
         r2.font.color.rgb = COLOR_TEXT_SECONDARY
 
     # Right: Real Execution Log & Limitations
-    add_card(s13, Inches(6.8), Inches(1.85), Inches(5.7), Inches(4.8), COLOR_EMERALD_BG, COLOR_EMERALD_BORDER)
-    t = s13.shapes.add_textbox(Inches(7.0), Inches(2.0), Inches(5.3), Inches(4.5))
+    add_card(s14, Inches(6.8), Inches(1.85), Inches(5.7), Inches(4.8), COLOR_EMERALD_BG, COLOR_EMERALD_BORDER)
+    t = s14.shapes.add_textbox(Inches(7.0), Inches(2.0), Inches(5.3), Inches(4.5))
     tf = t.text_frame
     tf.word_wrap = True
 
@@ -1082,7 +1128,7 @@ def create_deck():
 
     p_log = tf.add_paragraph()
     p_log.space_before = Pt(6)
-    p_log.text = "[LOG THỰC TẾ: python -m src.proposed_model.security_games]\n[*] Thư mục kiểm định : kaggle_dataset (2,483 tệp tin)\n[*] PPT Integrity Game: Phát hiện 100/100 phép thử (Tỷ lệ = 0.0)\n[*] Dolev-Yao Network : Chặn đứng 3/3 kịch bản (Swap, Tamper, Replay)\n[*] Consistency Proof : Xác thực nhất quán chỉ-thêm RFC 6962\n[*] Tuyết lở SAC Monte Carlo: 127.28/256 bit biến đổi (~49.72%)\n[*] Thời gian tổng cộng: 2,885.53 ms (Đạt chuẩn 7/7 thí nghiệm)"
+    p_log.text = "[LOG THỰC TẾ: python -m src.proposed_model.security_games]\n[*] Thư mục kiểm định : kaggle_dataset (2,483 tệp tin)\n[*] PPT Integrity Game: Phát hiện 100/100 phép thử (Tỷ lệ = 0.0)\n[*] Dolev-Yao Network : Chặn đứng 3/3 kịch bản (Swap, Tamper, Replay)\n[*] Consistency Proof : Xác thực nhất quán chỉ-thêm RFC 6962\n[*] Tuyết lở SAC Monte Carlo: 128.00/256 bit biến đổi (~50.00%)\n[*] Thời gian tổng cộng: 2,885.05 ms (Đạt chuẩn 7/7 thí nghiệm)"
     p_log.font.size = Pt(9)
     p_log.font.name = "Consolas"
     p_log.font.color.rgb = COLOR_BRAND_NAVY
@@ -1105,7 +1151,7 @@ def create_deck():
         r2.font.size = Pt(10)
         r2.font.color.rgb = COLOR_TEXT_SECONDARY
 
-    f_box = s13.shapes.add_textbox(Inches(0.8), Inches(6.8), Inches(11.7), Inches(0.4))
+    f_box = s14.shapes.add_textbox(Inches(0.8), Inches(6.8), Inches(11.7), Inches(0.4))
     tf_f = f_box.text_frame
     p_f = tf_f.paragraphs[0]
     p_f.text = "Số liệu thực tế đo đạc trực tiếp từ mã nguồn đề tài DT005; xem hướng dẫn chạy tại MIDTERM_DEMO.md."
@@ -1114,29 +1160,29 @@ def create_deck():
     p_f.font.color.rgb = COLOR_TEXT_MUTED
 
     # =========================================================================
-    # SLIDE 14: KẾT LUẬN & TÀI LIỆU THAM KHẢO
+    # SLIDE 15: KẾT LUẬN & ĐỊNH HƯỚNG BÁO CÁO GIỮA KỲ
     # =========================================================================
-    s14 = prs.slides.add_slide(blank_layout)
-    add_bg(s14)
-    add_header(s14, "TỔNG KẾT BÁO CÁO GIỮA KỲ & TÀI LIỆU THAM KHẢO", "SECTION 7 — KẾT LUẬN & NGUỒN THAM CHIẾU HỌC THUẬT",
-               "Tổng kết các luận điểm chính của Halpin, bài học thiết kế an ninh và danh mục tài liệu")
+    s15 = prs.slides.add_slide(blank_layout)
+    add_bg(s15)
+    add_header(s15, "TỔNG KẾT BÁO CÁO GIỮA KỲ & ĐỊNH HƯỚNG NGHIÊN CỨU", "SECTION 7 — KẾT LUẬN & THÔNG ĐIỆP HỌC THUẬT",
+               "Tổng kết các đóng góp lý thuyết của Halpin và lộ trình kỹ thuật cho giai đoạn cuối kỳ")
 
-    # Left: Conclusion
-    add_card(s14, Inches(0.8), Inches(1.85), Inches(5.7), Inches(4.8), COLOR_BG_PANEL, COLOR_BORDER_BLUE)
-    t = s14.shapes.add_textbox(Inches(1.0), Inches(2.0), Inches(5.3), Inches(4.5))
+    # Left: Đóng góp bài báo Halpin
+    add_card(s15, Inches(0.8), Inches(1.85), Inches(5.7), Inches(4.6), COLOR_BG_PANEL, COLOR_BORDER_BLUE)
+    t = s15.shapes.add_textbox(Inches(1.0), Inches(2.0), Inches(5.3), Inches(4.3))
     tf = t.text_frame
     tf.word_wrap = True
 
     p = tf.paragraphs[0]
-    p.text = "1. Tổng Kết Thông Điệp Học Thuật Của Bài Báo"
+    p.text = "1. Thông Điệp Học Thuật Cốt Lõi (Harry Halpin 2025)"
     p.font.size = Pt(13)
     p.font.bold = True
     p.font.color.rgb = COLOR_BRAND_BLUE
 
     conclusions = [
-        ("Bài học từ Halpin:", "Mật mã học không chỉ là toán học thuần túy trên giấy tờ. Các hệ thống an toàn trong thế giới thực phải nhận thức rõ khoảng cách giữa mô hình trừu tượng và thực tế triển khai (kênh kề, siêu dữ liệu, chuỗi cung ứng, thể chế)."),
-        ("Đóng góp của Halpin:", "Đặt nền móng triết học cho mật mã học, phân tích nhận thức luận về kẻ thù và vạch ra 4 hướng nghiên cứu mở nhằm mở rộng mật mã thành một khoa học an ninh hoàn chỉnh."),
-        ("Hoàn thành mục tiêu giữa kỳ:", "Nhóm sinh viên DT005 đã thẩm định học thuật sâu sắc toàn văn bài báo gốc (17 trang PDF) và xây dựng thành công bộ thí nghiệm minh họa thực nghiệm sống động phục vụ báo cáo hội đồng.")
+        ("Vượt qua sự trừu tượng hóa:", "Mật mã học không chỉ là toán học thuần túy trên giấy tờ. Các hệ thống an toàn trong thế giới thực phải nhận thức rõ khoảng cách giữa mô hình lý tưởng và thực tế vật lý (kênh kề, siêu dữ liệu, chuỗi cung ứng, áp lực thể chế)."),
+        ("Bản chất của đối thủ:", "Đối thủ không phải là 'nhiễu ngẫu nhiên' mà là tác nhân có chủ đích, liên tục tìm kiếm các kênh rò rỉ bị mô hình toán học bỏ qua."),
+        ("Chương trình nghiên cứu mở:", "Halpin đặt nền móng triết học và vạch ra 4 câu hỏi nghiên cứu liên ngành nhằm mở rộng mật mã học thành một khoa học an ninh hoàn chỉnh.")
     ]
     for h, b in conclusions:
         p_it = tf.add_paragraph()
@@ -1151,46 +1197,42 @@ def create_deck():
         r2.font.size = Pt(10.5)
         r2.font.color.rgb = COLOR_TEXT_SECONDARY
 
-    # Right: References
-    add_card(s14, Inches(6.8), Inches(1.85), Inches(5.7), Inches(4.8), COLOR_BG_PANEL, COLOR_BORDER)
-    t = s14.shapes.add_textbox(Inches(7.0), Inches(2.0), Inches(5.3), Inches(4.5))
+    # Right: Kết quả giữa kỳ & Định hướng cuối kỳ
+    add_card(s15, Inches(6.8), Inches(1.85), Inches(5.7), Inches(4.6), COLOR_EMERALD_BG, COLOR_EMERALD_BORDER)
+    t = s15.shapes.add_textbox(Inches(7.0), Inches(2.0), Inches(5.3), Inches(4.3))
     tf = t.text_frame
     tf.word_wrap = True
 
     p = tf.paragraphs[0]
-    p.text = "2. Tài Liệu Tham Khảo Chọn Lọc (Key References)"
+    p.text = "2. Hoàn Thành Giữa Kỳ & Lộ Trình Cuối Kỳ (Nhóm DT005)"
     p.font.size = Pt(13)
     p.font.bold = True
-    p.font.color.rgb = COLOR_TEXT_TITLE
+    p.font.color.rgb = COLOR_ACCENT_EMERALD
 
-    refs = [
-        ("[1] H. Halpin,", "The adversary: the philosophy of cryptography, Journal of Cybersecurity, Oxford Academic, Vol. 11, No. 1, tyaf006, 2025."),
-        ("[2] C. E. Shannon,", "A mathematical theory of communication, Bell Syst. Tech. J., 1948."),
-        ("[3] C. E. Shannon,", "Communication theory of secrecy systems, Bell Syst. Tech. J., 1949."),
-        ("[4] S. Goldwasser & S. Micali,", "Probabilistic encryption, JCSS, 1984."),
-        ("[5] D. Dolev & A. Yao,", "On the security of public key protocols, IEEE TIT, 1983."),
-        ("[6] M. Bellare & P. Rogaway,", "Random oracles are practical, ACM CCS, 1993."),
-        ("[7] P. Kocher,", "Timing attacks on implementations of Diffie-Hellman, RSA, DSS, Crypto, 1996."),
-        ("[8] B. Laurie et al.,", "Certificate Transparency, IETF RFC 6962, 2013.")
+    next_steps = [
+        ("Nghiệm thu tiến độ giữa kỳ:", "Hoàn thành thẩm định học thuật sâu sắc toàn văn bài báo gốc (17 trang PDF), phân tích đầy đủ 7 mục nội dung và xây dựng bộ diễn tập minh họa thực nghiệm sống động phục vụ báo cáo."),
+        ("Minh bạch phương pháp luận:", "Không ngụy tạo số liệu tác giả; phân định rạch ròi giữa công trình triết học của Halpin và các thử nghiệm độc lập của sinh viên."),
+        ("Lộ trình nghiên cứu cuối kỳ:", "Đề xuất phát triển chuyên sâu giải pháp tối ưu hóa cấu trúc cây Merkle phân cấp (HD-Merkle Dirty-Path Caching, nén CompactProof O(1)) làm đóng góp kỹ thuật trọng tâm cho đồ án cuối kỳ.")
     ]
-    for h, b in refs:
+    for h, b in next_steps:
         p_it = tf.add_paragraph()
-        p_it.space_before = Pt(4)
+        p_it.space_before = Pt(8)
         r1 = p_it.add_run()
-        r1.text = f"{h} "
+        r1.text = f"• {h} "
         r1.font.bold = True
-        r1.font.size = Pt(9.5)
-        r1.font.color.rgb = COLOR_BRAND_BLUE
+        r1.font.size = Pt(11)
+        r1.font.color.rgb = COLOR_TEXT_PRIMARY
         r2 = p_it.add_run()
         r2.text = b
-        r2.font.size = Pt(9)
+        r2.font.size = Pt(10.5)
         r2.font.color.rgb = COLOR_TEXT_SECONDARY
 
-    f_box = s14.shapes.add_textbox(Inches(0.8), Inches(6.8), Inches(11.7), Inches(0.4))
+    # Footer nhỏ gọn ghi chú tài liệu tham khảo chính
+    f_box = s15.shapes.add_textbox(Inches(0.8), Inches(6.6), Inches(11.7), Inches(0.55))
     tf_f = f_box.text_frame
     p_f = tf_f.paragraphs[0]
-    p_f.text = "Đề tài DT005 — An Toàn và Bảo Mật Hệ Thống Thông Tin — Báo cáo Tiến độ Giữa kỳ."
-    p_f.font.size = Pt(10)
+    p_f.text = "Tài liệu tham khảo chính: [1] H. Halpin, Oxford J. Cybersec., 2025 (DOI: 10.1093/cybsec/tyaf006); [2] Shannon (1949); [3] Goldwasser-Micali (1984); [4] Dolev-Yao (1983); [5] Kocher (1996); [6] RFC 6962 (2013)."
+    p_f.font.size = Pt(9.5)
     p_f.font.italic = True
     p_f.font.color.rgb = COLOR_TEXT_MUTED
 
