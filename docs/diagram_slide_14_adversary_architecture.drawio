@@ -1,0 +1,115 @@
+<mxfile host="app.diagrams.net" modified="2026-10-24T04:22:00.000Z" agent="Mozilla/5.0" version="21.0.0" type="device">
+  <diagram id="adversary-architecture-slide-14" name="Kiến Trúc Đối Kháng Red Team vs Blue Team">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#f8fafc" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- TITLE -->
+        <mxCell id="title" value="SƠ ĐỒ KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG THỰC TẾ: BLUE TEAM (CỔNG 8080) VS RED TEAM (CỔNG 8081)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=17;fontStyle=1;fontColor=#0f172a;" vertex="1" parent="1">
+          <mxGeometry x="60" y="25" width="1050" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- BLUE TEAM CONTAINER -->
+        <mxCell id="panel_blue" value="BLUE TEAM — HỆ THỐNG PHÒNG THỦ &amp; GIÁM SÁT TOÀN VẸN (PORT 8080)&#xa;Triển khai 4 mô hình: SHA-256, HMAC, Standard Merkle, HD-Merkle" style="swimlane;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#2563eb;strokeWidth=2;fontSize=13;fontStyle=1;fontColor=#1e3a8a;rounded=1;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="60" y="80" width="510" height="490" as="geometry" />
+        </mxCell>
+
+        <!-- Dataset Box -->
+        <mxCell id="b_dataset" value="&lt;b&gt;TẬP DỮ LIỆU GIÁM SÁT&lt;/b&gt;&lt;br&gt;kaggle_dataset (2.483 tệp tin)&lt;br&gt;&lt;font color=&quot;#64748b&quot; style=&quot;font-size: 11px;&quot;&gt;Dung lượng: 112.81 MB&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#3b82f6;strokeWidth=1.5;fontColor=#0f172a;fontSize=11;" vertex="1" parent="panel_blue">
+          <mxGeometry x="25" y="70" width="210" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- Engine Box -->
+        <mxCell id="b_engine" value="&lt;b&gt;ĐỘNG CƠ XÁC THỰC TOÀN VẸN&lt;/b&gt;&lt;br&gt;• SHA-256 Manifest (Tuyến tính)&lt;br&gt;• HMAC-SHA256 (Khóa bí mật)&lt;br&gt;• Standard Merkle (RFC 6962)&lt;br&gt;• HD-Merkle (Dirty-Path Cache)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#1d4ed8;strokeWidth=2;fontColor=#1e3a8a;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="panel_blue">
+          <mxGeometry x="265" y="65" width="220" height="85" as="geometry" />
+        </mxCell>
+
+        <!-- Baseline Root Hash -->
+        <mxCell id="b_roothash" value="&lt;b&gt;MỐC TIN CẬY BAN ĐẦU (H_0)&lt;/b&gt;&lt;br&gt;Cây băm gốc: Root Hash SHA-256 (32 bytes)&lt;br&gt;&lt;font color=&quot;#059669&quot;&gt;[Trạng thái: 100% NGUYÊN VẸN]&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#059669;strokeWidth=2;fontColor=#064e3b;fontSize=11;" vertex="1" parent="panel_blue">
+          <mxGeometry x="25" y="195" width="460" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Detection Engine -->
+        <mxCell id="b_detect" value="&lt;b&gt;CƠ CHẾ ĐỊNH VỊ SAI LỆCH CỤC BỘ O(log N)&lt;/b&gt;&lt;br&gt;• Phát hiện tức thì tệp bị can thiệp (FILE_MODIFIED)&lt;br&gt;• Tái tạo đường dẫn bẩn (Dirty Path) trong &lt;b&gt;~1.06 ms&lt;/b&gt;&lt;br&gt;• Tốc độ duyệt: &lt;b&gt;2.325 tệp/giây&lt;/b&gt; (Không cần quét lại toàn bộ 2.483 tệp)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff1f2;strokeColor=#e11d48;strokeWidth=2;fontColor=#881337;fontSize=11;align=left;spacingLeft=10;" vertex="1" parent="panel_blue">
+          <mxGeometry x="25" y="285" width="460" height="75" as="geometry" />
+        </mxCell>
+
+        <!-- Verification Results -->
+        <mxCell id="b_results" value="&lt;b&gt;KẾT QUẢ KIỂM TOÁN HỌC THUẬT (7 THÍ NGHIỆM ĐỘC LẬP):&lt;/b&gt;&lt;br&gt;• PPT Adversary Game: Bắt quả tang 100/100 can thiệp (Advantage = 0.0)&lt;br&gt;• RFC 6962 Domain Separation: Chặn đứng va chạm Node-Leaf Confusion&lt;br&gt;• Constant-Time Comparison: hmac.compare_digest triệt tiêu độ lệch chuỗi" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#f8fafc;strokeColor=#94a3b8;strokeWidth=1.5;fontColor=#334155;fontSize=10.5;align=left;spacingLeft=8;" vertex="1" parent="panel_blue">
+          <mxGeometry x="25" y="390" width="460" height="75" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bedge1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;strokeWidth=2;" edge="1" parent="panel_blue" source="b_dataset" target="b_engine">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bedge2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1d4ed8;strokeWidth=2;" edge="1" parent="panel_blue" source="b_engine" target="b_roothash">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bedge3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#e11d48;strokeWidth=2;" edge="1" parent="panel_blue" source="b_roothash" target="b_detect">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- RED TEAM CONTAINER -->
+        <mxCell id="panel_red" value="RED TEAM — ĐỘNG CƠ TẤN CÔNG ĐỐI KHÁNG (PORT 8081)&#xa;Mô phỏng 6 Vector tấn công thực tế theo triết lý Harry Halpin 2025" style="swimlane;whiteSpace=wrap;html=1;fillColor=#fef2f2;strokeColor=#dc2626;strokeWidth=2;fontSize=13;fontStyle=1;fontColor=#991b1b;rounded=1;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="600" y="80" width="510" height="490" as="geometry" />
+        </mxCell>
+
+        <!-- Red Team Engine -->
+        <mxCell id="r_engine" value="&lt;b&gt;ADVERSARY ENGINE (ĐỘNG CƠ KẺ ĐỐI ĐẦU)&lt;/b&gt;&lt;br&gt;Khởi tạo trên Cổng 8081 — Không sử dụng icon/emoji&lt;br&gt;&lt;font color=&quot;#64748b&quot; style=&quot;font-size: 11px;&quot;&gt;Thao tác trực tiếp vào hệ thống tệp đĩa cứng&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#b91c1c;strokeWidth=2;fontColor=#7f1d1d;fontSize=11;" vertex="1" parent="panel_red">
+          <mxGeometry x="25" y="70" width="460" height="55" as="geometry" />
+        </mxCell>
+
+        <!-- Attack Vectors Box -->
+        <mxCell id="r_vectors" value="&lt;b&gt;SÁU VECTOR TẤN CÔNG ĐỐI KHÁNG ĐỘC LẬP:&lt;/b&gt;&lt;br&gt;1. &lt;b&gt;Sửa nội dung tệp (In-place Tamper):&lt;/b&gt; Đổi byte bên trong tệp tin.&lt;br&gt;2. &lt;b&gt;Bù đại số CRC32 (GF(2) Collision):&lt;/b&gt; Tìm 4 byte bù qua mặt CRC32 100%.&lt;br&gt;3. &lt;b&gt;Chèn mã độc / Backdoor:&lt;/b&gt; Thêm tệp backdoor vào cây thư mục.&lt;br&gt;4. &lt;b&gt;Xóa tệp ngẫu nhiên:&lt;/b&gt; Phá vỡ tính toàn vẹn danh mục tệp.&lt;br&gt;5. &lt;b&gt;Tấn công Kẻ đứng giữa Dolev-Yao:&lt;/b&gt; Đánh tráo Merkle Proof trên mạng.&lt;br&gt;6. &lt;b&gt;Khai thác Node-Leaf Confusion:&lt;/b&gt; Tấn công nhập nhằng tiền tố." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff1f2;strokeColor=#ef4444;strokeWidth=1.5;fontColor=#991b1b;fontSize=10.5;align=left;spacingLeft=10;" vertex="1" parent="panel_red">
+          <mxGeometry x="25" y="150" width="460" height="135" as="geometry" />
+        </mxCell>
+
+        <!-- Safe Backup Box -->
+        <mxCell id="r_backup" value="&lt;b&gt;THƯ MỤC SAO LƯU AN TOÀN (.adversary_backups/)&lt;/b&gt;&lt;br&gt;Lưu trữ snapshot nguyên bản trước khi thực hiện can thiệp" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#64748b;strokeWidth=1.5;fontColor=#334155;fontSize=11;" vertex="1" parent="panel_red">
+          <mxGeometry x="25" y="315" width="460" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Rollback Action -->
+        <mxCell id="r_rollback" value="&lt;b&gt;CƠ CHẾ PHỤC HỒI NGUYÊN BẢN (ROLLBACK 100%)&lt;/b&gt;&lt;br&gt;Nút &lt;b&gt;&quot;ROLLBACK ALL&quot;&lt;/b&gt; hoàn trả 100% trạng thái đĩa cứng ban đầu,&lt;br&gt;giúp diễn tập lặp lại liên tục mà không làm hỏng dữ liệu." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#059669;strokeWidth=2;fontColor=#064e3b;fontSize=11;" vertex="1" parent="panel_red">
+          <mxGeometry x="25" y="390" width="460" height="75" as="geometry" />
+        </mxCell>
+
+        <mxCell id="redge1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#dc2626;strokeWidth=2;" edge="1" parent="panel_red" source="r_engine" target="r_vectors">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="redge2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#64748b;strokeWidth=1.5;" edge="1" parent="panel_red" source="r_vectors" target="r_backup">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="redge3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=2;" edge="1" parent="panel_red" source="r_backup" target="r_rollback">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- CROSS EDGES (Adversary -> Dataset) -->
+        <mxCell id="cross_attack" value="Kích hoạt tấn công vào tệp đĩa cứng" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#dc2626;strokeWidth=2.5;fontColor=#b91c1c;fontSize=11;fontStyle=1;" edge="1" parent="1" source="r_vectors" target="b_dataset">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="585" y="270" />
+              <mxPoint x="585" y="180" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="cross_detect" value="Blue Team phát hiện sai lệch tức thì" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=2.5;fontColor=#047857;fontSize=11;fontStyle=1;dashed=1;" edge="1" parent="1" source="b_detect" target="r_rollback">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="585" y="400" />
+              <mxPoint x="585" y="510" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- FOOTER -->
+        <mxCell id="footer_note2" value="Kiến trúc diễn tập an ninh mạng đề tài DT005 — An toàn và bảo mật hệ thống thông tin. Sẵn sàng mở và chỉnh sửa trực tiếp trên draw.io." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=2;fontColor=#64748b;" vertex="1" parent="1">
+          <mxGeometry x="60" y="585" width="1050" height="30" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

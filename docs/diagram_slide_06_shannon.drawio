@@ -1,0 +1,110 @@
+<mxfile host="app.diagrams.net" modified="2026-10-24T04:20:00.000Z" agent="Mozilla/5.0" version="21.0.0" type="device">
+  <diagram id="shannon-model-slide-06" name="Mô hình Shannon và Mạng Phức Hợp">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" background="#f8fafc" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- TITLE -->
+        <mxCell id="title" value="SƠ ĐỒ 2: ĐỐI SÁNH MÔ HÌNH SHANNON (1949) VỚI MẠNG XÃ HỘI - KỸ THUẬT PHỨC HỢP (HALPIN 2025)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;fontColor=#0f172a;" vertex="1" parent="1">
+          <mxGeometry x="60" y="25" width="1050" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- PANEL 1: SHANNON MODEL -->
+        <mxCell id="panel_shannon" value="MÔ HÌNH ĐIỂM - ĐIỂM CỔ ĐIỂN CỦA SHANNON (1949)&#xa;(Giả định kênh truyền đóng, sai lệch do nhiễu ngẫu nhiên)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#eff6ff;strokeColor=#3b82f6;strokeWidth=2;fontSize=13;fontStyle=1;fontColor=#1e3a8a;rounded=1;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="60" y="80" width="510" height="480" as="geometry" />
+        </mxCell>
+
+        <!-- Sender Alice -->
+        <mxCell id="node_alice" value="&lt;b&gt;Người Gửi (Sender)&lt;/b&gt;&lt;br&gt;Alice&lt;br&gt;&lt;font color=&quot;#64748b&quot; style=&quot;font-size: 11px;&quot;&gt;Bản rõ M&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2563eb;strokeWidth=2;fontColor=#0f172a;fontSize=12;" vertex="1" parent="panel_shannon">
+          <mxGeometry x="25" y="70" width="130" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Encryption -->
+        <mxCell id="node_enc" value="&lt;b&gt;Mã Hóa Enc(K, M)&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#1d4ed8&quot;&gt;Khóa bí mật K&lt;/font&gt;" style="rhombus;whiteSpace=wrap;html=1;fillColor=#dbeafe;strokeColor=#1d4ed8;strokeWidth=2;fontColor=#1e3a8a;fontSize=11;" vertex="1" parent="panel_shannon">
+          <mxGeometry x="195" y="60" width="120" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Receiver Bob -->
+        <mxCell id="node_bob" value="&lt;b&gt;Người Nhận (Receiver)&lt;/b&gt;&lt;br&gt;Bob&lt;br&gt;&lt;font color=&quot;#64748b&quot; style=&quot;font-size: 11px;&quot;&gt;Giải mã Dec(K, C)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#059669;strokeWidth=2;fontColor=#0f172a;fontSize=12;" vertex="1" parent="panel_shannon">
+          <mxGeometry x="355" y="70" width="130" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Channel -->
+        <mxCell id="node_channel" value="&lt;b&gt;KÊNH TRUYỀN CÔNG KHAI&lt;/b&gt;&lt;br&gt;Bản mã: C = Enc(K, M)&lt;br&gt;&lt;font color=&quot;#dc2626&quot;&gt;[Kẻ nghe lén có thể tiếp cận]&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fef2f2;strokeColor=#ef4444;strokeWidth=2;fontColor=#991b1b;fontSize=11;" vertex="1" parent="panel_shannon">
+          <mxGeometry x="145" y="210" width="220" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Adversary Eve -->
+        <mxCell id="node_eve" value="&lt;b&gt;ĐỐI THỦ EVE (Passive)&lt;/b&gt;&lt;br&gt;Chỉ nghe lén trên đường truyền&lt;br&gt;&lt;font color=&quot;#64748b&quot; style=&quot;font-size: 10px;&quot;&gt;Shannon giả định đối thủ bị động&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#b91c1c;strokeWidth=2;fontColor=#7f1d1d;fontSize=11;" vertex="1" parent="panel_shannon">
+          <mxGeometry x="145" y="320" width="220" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Weakness Box -->
+        <mxCell id="node_shannon_critique" value="&lt;b&gt;GIỚI HẠN NHẬN THỨC LUẬN (HALPIN CHỈ RA):&lt;/b&gt;&lt;br&gt;• Đồng nhất sai lệch dữ liệu với &quot;nhiễu ngẫu nhiên&quot; (Noise).&lt;br&gt;• Đối thủ trong mật mã là &lt;b&gt;tác nhân có chủ đích&lt;/b&gt; (Intentional Agent).&lt;br&gt;• Bỏ qua chi phí lưu trữ khóa, phân phối khóa và thế giới thực." style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#fffbeb;strokeColor=#f59e0b;strokeWidth=1.5;fontColor=#92400e;fontSize=10.5;align=left;spacingLeft=8;" vertex="1" parent="panel_shannon">
+          <mxGeometry x="25" y="400" width="460" height="65" as="geometry" />
+        </mxCell>
+
+        <!-- Edges Shannon -->
+        <mxCell id="edge1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#2563eb;strokeWidth=2;fontColor=#1e40af;" edge="1" parent="panel_shannon" source="node_alice" target="node_enc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#1d4ed8;strokeWidth=2;fontColor=#1e40af;" edge="1" parent="panel_shannon" source="node_enc" target="node_channel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=2;fontColor=#065f46;" edge="1" parent="panel_shannon" source="node_channel" target="node_bob">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="420" y="240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="edge4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#b91c1c;strokeWidth=2;dashed=1;fontColor=#991b1b;" edge="1" parent="panel_shannon" source="node_channel" target="node_eve">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- PANEL 2: COMPLEX NETWORK -->
+        <mxCell id="panel_complex" value="MẠNG XÃ HỘI - KỸ THUẬT KHÔNG ĐỒNG NHẤT (THỰC TẾ)&#xa;(Mô hình hiện đại đối diện đối thủ thể chế &amp; chuỗi cung ứng)" style="swimlane;whiteSpace=wrap;html=1;fillColor=#ecfdf5;strokeColor=#10b981;strokeWidth=2;fontSize=13;fontStyle=1;fontColor=#065f46;rounded=1;arcSize=4;" vertex="1" parent="1">
+          <mxGeometry x="600" y="80" width="510" height="480" as="geometry" />
+        </mxCell>
+
+        <!-- Secret Keepers Network -->
+        <mxCell id="node_keepers" value="&lt;b&gt;NHÓM NGƯỜI GIỮ BÍ MẬT&lt;/b&gt;&lt;br&gt;(Secret Keepers Network)&lt;br&gt;&lt;font color=&quot;#047857&quot; style=&quot;font-size: 10.5px;&quot;&gt;Duy trì bất biến chính sách (Policy)&lt;br&gt;Đối mặt lỗi phản bội (Insider / Snowden)&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#059669;strokeWidth=2;fontColor=#064e3b;fontSize=11;" vertex="1" parent="panel_complex">
+          <mxGeometry x="25" y="70" width="200" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Complex Infrastructure -->
+        <mxCell id="node_infra" value="&lt;b&gt;HẠ TẦNG VIỄN THÔNG / ĐÁM MÂY&lt;/b&gt;&lt;br&gt;(Cáp quang biển, Router, ISP, Data Center)&lt;br&gt;&lt;font color=&quot;#1e40af&quot; style=&quot;font-size: 10.5px;&quot;&gt;Không tin cậy (Untrusted)&lt;br&gt;Kiểm soát bởi các tập đoàn &amp; nhà mạng&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#3b82f6;strokeWidth=2;fontColor=#1e3a8a;fontSize=11;" vertex="1" parent="panel_complex">
+          <mxGeometry x="285" y="70" width="200" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Institutional Adversary -->
+        <mxCell id="node_nsa" value="&lt;b&gt;ĐỐI THỦ THỂ CHẾ (NSA / Five Eyes)&lt;/b&gt;&lt;br&gt;Global Passive &amp; Active Adversary&lt;br&gt;&lt;font color=&quot;#b91c1c&quot; style=&quot;font-size: 10.5px;&quot;&gt;• Thu thập lưu lượng cáp quang diện rộng&lt;br&gt;• Phân tích mạng xã hội &amp; Siêu dữ liệu (Metadata)&lt;br&gt;• Cưỡng chế pháp lý &amp; ép giao nộp khóa&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fee2e2;strokeColor=#dc2626;strokeWidth=2;fontColor=#7f1d1d;fontSize=11;" vertex="1" parent="panel_complex">
+          <mxGeometry x="25" y="210" width="460" height="75" as="geometry" />
+        </mxCell>
+
+        <!-- Real Attacks -->
+        <mxCell id="node_real_attacks" value="&lt;b&gt;CÁC CON ĐƯỜNG TẤN CÔNG THỰC TẾ (BỊ TOÁN HỌC BỎ QUA)&lt;/b&gt;&lt;br&gt;• &lt;b&gt;Kênh kề (Side-channel):&lt;/b&gt; Rò rỉ thời gian (Kocher 1996), điện năng tiêu thụ, bộ nhớ đệm CPU.&lt;br&gt;• &lt;b&gt;Chuỗi cung ứng:&lt;/b&gt; Cài cửa sau vào phần cứng vi xử lý, làm suy yếu chuẩn (Dual_EC_DRBG).&lt;br&gt;• &lt;b&gt;Siêu dữ liệu:&lt;/b&gt; Khai thác thời gian, kích thước và IP mà không cần phá vỡ toán học mã hóa." style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#fef2f2;strokeColor=#ef4444;strokeWidth=1.5;fontColor=#991b1b;fontSize=10.5;align=left;spacingLeft=8;" vertex="1" parent="panel_complex">
+          <mxGeometry x="25" y="315" width="460" height="85" as="geometry" />
+        </mxCell>
+
+        <!-- Complex Edges -->
+        <mxCell id="cedge1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#059669;strokeWidth=2;" edge="1" parent="panel_complex" source="node_keepers" target="node_infra">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cedge2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#dc2626;strokeWidth=2;dashed=1;" edge="1" parent="panel_complex" source="node_nsa" target="node_infra">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cedge3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#dc2626;strokeWidth=2;dashed=1;" edge="1" parent="panel_complex" source="node_nsa" target="node_keepers">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- FOOTER -->
+        <mxCell id="footer_note" value="Nguồn tham khảo: C. E. Shannon (1949, Bell Syst. Tech. J.); H. Halpin (2025, Oxford J. Cybersec., Sec. 2 &amp; 3, tr. 3–5). Vẽ bởi Đề tài DT005." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=11;fontStyle=2;fontColor=#64748b;" vertex="1" parent="1">
+          <mxGeometry x="60" y="575" width="1050" height="30" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
