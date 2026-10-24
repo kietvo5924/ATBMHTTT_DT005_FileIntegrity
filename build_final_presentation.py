@@ -794,27 +794,27 @@ def create_deck():
         p_c.font.size = Pt(10.5)
         p_c.font.color.rgb = RGBColor(255, 255, 255)
 
-    # Dữ liệu 4 hàng nội dung
+    # Dữ liệu 4 hàng nội dung (tinh gọn, súc tích, dễ nhìn)
     table_data = [
         ("1. Bản chất thông tin &\nBí mật an toàn (Sec 1–2)",
-         "Coi thông tin là xác suất thống kê; kênh truyền chỉ chịu nhiễu ngẫu nhiên; an toàn tuyệt đối là One-Time Pad.",
-         "Thông tin mang ngữ nghĩa khách quan (Dretske); đối thủ là tác nhân có chủ đích, liên tục tìm cách khai thác.",
-         "Phân định rạch ròi giữa bắt lỗi ngẫu nhiên và an ninh đối kháng; mã tuyến tính (CRC32) không thể thay thế hàm băm phi tuyến (SHA-256)."),
+         "Thông tin là xác suất thống kê; giả định kênh chỉ có nhiễu ngẫu nhiên.",
+         "Thông tin có ngữ nghĩa khách quan (Dretske); đối thủ là tác nhân có chủ đích.",
+         "Mã tuyến tính (CRC32) chỉ bắt nhiễu; an ninh đối kháng cần hàm băm phi tuyến (SHA-256)."),
 
         ("2. Giới hạn của sự\nhình thức hóa (Sec 5)",
-         "Coi thuật toán mật mã là hộp đen toán học lý tưởng; thời gian và phần cứng thực thi là vô hình.",
-         "Sự trừu tượng hóa làm mật mã học mù quáng trước thế giới vật lý: bỏ qua thời gian CPU, năng lượng, lỗi cài đặt.",
-         "Xây dựng hệ thống an toàn đa tầng; áp dụng hàm so sánh thời gian hằng số (hmac.compare_digest) triệt tiêu rò rỉ kênh kề."),
+         "Coi mật mã là hộp đen toán học lý tưởng; coi thời gian thực thi là vô hình.",
+         "Điểm mù vật lý: bỏ qua thời gian CPU, năng lượng, kiến trúc bộ nhớ cache.",
+         "Phòng thủ đa tầng; dùng hàm thời gian hằng số (hmac.compare_digest) triệt tiêu kênh kề."),
 
         ("3. Đối thủ trong\nthế giới thực (Sec 6)",
-         "Đối thủ bị giới hạn trong năng lực tính toán đa thức (PPT) hoặc tấn công vào đường truyền (Dolev-Yao).",
-         "Snowden tiết lộ đối thủ thể chế (NSA) có nguồn lực khổng lồ: khai thác siêu dữ liệu, cài cửa sau chuẩn NIST.",
-         "Mở rộng nghiên cứu mật mã chống cửa sau (Cliptography); bảo vệ siêu dữ liệu và cấu trúc dữ liệu minh bạch (RFC 6962)."),
+         "Đối thủ bị giới hạn toán học (PPT) hoặc tấn công kênh truyền sạch (Dolev-Yao).",
+         "Đối thủ thể chế (NSA): khai thác siêu dữ liệu, cài cửa sau chuẩn NIST (Dual_EC).",
+         "Nghiên cứu mật mã chống cửa sau (Cliptography) và phân tách miền (RFC 6962)."),
 
         ("4. Chương trình nghiên cứu\ntương lai (Sec 7)",
-         "Mật mã học là phân nhánh độc lập thuần túy của toán học rời rạc và khoa học máy tính lý thuyết.",
-         "Đặt ra 4 câu hỏi mở: tích hợp phương pháp liên ngành, dùng thống kê lượng hóa đối thủ, mô hình hóa hệ thống phức hợp.",
-         "Kết hợp toán học với triết học nhận thức và dữ liệu thực nghiệm để xây dựng một khoa học an ninh hoàn chỉnh.")
+         "Mật mã học chỉ là phân nhánh của toán học rời rạc và lý thuyết tính toán.",
+         "4 câu hỏi mở: dùng thống kê lượng hóa đối thủ, mô hình hóa mạng xã hội động.",
+         "Kết hợp toán học, triết học nhận thức và dữ liệu thực nghiệm thành khoa học an ninh.")
     ]
 
     for r_idx, (col0, col1, col2, col3) in enumerate(table_data, start=1):
