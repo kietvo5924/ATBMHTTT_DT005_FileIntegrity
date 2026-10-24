@@ -315,8 +315,8 @@ def create_deck():
         ("3. Tác Nhân Có Chủ Đích", "BẢN CHẤT CỦA ĐỐI THỦ",
          COLOR_EMERALD_BG, COLOR_EMERALD_BORDER, COLOR_ACCENT_EMERALD,
          [("Tính chủ đích (Intentionality):", "Đối thủ không phải là 'nhiễu ngẫu nhiên' mà là thực thể có niềm tin, mục tiêu và ý chí khai thác lỗ hổng."),
-          ("Tính tương đối của bí mật:", "Bí mật không vĩnh cửu. Không có hệ thống nào tuyệt đối; bí mật phụ thuộc vào năng lực tính toán và thời gian của đối thủ."),
-          ("Public vs Common Knowledge:", "Bản mã là tri thức công cộng (public); nhưng ý nghĩa bản rõ chỉ có thể thành tri thức phổ thông nếu có khóa.")])
+          ("Tính tương đối của bí mật:", "Bí mật không tồn tại tự thân; nó là mối quan hệ giữa nhóm người giữ bí mật và thế giới bên ngoài trong một khoảng thời gian."),
+          ("Public vs Common Knowledge:", "Common Knowledge (Lewis): Mọi tác nhân đều biết và tin trạng thái sự việc. Public Knowledge: Thông tin mà bất kỳ ai cũng có tiềm năng tiếp cận (như khi bí mật bị rò rỉ - leak).")]),
     ]
 
     for idx, (c_title, c_badge, bg_c, brd_c, text_c, items) in enumerate(cards_data):
@@ -369,7 +369,7 @@ def create_deck():
 
     timeline_phases = [
         ("Giai đoạn 1 (1948–1949)", "MÔ HÌNH SHANNON",
-         "Claude Shannon hình thức hóa mật mã học bằng xác suất; định nghĩa Bí mật hoàn hảo (OTP). Giả định sai lệch do 'Nhiễu ngẫu nhiên'.",
+         "Mô hình truyền thông bảo mật điểm - điểm; định nghĩa Bí mật hoàn hảo H(K) >= H(M). Giới hạn: Giản lược đối thủ thành kẻ nghe lén trên kênh trừu tượng, bỏ qua chi phí phân phối khóa và thực tế xã hội - kỹ thuật.",
          COLOR_BG_PANEL, COLOR_BORDER_BLUE, COLOR_BRAND_BLUE),
         ("Giai đoạn 2 (1976)", "CÁCH MẠNG KHÓA CÔNG KHAI",
          "Diffie-Hellman và Merkle giải quyết bài toán phân phối khóa; chuyển gánh nặng bảo mật sang độ phức tạp tính toán một chiều.",
@@ -525,7 +525,7 @@ def create_deck():
          "Thời gian vi xử lý CPU, dao động điện năng tiêu thụ, phát xạ điện từ, kiến trúc bộ nhớ đệm (Cache), lỗi lập trình phần mềm.",
          COLOR_AMBER_BG, COLOR_AMBER_BORDER, COLOR_ACCENT_AMBER),
         ("BƯỚC 3: CON ĐƯỜNG KHAI THÁC CỦA ĐỐI THỦ THẾ GIỚI THỰC",
-         "Tấn công kênh kề (Timing Attack - Kocher 1996), phân tích lưu lượng siêu dữ liệu, tấn công tiền ảnh cấp hai cấu trúc (Node-Leaf Confusion).",
+         "Tấn công kênh kề (Timing Attack - Kocher 1996), phân tích độ dài và lưu lượng siêu dữ liệu (Traffic Analysis), khai thác lỗi cài đặt phần mềm và quản lý (Anderson 2001).",
          RGBColor(254, 242, 242), RGBColor(254, 202, 202), COLOR_ACCENT_ROSE),
         ("BƯỚC 4: KẾT LUẬN NHẬN THỨC LUẬN CỦA HARRY HALPIN",
          "Cái giá của sự trừu tượng hóa là làm cho mật mã học mù quáng trước chính những năng lực thực tế của đối thủ nằm ngoài mô hình lý thuyết.",
@@ -730,9 +730,9 @@ def create_deck():
 
     independent_pts = [
         ("Mục tiêu thực nghiệm:", "Sinh viên tự xây dựng hệ thống kiểm tra toàn vẹn tệp nhằm chuyển hóa các luận điểm lý thuyết trừu tượng của Halpin thành các kịch bản quan sát được."),
-        ("Minh họa trực quan:", "Thiết kế các thí nghiệm minh họa: sự bất lực của mã tuyến tính CRC32 trước kẻ thù toán học; can thiệp đường truyền Dolev-Yao; rò rỉ siêu dữ liệu kênh truyền."),
+        ("Minh họa trực quan:", "Thiết kế các kịch bản kiểm thử: đối đầu toán học trên mã tuyến tính CRC32; can thiệp đường truyền Dolev-Yao; rò rỉ kênh kề thời gian so sánh chuỗi."),
         ("Phân định ranh giới rõ ràng:", "Mã nguồn và hệ thống kiểm tra toàn vẹn là đóng góp kỹ thuật độc lập của sinh viên; không được nhầm lẫn là thuật toán do Halpin đề xuất."),
-        ("Báo cáo khoa học nghiêm túc:", "Tất cả kết quả đo đạc được lưu vết kiểm toán tại file MIDTERM_CODE_AUDIT.md.")
+        ("Kiểm toán khoa học:", "Tất cả quy trình kiểm toán mã nguồn và đối chiếu thực nghiệm được lưu vết kỹ thuật tại MIDTERM_CODE_AUDIT.md.")
     ]
     for h, b in independent_pts:
         p_it = tf.add_paragraph()
@@ -750,7 +750,7 @@ def create_deck():
     f_box = s10.shapes.add_textbox(Inches(0.8), Inches(6.8), Inches(11.7), Inches(0.4))
     tf_f = f_box.text_frame
     p_f = tf_f.paragraphs[0]
-    p_f.text = "Báo cáo phân định phương pháp luận của nhóm nghiên cứu đề tài DT005."
+    p_f.text = "Báo cáo phân định phương pháp luận độc lập của nhóm nghiên cứu đề tài DT005."
     p_f.font.size = Pt(10)
     p_f.font.italic = True
     p_f.font.color.rgb = COLOR_TEXT_MUTED
@@ -767,21 +767,21 @@ def create_deck():
     gap11 = Inches(0.3)
 
     examples_data = [
-        ("1. NHIỄU vs KẺ THÙ CHỦ ĐÍCH",
-         "Mật mã học khác lý thuyết Shannon: đối thủ có chủ đích, không phải nhiễu ngẫu nhiên. Mã toàn vẹn tuyến tính CRC32 hoàn toàn bất lực.",
-         "Giải hệ phương trình bù đại số GF(2), tìm 4 byte giả mạo qua mặt CRC32 100%. Hàm băm SHA-256 phát hiện thay đổi ngay lập tức.",
-         "Chỉ minh họa tính phi tuyến của hàm băm; không chứng minh an toàn toàn diện cho toàn bộ hệ thống."),
-        ("2. NHẬP NHẰNG NÚT LÁ MERKLE",
-         "Ghép chuỗi thô H(L || R) khiến kẻ thù có thể đánh tráo nút nhánh nội bộ thành nút lá, gây va chạm cấu trúc tầng cây.",
-         "Cài đặt phân tách miền chuẩn RFC 6962: gắn tiền tố 0x00 cho nút lá và 0x01 cho nút nhánh để triệt tiêu hoàn toàn nhập nhằng.",
-         "Chỉ giải quyết va chạm cấu trúc tầng cây Merkle; không loại trừ va chạm ngẫu nhiên 2^256 của SHA-256."),
-        ("3. KÊNH KỀ THỜI GIAN SO SÁNH",
-         "Lý thuyết xem mật mã là hàm toán học lý tưởng, nhưng thực tế việc dừng sớm (early-return) làm rò rỉ dữ liệu qua thời gian thực thi.",
-         "Đo đạc 5 vòng so sánh chuỗi tuần tự (lộ chênh lệch thời gian) so với hàm thời gian hằng số hmac.compare_digest triệt tiêu độ lệch.",
-         "Đo đạc trên máy tính đơn có nhiễu hệ điều hành; chỉ minh họa ở mức thư viện phần mềm, không phải phần cứng.")
+        ("1. NHIỄU vs ĐỐI THỦ CHỦ ĐÍCH",
+         ("Luận điểm Halpin (Sec. 1–2):", "Đối thủ là tác nhân có chủ đích, không phải nhiễu ngẫu nhiên. Mã kiểm tra lỗi tuyến tính được thiết kế cho nhiễu ngẫu nhiên, không phòng vệ được trước đối thủ chủ đích."),
+         ("Minh họa độc lập (DT005):", "Thử nghiệm kịch bản bù 4 byte GF(2): Kẻ tấn công giải hệ phương trình tuyến tính để qua mặt CRC32 trong tệp bị can thiệp; hàm băm phi tuyến SHA-256 phát hiện tức thì."),
+         ("Giới hạn diễn giải:", "Chỉ minh họa tính phi tuyến của hàm băm trong kịch bản giả mạo đã kiểm thử; không kết luận CRC32 bất lực trong vai trò phát hiện lỗi ngẫu nhiên vật lý.")),
+        ("2. PHÂN TÁCH MIỀN NÚT LÁ (RFC 6962)",
+         ("Gốc lý thuyết bài báo:", "Halpin nhấn mạnh điểm mù khi triển khai cấu trúc dữ liệu trong thực tế, nhưng KHÔNG trực tiếp đề cập cấu trúc cây Merkle hay kỹ thuật phân tách miền."),
+         ("Minh họa độc lập (DT005):", "Sinh viên chủ động mở rộng bài toán toàn vẹn: Cài đặt phân tách miền theo chuẩn IETF RFC 6962 (tiền tố byte 0x00 cho lá, 0x01 cho nhánh) để phòng ngừa va chạm cấu trúc tầng cây."),
+         ("Giới hạn diễn giải:", "Kỹ thuật RFC 6962 do sinh viên tự nghiên cứu tích hợp, không phải đề xuất của Halpin; chỉ phòng ngừa va chạm cấu trúc, không thay đổi độ phức tạp 2^256 của SHA-256.")),
+        ("3. RÒ RỈ KÊNH KỀ THỜI GIAN",
+         ("Luận điểm Halpin (Sec. 5):", "Mô hình toán học trừu tượng xem mật mã là hàm lý tưởng, nhưng thời gian thực thi thực tế làm rò rỉ dữ liệu bí mật (dẫn theo Paul Kocher 1996)."),
+         ("Minh họa độc lập (DT005):", "Sinh viên xây dựng kịch bản kiểm thử đo đạc thời gian so sánh chuỗi tuần tự (dừng sớm khi gặp byte lệch) so với việc sử dụng hàm thời gian hằng số hmac.compare_digest."),
+         ("Giới hạn diễn giải:", "Đo đạc trên môi trường máy tính đơn có jitter hệ điều hành; chỉ minh họa rò rỉ logic ở mức phần mềm ứng dụng, không đại diện cho kênh kề phần cứng chuyên sâu."))
     ]
 
-    for idx, (ex_title, ex_theory, ex_impl, ex_limit) in enumerate(examples_data):
+    for idx, (ex_title, (p1_title, ex_theory), (p2_title, ex_impl), (p3_title, ex_limit)) in enumerate(examples_data):
         left_pos = Inches(0.8) + idx * (col_w11 + gap11)
         add_card(s11, left_pos, Inches(1.85), col_w11, Inches(4.8), COLOR_BG_PANEL, COLOR_BORDER)
         t = s11.shapes.add_textbox(left_pos + Inches(0.2), Inches(2.0), col_w11 - Inches(0.4), Inches(4.5))
@@ -790,47 +790,47 @@ def create_deck():
 
         p_t = tf.paragraphs[0]
         p_t.text = ex_title
-        p_t.font.size = Pt(12)
+        p_t.font.size = Pt(11.5)
         p_t.font.bold = True
         p_t.font.color.rgb = COLOR_BRAND_NAVY
-        p_t.space_after = Pt(10)
+        p_t.space_after = Pt(8)
 
         # 1. Luận điểm bài báo Halpin
         p1_h = tf.add_paragraph()
-        p1_h.text = "Luận điểm bài báo Halpin:"
-        p1_h.font.size = Pt(10.5)
+        p1_h.text = p1_title
+        p1_h.font.size = Pt(10)
         p1_h.font.bold = True
         p1_h.font.color.rgb = COLOR_TEXT_PRIMARY
 
         p1_b = tf.add_paragraph()
         p1_b.text = ex_theory
-        p1_b.font.size = Pt(9.5)
+        p1_b.font.size = Pt(9.2)
         p1_b.font.color.rgb = COLOR_TEXT_SECONDARY
-        p1_b.space_after = Pt(8)
+        p1_b.space_after = Pt(6)
 
         # 2. Minh họa thực nghiệm DT005
         p2_h = tf.add_paragraph()
-        p2_h.text = "Minh họa thực nghiệm DT005:"
-        p2_h.font.size = Pt(10.5)
+        p2_h.text = p2_title
+        p2_h.font.size = Pt(10)
         p2_h.font.bold = True
         p2_h.font.color.rgb = COLOR_TEXT_PRIMARY
 
         p2_b = tf.add_paragraph()
         p2_b.text = ex_impl
-        p2_b.font.size = Pt(9.5)
+        p2_b.font.size = Pt(9.2)
         p2_b.font.color.rgb = COLOR_TEXT_SECONDARY
-        p2_b.space_after = Pt(8)
+        p2_b.space_after = Pt(6)
 
         # 3. Giới hạn diễn giải
         p3_h = tf.add_paragraph()
-        p3_h.text = "Giới hạn diễn giải:"
-        p3_h.font.size = Pt(10.5)
+        p3_h.text = p3_title
+        p3_h.font.size = Pt(10)
         p3_h.font.bold = True
         p3_h.font.color.rgb = COLOR_TEXT_PRIMARY
 
         p3_b = tf.add_paragraph()
         p3_b.text = ex_limit
-        p3_b.font.size = Pt(9.5)
+        p3_b.font.size = Pt(9.2)
         p3_b.font.color.rgb = COLOR_TEXT_MUTED
 
     f_box = s11.shapes.add_textbox(Inches(0.8), Inches(6.8), Inches(11.7), Inches(0.4))
@@ -842,63 +842,36 @@ def create_deck():
     p_f.font.color.rgb = COLOR_TEXT_MUTED
 
     # =========================================================================
-    # SLIDE 12: SLIDE CHUYỂN TIẾP TỐI GIẢN: DEMO (NỀN SÁNG TRANG NHÃ)
+    # SLIDE 12: GIAO DIỆN BẢNG ĐIỀU KHIỂN GIÁM SÁT TOÀN VẸN THỰC TẾ (DEMO DASHBOARD)
     # =========================================================================
     s12 = prs.slides.add_slide(blank_layout)
     add_bg(s12)
+    add_header(s12, "GIAO DIỆN BẢNG ĐIỀU KHIỂN GIÁM SÁT TOÀN VẸN (BLUE TEAM)", "MINH HỌA THỰC NGHIỆM ĐỘC LẬP (LIVE DEMO)",
+               "Ảnh chụp thực tế từ hệ thống: Bắt quả tang tệp tin Resume/Resume.csv bị sửa đổi tại Port 8080")
 
-    add_card(s12, Inches(1.5), Inches(1.5), Inches(10.333), Inches(4.5), COLOR_BG_PANEL, COLOR_BORDER_BLUE)
+    img_s12_path = os.path.join(os.path.dirname(__file__), "docs", "dashboard_real_results.png")
+    if os.path.exists(img_s12_path):
+        img_w12 = Inches(10.2)
+        img_h12 = Inches(4.77)
+        img_l12 = (prs.slide_width - img_w12) / 2
+        img_t12 = Inches(1.85)
+        s12.shapes.add_picture(img_s12_path, img_l12, img_t12, img_w12, img_h12)
 
-    t_demo = s12.shapes.add_textbox(Inches(1.8), Inches(1.8), Inches(9.733), Inches(3.9))
-    tf_demo = t_demo.text_frame
-    tf_demo.word_wrap = True
-
-    p_badge = tf_demo.paragraphs[0]
-    p_badge.alignment = PP_ALIGN.CENTER
-    p_badge.text = "DIỄN TẬP AN NINH MẠNG TRỰC TIẾP"
-    p_badge.font.size = Pt(12)
-    p_badge.font.bold = True
-    p_badge.font.color.rgb = COLOR_BRAND_BLUE
-
-    p_main = tf_demo.add_paragraph()
-    p_main.alignment = PP_ALIGN.CENTER
-    p_main.space_before = Pt(14)
-    p_main.text = "DEMO"
-    p_main.font.size = Pt(64)
-    p_main.font.bold = True
-    p_main.font.color.rgb = COLOR_BRAND_NAVY
-
-    p_sub = tf_demo.add_paragraph()
-    p_sub.alignment = PP_ALIGN.CENTER
-    p_sub.space_before = Pt(14)
-    p_sub.text = "HỆ THỐNG GIÁM SÁT TOÀN VẸN TỆP & MÔ HÌNH ĐỐI KHÁNG RED TEAM VS BLUE TEAM"
-    p_sub.font.size = Pt(15)
-    p_sub.font.bold = True
-    p_sub.font.color.rgb = COLOR_TEXT_PRIMARY
-
-    p_note = tf_demo.add_paragraph()
-    p_note.alignment = PP_ALIGN.CENTER
-    p_note.space_before = Pt(10)
-    p_note.text = "Minh họa thực nghiệm các luận điểm lý thuyết: Can thiệp dữ liệu, Nhập nhằng nút lá RFC 6962, và So sánh chuỗi thời gian hằng số"
-    p_note.font.size = Pt(11)
-    p_note.font.italic = True
-    p_note.font.color.rgb = COLOR_TEXT_SECONDARY
-
-    p_port = tf_demo.add_paragraph()
-    p_port.alignment = PP_ALIGN.CENTER
-    p_port.space_before = Pt(12)
-    p_port.text = "Blue Team Dashboard: http://localhost:8080   |   Red Team Adversary Engine: http://localhost:8081"
-    p_port.font.size = Pt(10.5)
-    p_port.font.bold = True
-    p_port.font.color.rgb = COLOR_BRAND_BLUE
+    f_box12 = s12.shapes.add_textbox(Inches(0.8), Inches(6.8), Inches(11.7), Inches(0.4))
+    tf_f12 = f_box12.text_frame
+    p_f12 = tf_f12.paragraphs[0]
+    p_f12.text = "Ảnh chụp màn hình thực tế từ phiên chạy thử nghiệm của đề tài; không dùng hình ảnh giả lập."
+    p_f12.font.size = Pt(10)
+    p_f12.font.italic = True
+    p_f12.font.color.rgb = COLOR_TEXT_MUTED
 
     # =========================================================================
-    # SLIDE 13: KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG RED TEAM VS BLUE TEAM (SƠ ĐỒ HÌNH VẼ)
+    # SLIDE 13: KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG RED TEAM VS BLUE TEAM (DEMO ARCHITECTURE)
     # =========================================================================
     s13 = prs.slides.add_slide(blank_layout)
     add_bg(s13)
-    add_header(s13, "KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG: RED TEAM VS BLUE TEAM", "SƠ ĐỒ 5: KIẾN TRÚC ĐỐI KHÁNG THỰC TẾ & BẰNG CHỨNG KIỂM ĐỊNH",
-               "Mô hình đối kháng thực tế 2 màn hình trên tập dữ liệu kaggle_dataset (2.483 tệp tin)")
+    add_header(s13, "KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG: RED TEAM VS BLUE TEAM", "SƠ ĐỒ 5: KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG (DEMO ARCHITECTURE)",
+               "Mô hình đối kháng thực tế 2 màn hình trên tập dữ liệu kaggle_dataset (2.485 tệp tin / ~112,81 MiB theo benchmark)")
 
     img_s13_path = os.path.join(os.path.dirname(__file__), "docs", "Slide14.drawio.png")
     if os.path.exists(img_s13_path):
@@ -911,7 +884,7 @@ def create_deck():
     f_box = s13.shapes.add_textbox(Inches(0.8), Inches(6.8), Inches(11.7), Inches(0.4))
     tf_f = f_box.text_frame
     p_f = tf_f.paragraphs[0]
-    p_f.text = "Sơ đồ kiến trúc kiểm thử đối kháng do sinh viên tự thiết kế minh họa các luận điểm của Halpin (2025)."
+    p_f.text = "Sơ đồ kiến trúc diễn tập đối kháng độc lập do sinh viên thiết kế minh họa các khái niệm an ninh."
     p_f.font.size = Pt(10)
     p_f.font.italic = True
     p_f.font.color.rgb = COLOR_TEXT_MUTED
@@ -922,7 +895,7 @@ def create_deck():
     s14 = prs.slides.add_slide(blank_layout)
     add_bg(s14)
     add_header(s14, "TỔNG KẾT BÁO CÁO GIỮA KỲ & ĐỊNH HƯỚNG NGHIÊN CỨU", "SECTION 7 — KẾT LUẬN & THÔNG ĐIỆP HỌC THUẬT",
-               "Tổng kết các đóng góp lý thuyết của Halpin và lộ trình kỹ thuật cho giai đoạn cuối kỳ")
+               "Tổng kết các đóng góp lý thuyết của Halpin và định hướng nghiên cứu tiếp theo")
 
     # Left: Đóng góp bài báo Halpin
     add_card(s14, Inches(0.8), Inches(1.85), Inches(5.7), Inches(4.6), COLOR_BG_PANEL, COLOR_BORDER_BLUE)
@@ -965,9 +938,9 @@ def create_deck():
     p.font.color.rgb = COLOR_ACCENT_EMERALD
 
     next_steps = [
-        ("Nghiệm thu tiến độ giữa kỳ:", "Hoàn thành thẩm định học thuật sâu sắc toàn văn bài báo gốc (17 trang PDF), phân tích đầy đủ 7 mục nội dung và xây dựng bộ diễn tập minh họa thực nghiệm sống động phục vụ báo cáo."),
-        ("Minh bạch phương pháp luận:", "Không ngụy tạo số liệu tác giả; phân định rạch ròi giữa công trình triết học của Halpin và các thử nghiệm độc lập của sinh viên."),
-        ("Lộ trình nghiên cứu cuối kỳ:", "Đề xuất phát triển chuyên sâu giải pháp tối ưu hóa cấu trúc cây Merkle phân cấp (HD-Merkle Dirty-Path Caching, nén CompactProof O(1)) làm đóng góp kỹ thuật trọng tâm cho đồ án cuối kỳ.")
+        ("Nghiệm thu tiến độ giữa kỳ:", "Hoàn thành thẩm định học thuật sâu sắc toàn văn bài báo gốc (17 trang PDF), phân tích đầy đủ 7 mục nội dung và làm rõ khoảng cách giữa lý thuyết trừu tượng với an ninh thực tế."),
+        ("Minh bạch phương pháp luận:", "Không ngụy tạo số liệu tác giả; phân định rõ ràng giữa công trình khảo cứu triết học của Halpin và các kịch bản thực nghiệm minh họa độc lập do sinh viên tự xây dựng."),
+        ("Định hướng nghiên cứu cuối kỳ:", "Tiếp tục nghiên cứu và hoàn thiện mô hình cấu trúc cây phân cấp tối ưu cho bài toán kiểm tra toàn vẹn dữ liệu, tiến hành đo đạc và đánh giá thực nghiệm toàn diện.")
     ]
     for h, b in next_steps:
         p_it = tf.add_paragraph()
@@ -986,7 +959,7 @@ def create_deck():
     f_box = s14.shapes.add_textbox(Inches(0.8), Inches(6.6), Inches(11.7), Inches(0.55))
     tf_f = f_box.text_frame
     p_f = tf_f.paragraphs[0]
-    p_f.text = "Tài liệu tham khảo chính: [1] H. Halpin, Oxford J. Cybersec., 2025 (DOI: 10.1093/cybsec/tyaf006); [2] Shannon (1949); [3] Goldwasser-Micali (1984); [4] Dolev-Yao (1983); [5] Kocher (1996); [6] RFC 6962 (2013)."
+    p_f.text = "Tài liệu tham khảo chính: Halpin (2025), Shannon (1949), Goldwasser-Micali (1984), Dolev-Yao (1983), Kocher (1996), RFC 6962."
     p_f.font.size = Pt(9.5)
     p_f.font.italic = True
     p_f.font.color.rgb = COLOR_TEXT_MUTED
