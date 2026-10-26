@@ -304,19 +304,19 @@ def create_deck():
     cards_data = [
         ("1. Bản Thể Học Thông Tin", "BRIAN CANTWELL SMITH (1996)",
          COLOR_BG_PANEL, COLOR_BORDER_BLUE, COLOR_BRAND_BLUE,
-         [("Dòng chảy nguyên thủy:", "Thế giới khởi đầu từ dòng chảy siêu hình không biên giới (primordial metaphysical flux)."),
-          ("Phân ranh giới:", "Con người và hệ thống định hình thực tại bằng cách đăng ký đối tượng (registration of objects)."),
-          ("Tác nhân xa (Distal):", "Thông tin mật mã ra đời để truyền đạt trạng thái giữa các thực thể ở xa nhau mà không thể tương tác trực tiếp.")]),
+         [("Dòng chảy nguyên thủy:", "Dữ liệu ban đầu vốn là dòng chảy vô định; hệ thống định hình an toàn bằng cách phân định rõ các đối tượng ('đăng ký đối tượng')."),
+          ("Phân ranh giới:", "Tách bạch rạch ròi 3 thực thể then chốt: Bản rõ (M), Bản mã (C) và Chìa khóa bí mật (K)."),
+          ("Tác nhân ở xa:", "Mật mã ra đời để truyền đạt trạng thái an toàn giữa các thực thể ở xa nhau mà không thể tương tác trực tiếp.")]),
         ("2. Thuyết Thông Tin Khách Quan", "FRED DRETSKE (1981)",
          COLOR_AMBER_BG, COLOR_AMBER_BORDER, COLOR_ACCENT_AMBER,
-         [("Thông tin khách quan:", "Thông tin là tính quy luật của trạng thái sự vật (state of affairs), hoàn toàn độc lập với việc có ai đọc hay không."),
-          ("Thông tin và Bí mật:", "Bản rõ chứa đựng thông tin về nguồn; bản mã khi được mã hóa hoàn hảo sẽ không làm rò rỉ bất kỳ thông tin nào về nguồn."),
-          ("Dòng chảy thông tin:", "Nhiệm vụ của mật mã là kiểm soát dòng chảy thông tin chỉ đi đến người nhận được ủy quyền.")]),
+         [("Thông tin khách quan:", "Thông tin tồn tại khách quan theo tự nhiên, độc lập với người nhận; bản rõ mang thông tin về nguồn."),
+          ("Bản mã và Bí mật:", "Hệ mật bảo đảm bản mã gửi đi không làm rò rỉ bất kỳ dấu vết hay thông tin nào về nguồn tin gốc."),
+          ("Kiểm soát dòng tin:", "Nhiệm vụ của mật mã là kiểm soát dòng chảy dữ liệu, chỉ người nhận có khóa hợp lệ mới giải mã được.")]),
         ("3. Tác Nhân Có Chủ Đích", "BẢN CHẤT CỦA ĐỐI THỦ",
          COLOR_EMERALD_BG, COLOR_EMERALD_BORDER, COLOR_ACCENT_EMERALD,
-         [("Tính chủ đích (Intentionality):", "Đối thủ không phải là 'nhiễu ngẫu nhiên' mà là thực thể có niềm tin, mục tiêu và ý chí khai thác lỗ hổng."),
-          ("Tính tương đối của bí mật:", "Bí mật không tồn tại tự thân; nó là mối quan hệ giữa nhóm người giữ bí mật và thế giới bên ngoài trong một khoảng thời gian."),
-          ("Public vs Common Knowledge:", "Common Knowledge (Lewis): Mọi tác nhân đều biết và tin trạng thái sự việc. Public Knowledge: Thông tin mà bất kỳ ai cũng có tiềm năng tiếp cận (như khi bí mật bị rò rỉ - leak).")]),
+         [("Tính có chủ đích:", "Đối thủ là tác nhân có chủ đích (intentional agent), có mục tiêu phá hoại rõ ràng, khác hoàn toàn với nhiễu ngẫu nhiên vật lý."),
+          ("Tính tương đối của bí mật:", "Bí mật không tồn tại tự thân; nó là mối quan hệ giữa nhóm người nắm giữ và thế giới bên ngoài trong một khoảng thời gian."),
+          ("Tri thức chung & Công khai:", "Common Knowledge: tri thức ai cũng biết và biết người khác cùng biết. Public Knowledge: thông tin công khai ai cũng có thể tiếp cận.")]),
     ]
 
     for idx, (c_title, c_badge, bg_c, brd_c, text_c, items) in enumerate(cards_data):
@@ -804,7 +804,7 @@ def create_deck():
         ("2. Giới hạn của sự\nhình thức hóa (Sec 5)",
          "Coi mật mã là hộp đen toán học lý tưởng; coi thời gian thực thi là vô hình.",
          "Điểm mù vật lý: bỏ qua thời gian CPU, năng lượng, kiến trúc bộ nhớ cache.",
-         "Phòng thủ đa tầng; dùng hàm thời gian hằng số (hmac.compare_digest) triệt tiêu kênh kề."),
+         "Phòng thủ đa tầng; dùng hàm thời gian hằng số (hmac.compare_digest) chống rò rỉ thời gian phần mềm."),
 
         ("3. Đối thủ trong\nthế giới thực (Sec 6)",
          "Đối thủ bị giới hạn toán học (PPT) hoặc tấn công kênh truyền sạch (Dolev-Yao).",

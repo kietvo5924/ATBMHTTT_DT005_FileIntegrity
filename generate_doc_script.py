@@ -1,14 +1,17 @@
 # -*- coding: utf-8 -*-
 """
-Script tạo tài liệu Word (.docx) Kịch Bản Thuyết Trình & Hướng Dẫn Diễn Tập Demo:
+Script tạo tài liệu Word (.docx) Kịch Bản Thuyết Trình & Hướng Dẫn Diễn Tập Demo (Bản Chuẩn Dễ Hiểu & Tự Nhiên):
 Đề tài DT005 - Thẩm định Học thuật và Minh họa Thực nghiệm Bài báo Harry Halpin (2025):
 "The adversary: the philosophy of cryptography" (Journal of Cybersecurity, Oxford Academic).
 
-Quy chuẩn tinh giản:
-- Giữ trọn vẹn toàn bộ nội dung học thuật, KHÔNG bỏ ý hay bỏ câu.
-- Cắt gọt các từ ngữ rườm rà, từ đệm, từ lặp lại.
-- Chỉ mở rộng (↳ Mở rộng:) đối với các khái niệm thực sự khó hiểu hoặc quan trọng.
-- Trực tiếp dẫn dắt sơ đồ tại Slide 10 qua 4 khối trực quan.
+Quy chuẩn biên tập:
+1. Giúp sinh viên chưa chuyên sâu mật mã học dễ hiểu, dễ nhớ và tự tin nói thành lời trước lớp.
+2. Bổ sung ví dụ đời thường, trực quan (dấu vân tay số cho SHA-256, con dấu niêm phong đối chiếu cho HMAC, cây gia phả/hóa đơn tổng cho Merkle Tree, đo thời gian tiếng click ổ khóa cho Timing Attack, đếm số chữ cho CRC32).
+3. Câu văn tự nhiên, có chủ ngữ, có mạch nối ý rõ ràng; không ép câu cụt ngủn máy móc.
+4. Giữ đúng các thuật ngữ chuyên ngành bắt buộc (SHA-256, HMAC, Merkle Tree, PPT, Dolev-Yao, Random Oracle), có giải thích ngắn khi xuất hiện lần đầu.
+5. Giữ nguyên cấu trúc 3 phần, 13 slide, số liệu 2.485 tệp, trích dẫn học thuật và chuẩn định dạng Word.
+6. Chuẩn hóa các khẳng định tuyệt đối (thay "triệt tiêu hoàn toàn", "an toàn tuyệt đối", "ngay lập tức" bằng các giới hạn kỹ thuật chính xác).
+7. Minh bạch rạch ròi giữa nội dung lý thuyết của bài báo gốc và phần thực nghiệm độc lập do sinh viên tự thiết kế.
 """
 
 import sys
@@ -110,7 +113,8 @@ def create_document():
             "bullets": [
                 ("Tên đề tài:", "Hệ thống kiểm tra toàn vẹn tệp bằng SHA-256, HMAC và cây Merkle phân cấp động."),
                 ("Bài báo khảo sát:", "The adversary: the philosophy of cryptography — TS. Harry Halpin (Journal of Cybersecurity, Oxford Academic, 2025)."),
-                ("Thông tin thực hiện:", "Học phần: An toàn và bảo mật hệ thống thông tin | GVHD: ThS. Phạm Trọng Huynh | SVTH: Võ Anh Kiệt — MSSV: 1150080143.")
+                ("Thông tin thực hiện:", "Học phần: An toàn và bảo mật hệ thống thông tin | GVHD: ThS. Phạm Trọng Huynh | SVTH: Võ Anh Kiệt — MSSV: 1150080143.",
+                 "Lời thoại mở đầu: 'Kính chào Thầy và các bạn. Hôm nay em xin trình bày đồ án giữa kỳ DT005. Đồ án của em xuất phát từ việc khảo cứu bài báo khoa học của TS. Harry Halpin xuất bản năm 2025 trên tạp chí Journal of Cybersecurity, từ đó nhóm xây dựng một hệ thống thực nghiệm kiểm tra toàn vẹn dữ liệu để đối chứng các luận điểm của tác giả.'")
             ],
             "footer": "Bản trình chiếu chính thức phục vụ nghiệm thu đồ án giữa kỳ."
         },
@@ -121,14 +125,14 @@ def create_document():
             "title": "BỐI CẢNH, MỤC TIÊU & BA ĐÓNG GÓP CỦA BÀI BÁO",
             "time": "1:00",
             "header": "SECTION 1 — GIỚI THIỆU & MỤC TIÊU BÀI BÁO (TRANG 1–2)",
-            "lead": "Khảo cứu nhận thức luận về Kẻ thù trong Mật mã học và Chương trình nghiên cứu tương lai",
+            "lead": "Góc nhìn triết học về Kẻ tấn công trong Mật mã học và Chương trình nghiên cứu tương lai",
             "bullets": [
-                ("1. Bối cảnh mật mã học:", "Khoa học về truyền thông bí mật khi có sự hiện diện của đối thủ có chủ đích trên môi trường mạng mở."),
-                ("2. Nghịch lý nhận thức luận:", "Lý thuyết thông tin của Shannon (1948) được triết học nghiên cứu nhiều, nhưng mật mã học lại bị bỏ quên suốt nhiều thập kỷ.",
-                 "Halpin chỉ ra triết học nghiên cứu sâu lý thuyết thông tin nhưng bỏ quên mật mã học — nơi thực sự định hình an toàn trước đối thủ."),
-                ("3. Cái giá của sự trừu tượng hóa:", "Xem mật mã học chỉ là toán học trên giấy sẽ tạo ra điểm mù trước các đòn tấn công vật lý trong thế giới thực.",
-                 "Kẻ tấn công trong thực tế không giải toán mà nhắm vào thời gian xử lý CPU, bộ nhớ đệm Cache và môi trường vật lý."),
-                ("4. Ba đóng góp học thuật của Halpin:", "Hệ thống hóa lịch sử các mô hình đối thủ; Phê phán giới hạn toán học hóa; Đề xuất 4 câu hỏi nghiên cứu mở kết hợp liên ngành.")
+                ("1. Bối cảnh mật mã học:", "Mật mã học là ngành khoa học bảo vệ dữ liệu bí mật khi truyền qua môi trường mạng mở có kẻ tấn công chủ đích rình rập."),
+                ("2. Nghịch lý nghiên cứu:", "Lý thuyết thông tin của Shannon (1948) được nghiên cứu triết học rất kỹ, nhưng mật mã học lại bị lãng quên suốt nhiều thập kỷ.",
+                 "Lời giải thích dễ nhớ: Halpin chỉ ra rằng lý thuyết thông tin chỉ xử lý nhiễu ngẫu nhiên của đường truyền; còn mật mã học mới là nơi trực tiếp đối đầu với kẻ thù có mưu mô và chủ đích phá hoại."),
+                ("3. Hạn chế khi chỉ nhìn trên lý thuyết:", "Nếu chỉ xem mật mã là các phép toán thuần túy trên giấy, chúng ta sẽ có điểm mù trước các đòn tấn công vật lý ngoài đời thực.",
+                 "Ví dụ gần gũi: Một cánh cửa có ổ khóa toán học cực kỳ vững chắc, nhưng kẻ trộm không bẻ khóa mà dùng xà beng cạy bản lề hoặc đo độ trễ khi chìa xoay. Trong máy tính, kẻ tấn công đo thời gian CPU xử lý và bộ nhớ đệm (Cache) để mò ra khóa."),
+                ("4. Ba đóng góp học thuật của Halpin:", "Tác giả hệ thống hóa lịch sử các mô hình kẻ tấn công; Phê phán giới hạn của việc toán học hóa quá mức; và Đề xuất 4 câu hỏi nghiên cứu liên ngành cho tương lai.")
             ],
             "footer": "Trích dẫn: Harry Halpin (2025), Section 1: Introduction, Journal of Cybersecurity, tr. 1–2."
         },
@@ -139,15 +143,15 @@ def create_document():
             "title": "CƠ SỞ TRIẾT HỌC: THÔNG TIN, BÍ MẬT VÀ TÁC NHÂN",
             "time": "1:00",
             "header": "SECTION 2 & 3 — CƠ SỞ TRIẾT HỌC VỀ THÔNG TIN (TRANG 2–5)",
-            "lead": "Khung nhận thức luận của Fred Dretske và Brian Cantwell Smith ứng dụng trong Mật mã học",
+            "lead": "Khung lý thuyết của Fred Dretske và Brian Cantwell Smith ứng dụng trong Mật mã học",
             "bullets": [
-                ("1. Bản thể học thông tin (Brian Cantwell Smith):", "Thế giới khởi đầu từ dòng dữ liệu chưa có ranh giới; con người định hình thực tại bằng cách 'đăng ký đối tượng' (registration of objects) giữa các tác nhân ở xa nhau.",
-                 "Để bảo vệ dữ liệu, hệ thống phân định rõ ranh giới các đối tượng: Bản rõ (M), Bản mã (C) và Khóa bí mật (K)."),
-                ("2. Thuyết thông tin khách quan (Fred Dretske):", "Thông tin tồn tại khách quan theo quy luật tự nhiên; bản rõ mang thông tin về nguồn, hệ mật đảm bảo bản mã không để lộ thông tin về nguồn.",
-                 "Thông tin tồn tại khách quan độc lập với người nhận; hệ mật tốt triệt tiêu dấu vết để bản mã trông như chuỗi ngẫu nhiên."),
-                ("3. Bản chất của đối thủ:", "Đối thủ là tác nhân có chủ đích (intentional agent), có mục tiêu rõ ràng, khác biệt hoàn toàn với nhiễu ngẫu nhiên vật lý."),
-                ("4. Bản chất của Bí mật & Tri thức (David Lewis):", "Common Knowledge là tri thức chung mọi người cùng biết; Public Knowledge là công khai; Bí mật là 'tri thức không phổ biến'.",
-                 "Common Knowledge là tri thức ai cũng biết và biết người khác cùng biết; Bí mật là tri thức nội bộ được giới hạn quyền truy cập.")
+                ("1. Bản thể học thông tin (Brian Cantwell Smith):", "Dữ liệu ban đầu vốn là dòng chảy vô định; con người tạo ra sự an toàn bằng cách phân định rõ ranh giới các đối tượng ('đăng ký đối tượng' — registration of objects).",
+                 "Lời giải thích dễ nhớ: Trong hệ thống mật mã, ta phải tách bạch rạch ròi 3 thực thể: Bản rõ cần bảo vệ (M), Bản mã gửi đi (C) và Chìa khóa bí mật (K)."),
+                ("2. Thuyết thông tin khách quan (Fred Dretske):", "Thông tin tồn tại khách quan theo quy luật tự nhiên, độc lập với người nhận; bản rõ mang thông tin gốc, còn hệ mật phải bảo đảm bản mã không để lộ bất kỳ thông tin nào về nguồn.",
+                 "Ví dụ gần gũi: Giống như việc xóa sạch dấu vết hiện trường để kẻ lạ nhìn vào bản mã chỉ thấy một chuỗi ngẫu nhiên hỗn loạn, không thể đoán được nội dung gốc là gì."),
+                ("3. Bản chất của kẻ tấn công:", "Đối thủ là tác nhân có chủ đích (intentional agent), có mục tiêu phá hoại rõ ràng, hoàn toàn khác với sự cố chập chờn hay nhiễu đường truyền vật lý."),
+                ("4. Bản chất của Bí mật & Tri thức (David Lewis):", "Phân biệt giữa Tri thức chung (Common Knowledge — tri thức ai cũng biết và biết người khác cùng biết), Tri thức công khai (Public Knowledge) và Bí mật (thông tin nội bộ chỉ số ít người nắm giữ).",
+                 "Lời giải thích dễ nhớ: Mật mã học sinh ra để biến thông điệp thành bí mật: chỉ người nào có chìa khóa hợp lệ mới giải mã được thông tin.")
             ],
             "footer": "Trích dẫn khoa học: Dretske (1981, Ref [1]); Cantwell Smith (1996, Ref [5]); Halpin (2025), tr. 2–5."
         },
@@ -158,15 +162,15 @@ def create_document():
             "title": "TIẾN TRÌNH LỊCH SỬ MÔ HÌNH HÓA ĐỐI THỦ TRONG MẬT MÃ",
             "time": "1:00",
             "header": "SƠ ĐỒ 1: DÒNG THỜI GIAN TIẾN HÓA MÔ HÌNH ĐỐI THỦ",
-            "lead": "Sự dịch chuyển từ Lý thuyết thông tin sang Giả định độ phức tạp tính toán và Phê phán hậu Snowden",
+            "lead": "Từ mô hình thông tin của Shannon đến độ phức tạp tính toán và bài học thực tế sau vụ Snowden",
             "bullets": [
                 ("1. Giai đoạn 1 (1948–1949) — Mô hình Shannon:", "Mô hình bảo mật điểm-điểm; định nghĩa Bí mật hoàn hảo H(K) >= H(M). Giới hạn: Trừu tượng hóa đối thủ trên kênh toán học, bỏ qua chi phí phân phối khóa.",
-                 "Shannon chứng minh One-Time Pad an toàn tuyệt đối nhưng bất khả thi vì khóa phải dài bằng bản rõ và không thể tái sử dụng."),
-                ("2. Giai đoạn 2 (1976) — Cách mạng Khóa công khai:", "Diffie-Hellman và Merkle giải bài toán phân phối khóa bằng các bài toán độ phức tạp tính toán một chiều."),
-                ("3. Giai đoạn 3 (1982–1984) — PPT Adversary & Security Games:", "Goldwasser-Micali mô hình hóa đối thủ thời gian đa thức xác suất (PPT) và kiểm chứng an toàn qua trò chơi an ninh.",
-                 "Chuyển từ an toàn tuyệt đối sang an toàn tính toán: đối thủ có tài nguyên giới hạn đa thức không thể giải bài toán trong thời gian thực tế."),
-                ("4. Giai đoạn 4 (1981–1993) — Dolev-Yao & Random Oracle:", "Dolev-Yao mô hình hóa đối thủ kiểm soát kênh mạng; Bellare-Rogaway đề xuất Random Oracle Model (ROM) cho hàm băm."),
-                ("5. Giai đoạn 5 (2013–2025) — Phê phán hậu Snowden:", "Snowden phơi bày năng lực thực tế của đối thủ thể chế: Kênh kề, cửa sau tiêu chuẩn, can thiệp chuỗi cung ứng và giám sát siêu dữ liệu.")
+                 "Lời giải thích dễ nhớ: Shannon chứng minh mã hóa dùng khóa một lần (One-Time Pad) đạt độ an toàn lý thuyết tuyệt đối, nhưng không khả thi vì khóa phải dài bằng văn bản và không bao giờ được dùng lại."),
+                ("2. Giai đoạn 2 (1976) — Cách mạng Khóa công khai:", "Diffie-Hellman và Merkle giải bài toán phân phối khóa bằng các bài toán toán học một chiều khó đảo ngược (như tính lũy thừa thì nhanh nhưng tìm logarit rời rạc thì cực khó)."),
+                ("3. Giai đoạn 3 (1982–1984) — Kẻ thù PPT & Trò chơi an ninh:", "Goldwasser-Micali mô hình hóa đối thủ có năng lực tính toán đa thức xác suất (PPT — Probabilistic Polynomial-Time, tức đối thủ có máy tính mạnh nhưng tài nguyên và thời gian hữu hạn). Độ an toàn được kiểm chứng qua các kịch bản thử thách (Security Games).",
+                 "Lời giải thích dễ nhớ: Chuyển từ an toàn tuyệt đối trên lý thuyết sang an toàn thực tế: kẻ tấn công dù có siêu máy tính cũng không thể giải nổi bài toán trong thời gian cho phép."),
+                ("4. Giai đoạn 4 (1981–1993) — Dolev-Yao & Hộp đen ngẫu nhiên (ROM):", "Dolev-Yao mô hình hóa kẻ tấn công kiểm soát toàn bộ kênh truyền mạng; Bellare-Rogaway đề xuất mô hình Random Oracle coi hàm băm như một cỗ máy ngẫu nhiên lý tưởng."),
+                ("5. Giai đoạn 5 (2013–2025) — Bài học thực tế từ Snowden:", "Vụ lộ lọt của Snowden phơi bày sức mạnh thực tế của các cơ quan tình báo: Tấn công kênh kề vật lý, cài cửa sau vào tiêu chuẩn quốc tế và thu thập siêu dữ liệu người dùng.")
             ],
             "footer": "Sơ đồ tổng hợp dựa trên Section 3–6, Harry Halpin (2025), Journal of Cybersecurity, tr. 3–12."
         },
@@ -177,11 +181,11 @@ def create_document():
             "title": "MÔ HÌNH TRUYỀN THÔNG CỦA SHANNON VÀ MẠNG THỰC TẾ",
             "time": "1:00",
             "header": "SƠ ĐỒ 2: ĐỐI SÁNH MÔ HÌNH TRUYỀN THÔNG ĐIỂM-ĐIỂM VÀ MẠNG XÃ HỘI-KỸ THUẬT",
-            "lead": "Khoảng cách giữa mô hình điểm-điểm đóng kín của Shannon và mạng phức hợp không đồng nhất",
+            "lead": "Khoảng cách giữa mô hình điểm-điểm khép kín của Shannon và môi trường mạng Internet thực tế",
             "bullets": [
-                ("Panel Trái — Mô hình điểm-điểm Shannon (1949):", "Alice gửi bản rõ M mã hóa bằng khóa K qua kênh truyền đến Bob; đối thủ Eve nghe lén thụ động. Bỏ qua chi phí quản lý khóa và bề mặt tấn công vật lý."),
-                ("Panel Phải — Mạng xã hội - kỹ thuật (Halpin 2025):", "Thông tin luân chuyển qua hạ tầng mở, ISP, đám mây. Đối thủ thể chế (NSA) tấn công qua 4 hướng: Kênh kề, giám sát siêu dữ liệu, cửa sau phần cứng và phản bội nội bộ.",
-                 "Siêu dữ liệu (thời gian, địa chỉ IP, dung lượng) cho phép đối thủ theo dõi hành vi và mối quan hệ mà không cần bẻ khóa nội dung.")
+                ("Panel Trái — Mô hình lý thuyết của Shannon (1949):", "Alice gửi bản rõ M đã mã hóa bằng khóa K đến Bob; kẻ nghe lén Eve chỉ thụ động đón bắt đường truyền. Mô hình này bỏ qua chi phí quản lý khóa và bề mặt tấn công vật lý."),
+                ("Panel Phải — Mạng Internet thực tế ngày nay (Halpin 2025):", "Dữ liệu luân chuyển qua nhà mạng, máy chủ đám mây. Đối thủ quy mô quốc gia (như NSA) tấn công vào 4 hướng: Kênh kề vật lý, phân tích siêu dữ liệu, cài cửa sau phần cứng và nội gián.",
+                 "Ví dụ gần gũi về siêu dữ liệu: Kẻ tấn công không cần bẻ khóa đọc thư, mà chỉ cần nhìn vào người gửi, người nhận, thời gian và kích thước gói tin là đã biết rõ bạn đang liên lạc với ai và làm gì.")
             ],
             "footer": "Sơ đồ tổng hợp dựa trên Shannon (1949) và Harry Halpin (2025), Journal of Cybersecurity, tr. 3–5."
         },
@@ -192,13 +196,13 @@ def create_document():
             "title": "BA MÔ HÌNH ĐỐI THỦ HÌNH THỨC TRONG MẬT MÃ HIỆN ĐẠI",
             "time": "1:00",
             "header": "SECTION 4 — HÌNH THỨC HÓA ĐỐI THỦ (TRANG 5–8)",
-            "lead": "Tiến trình toán học hóa kẻ thù: Độ phức tạp tính toán đa thức, Logic kênh truyền và Tiên tri ngẫu nhiên",
+            "lead": "Ba cách toán học hóa kẻ thù: Độ phức tạp tính toán đa thức, Logic kênh truyền và Tiên tri ngẫu nhiên",
             "bullets": [
-                ("1. PPT Adversary (Goldwasser-Micali 1984):", "Đối thủ là thuật toán Turing xác suất chạy thời gian đa thức; an toàn định nghĩa qua trò chơi thách đấu; chứng minh bằng quy dẫn về bài toán khó."),
-                ("2. Đối thủ mạng logic (Dolev-Yao 1983):", "Đối thủ kiểm soát toàn bộ kênh truyền (chặn, sửa, xóa, phát lại gói tin), nhưng xem mật mã là hộp đen an toàn tuyệt đối nếu không có khóa.",
-                 "Điểm mù của Dolev-Yao là giả định mật mã là hộp đen hoàn hảo, bỏ qua các lỗ hổng rò rỉ vật lý khi thực thi thuật toán."),
-                ("3. Tiên tri ngẫu nhiên (Bellare-Rogaway 1993):", "Giả định hàm băm hoạt động như hàm ngẫu nhiên lý tưởng (Random Oracle); thực tế không hàm băm nào đạt được tính ngẫu nhiên toán học này.",
-                 "SHA-256 là thuật toán xác định trên máy tính thực, không phải hàm ngẫu nhiên lý tưởng, nên vẫn chịu tác động từ môi trường thực thi.")
+                ("1. Kẻ tấn công bị giới hạn tính toán (PPT — Goldwasser-Micali 1984):", "Mô hình hóa đối thủ như một thuật toán chạy trong thời gian đa thức xác suất (PPT). Độ an toàn được đo bằng xác suất kẻ địch thắng trong trò chơi thách đấu."),
+                ("2. Kẻ tấn công mạng logic (Dolev-Yao 1983):", "Giả định đối thủ kiểm soát toàn bộ đường truyền (bắt, sửa, xóa, gửi lại gói tin), nhưng lại xem mật mã là chiếc hộp đen an toàn tuyệt đối nếu không có khóa.",
+                 "Điểm mù của Dolev-Yao: Mô hình này ngây thơ coi mật mã là hộp đen hoàn hảo trên giấy, bỏ qua các lỗ hổng rò rỉ vật lý khi phần mềm chạy trên máy tính thật."),
+                ("3. Tiên tri ngẫu nhiên (Random Oracle — Bellare-Rogaway 1993):", "Giả định hàm băm hoạt động như một cỗ máy ngẫu nhiên lý tưởng; nhưng thực tế không hàm băm máy tính nào đạt được sự ngẫu nhiên toán học tuyệt đối này.",
+                 "Lời giải thích dễ nhớ: SHA-256 là thuật toán xác định chạy trên CPU máy thật, không phải cỗ máy ngẫu nhiên lý tưởng, nên vẫn chịu tác động từ môi trường thực thi phần cứng.")
             ],
             "footer": "Trích dẫn: Goldwasser-Micali (1984); Dolev-Yao (1983); Bellare-Rogaway (1993); Halpin (2025), tr. 5–8."
         },
@@ -211,11 +215,11 @@ def create_document():
             "header": "SECTION 5 — GIỚI HẠN TRỪU TƯỢNG HÓA (TRANG 8–10)",
             "lead": "Khoảng cách giữa các giả định toán học lý tưởng và thế giới vật lý thực tế",
             "bullets": [
-                ("Bước 1 — Giả định toán học:", "Hộp đen mật mã lý tưởng, thời gian thực thi vô hình, độ dài bản mã không làm lộ nội dung, kênh truyền độc lập."),
-                ("Bước 2 — Yếu tố vật lý bị lược bỏ:", "Thời gian xử lý CPU, điện năng tiêu thụ, bức xạ điện từ, bộ nhớ đệm Cache, lỗi lập trình."),
-                ("Bước 3 — Đối thủ thế giới thực khai thác:", "Tấn công kênh kề thời gian (Kocher 1996), phân tích lưu lượng và kích thước gói tin, lỗi quản lý khóa (Anderson 2001).",
-                 "Kẻ tấn công đo sự chênh lệch micro-giây khi CPU so khớp dữ liệu để dò từng byte khóa bí mật."),
-                ("Bước 4 — Kết luận của Halpin:", "Sự trừu tượng hóa quá mức làm mật mã học bỏ sót chính những năng lực thực tế của đối thủ ngoài đời thực.")
+                ("Bước 1 — Giả định trên lý thuyết:", "Coi mật mã là hộp đen lý tưởng, thời gian chạy không bị đo lường, độ dài bản mã không làm lộ thông tin, đường truyền độc lập."),
+                ("Bước 2 — Thực tế vật lý bị bỏ quên:", "Thời gian xử lý CPU, điện năng tiêu thụ, bức xạ điện từ, bộ nhớ đệm (Cache) và lỗi phần mềm."),
+                ("Bước 3 — Đòn đánh của kẻ tấn công thực tế:", "Đo chênh lệch thời gian chạy để mò khóa (tấn công kênh kề — Kocher 1996), phân tích lưu lượng gói tin và khai thác sơ hở quản lý khóa.",
+                 "Ví dụ gần gũi: Giống như kẻ trộm lắng nghe tiếng click của ổ khóa số để dò từng nấc mã; kẻ tấn công đo sự chênh lệch vài phần triệu giây khi CPU so sánh chuỗi để mò ra từng ký tự của mật khẩu."),
+                ("Bước 4 — Kết luận của Halpin:", "Quá trừu tượng hóa trên lý thuyết khiến mật mã học bỏ sót chính những vũ khí nguy hiểm nhất của kẻ tấn công ngoài đời thực.")
             ],
             "footer": "Sơ đồ tổng hợp dựa trên Kocher (1996) và Halpin (2025), Section 5, tr. 8–10."
         },
@@ -226,13 +230,13 @@ def create_document():
             "title": "SNOWDEN VÀ ĐỐI THỦ THỂ CHẾ (THE REAL ADVERSARY)",
             "time": "1:00",
             "header": "SECTION 6 — TIẾT LỘ CỦA SNOWDEN (TRANG 10–12)",
-            "lead": "Khủng hoảng mô hình an ninh trước đối thủ giám sát hàng loạt quy mô quốc gia",
+            "lead": "Thực tế an ninh trước đối thủ giám sát quy mô quốc gia",
             "bullets": [
-                ("1. Khủng hoảng thực tiễn (Snowden 2013):", "NSA không cần phá toán học của RSA/AES mà tấn công vào hạ tầng xung quanh (đánh cắp khóa, thâm nhập cáp quang biển)."),
-                ("2. Năng lực đối thủ thể chế:", "Khai thác siêu dữ liệu để lập bản đồ liên lạc; cài cửa sau vào tiêu chuẩn NIST (Dual_EC_DRBG); gây áp lực pháp lý lên các tập đoàn công nghệ.",
-                 "Vụ bê bối Dual_EC_DRBG cho thấy đối thủ thể chế có thể cài điểm yếu vào chuẩn quốc tế để bí mật giải mã lưu lượng toàn cầu."),
-                ("3. Tính tương đối của đối thủ:", "'Đối thủ' mang tính vị thế; mật mã học buộc phải nghiên cứu cơ chế phòng chống cửa sau (Cliptography).",
-                 "Cliptography nghiên cứu thiết kế mật mã có khả năng tự bảo vệ ngay cả khi phần mềm bị đối thủ cài sẵn cửa sau.")
+                ("1. Bài học thực tiễn từ Snowden (2013):", "Kẻ tấn công không mất công bẻ khóa toán học RSA hay AES, mà tấn công thẳng vào hạ tầng xung quanh (đánh cắp khóa tại máy chủ, thâm nhập cáp quang biển)."),
+                ("2. Năng lực của đối thủ thể chế:", "Khai thác siêu dữ liệu để vẽ bản đồ liên lạc; cài cửa sau vào tiêu chuẩn bảo mật quốc tế NIST (vụ bê bối Dual_EC_DRBG); gây sức ép pháp lý lên các tập đoàn công nghệ.",
+                 "Lời giải thích dễ nhớ: Vụ bê bối Dual_EC_DRBG chứng minh cơ quan tình báo có thể bí mật cài điểm yếu toán học vào bộ sinh số ngẫu nhiên chuẩn quốc tế để đọc trộm thông tin toàn cầu."),
+                ("3. Khái niệm 'Đối thủ' mang tính vị thế:", "Kẻ thù tùy thuộc vào góc nhìn; ngành mật mã buộc phải nghiên cứu cơ chế phòng chống cửa sau (Cliptography).",
+                 "Lời giải thích dễ nhớ: Cliptography là hướng nghiên cứu thiết kế thuật toán tự bảo vệ an toàn ngay cả khi phần mềm hay thiết bị đã bị cài sẵn cửa sau từ trước.")
             ],
             "footer": "Trích dẫn: Harry Halpin (2025), Section 6: Snowden and the real adversary, tr. 10–12."
         },
@@ -243,13 +247,13 @@ def create_document():
             "title": "CHƯƠNG TRÌNH NGHIÊN CỨU TƯƠNG LAI: BỐN CÂU HỎI MỞ",
             "time": "1:00",
             "header": "SECTION 7 — KẾT LUẬN & CHƯƠNG TRÌNH NGHIÊN CỨU (TRANG 12–14)",
-            "lead": "Đề xuất hòa giải giữa trừu tượng hóa toán học và dữ liệu thực nghiệm thế giới thực",
+            "lead": "Đề xuất dung hòa giữa trừu tượng hóa toán học và dữ liệu thực nghiệm thực tế",
             "bullets": [
-                ("RQ1 — Mạng xã hội động:", "Nghiên cứu hành vi giữ bí mật thực tế của con người; đánh giá độ bền chính sách an ninh trước sự cố nội bộ Byzantine."),
-                ("RQ2 — Mô hình hóa bằng thống kê:", "Dùng thống kê thực nghiệm và mô phỏng Monte Carlo để định lượng năng lực thực tế của đối thủ và liên minh giám sát."),
-                ("RQ3 — Phương pháp liên ngành:", "Ứng dụng lý thuyết hệ thống phức hợp và động lực học mạng (như mô hình lây lan) vào phân tích sự rò rỉ thông tin.",
-                 "Mô hình hóa sự rò rỉ thông tin tương tự quy luật lây lan dịch bệnh để dự báo và kiểm soát nguy cơ mất an toàn."),
-                ("RQ4 — Triết học chất vấn ngầm định:", "Xem xét lại các giả định nền tảng từ thời Shannon, điều chỉnh cho phù hợp với môi trường mạng hiện đại.")
+                ("RQ1 — Mạng xã hội động:", "Nghiên cứu hành vi giữ bí mật thực tế của con người; đánh giá độ bền của chính sách an ninh trước sự cố nội bộ hoặc kẻ phản bội."),
+                ("RQ2 — Đo lường bằng thống kê thực nghiệm:", "Dùng thống kê thực nghiệm và mô phỏng xác suất (Monte Carlo) để định lượng chính xác sức mạnh thật sự của đối thủ và liên minh giám sát."),
+                ("RQ3 — Phương pháp tiếp cận liên ngành:", "Ứng dụng lý thuyết hệ thống phức hợp và mô hình lây lan dịch bệnh để phân tích đường đi của thông tin rò rỉ.",
+                 "Ví dụ gần gũi: Xem sự rò rỉ thông tin lây lan giống như một đợt dịch bệnh giúp các chuyên gia an ninh dự báo trước đường đi và khoanh vùng dập tắt nguy cơ nhanh hơn."),
+                ("RQ4 — Đánh giá lại các giả định nền tảng:", "Soi xét lại các tiên đề lý thuyết từ thời Shannon để điều chỉnh cho phù hợp với môi trường an ninh mạng hiện đại.")
             ],
             "footer": "Trích dẫn nguyên văn 4 câu hỏi nghiên cứu mở: Harry Halpin (2025), Section 7, tr. 12–14."
         },
@@ -260,16 +264,16 @@ def create_document():
             "title": "KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG: RED TEAM VS BLUE TEAM",
             "time": "0:45",
             "header": "SƠ ĐỒ 4: KIẾN TRÚC DIỄN TẬP ĐỐI KHÁNG (PRE-DEMO ARCHITECTURE)",
-            "lead": "Mô hình đối kháng 2 màn hình trên tập dữ liệu kaggle_dataset (2.485 tệp tin) kiểm chứng trực quan luận điểm bài báo",
+            "lead": "Mô hình đối kháng 2 màn hình do sinh viên tự thiết kế trên tập dữ liệu kaggle_dataset (2.485 tệp tin) để kiểm chứng luận điểm bài báo",
             "bullets": [
-                ("Khối 1 (Trái) — Blue Team (Port 8080):", "Thiết lập mốc tin cậy sạch ban đầu H_0; tích hợp phân tách miền RFC 6962 (tiền tố 0x00 cho lá, 0x01 cho nhánh).",
-                 "Phân tách miền 0x00/0x01 ngăn chặn triệt để tấn công nhầm lẫn cấu trúc cây Merkle (Node-Leaf Confusion)."),
-                ("Khối 2 (Giữa) — Kho dữ liệu (kaggle_dataset):", "2.485 tệp tin (~112,8 MB) mô phỏng cấu trúc cây thư mục doanh nghiệp thực tế trên đĩa cứng."),
-                ("Khối 3 (Phải) — Red Team (Port 8081):", "Mô phỏng đối thủ chủ đích: Kịch bản 1 (Sửa tệp trực tiếp) và Kịch bản 2 (Bù 4 byte GF(2) qua mặt CRC32).",
-                 "Kịch bản 2 chứng minh đối thủ chủ đích dễ dàng đánh lừa mã tuyến tính CRC32, nhưng bất lực trước hàm băm phi tuyến SHA-256."),
-                ("Khối 4 (Dưới) — Cơ chế hoàn nguyên an toàn:", "Thư mục sao lưu an toàn .adversary_backups/ và nút Rollback All phục hồi nguyên trạng sau diễn tập.")
+                ("Khối 1 (Trái) — Đội Phòng thủ Blue Team (Port 8080):", "Thiết lập mốc tin cậy sạch ban đầu H_0; tích hợp phân tách miền chuẩn RFC 6962 (tiền tố 0x00 cho lá, 0x01 cho nhánh).",
+                 "Lời giải thích dễ nhớ: Phân tách miền 0x00/0x01 giúp phòng chống hiệu quả nguy cơ kẻ tấn công đánh tráo một nút lá thành cặp băm của nút nhánh trên cây Merkle (Node-Leaf Confusion)."),
+                ("Khối 2 (Giữa) — Kho dữ liệu kiểm thử (kaggle_dataset):", "Bộ dữ liệu thực tế gồm 2.485 tệp tin (~112,8 MB) do nhóm sinh viên tự chọn để mô phỏng cây thư mục doanh nghiệp trên đĩa cứng."),
+                ("Khối 3 (Phải) — Đội Tấn công Red Team (Port 8081):", "Mô phỏng đối thủ chủ đích: Kịch bản 1 (Sửa tệp tin trực tiếp) và Kịch bản 2 (Bù 4 byte GF(2) qua mặt mã kiểm tra CRC32).",
+                 "Lời giải thích dễ nhớ: Kịch bản 2 chứng minh kẻ tấn công có chủ đích dễ dàng đánh lừa mã tuyến tính CRC32, nhưng hoàn toàn bất lực trước hàm băm phi tuyến SHA-256."),
+                ("Khối 4 (Dưới) — Cơ chế khôi phục an toàn:", "Thư mục sao lưu an toàn .adversary_backups/ và nút Rollback All giúp phục hồi dữ liệu về nguyên trạng ban đầu.")
             ],
-            "footer": "Sơ đồ kiến trúc diễn tập đối kháng độc lập do sinh viên thiết kế minh họa các khái niệm an ninh."
+            "footer": "Sơ đồ kiến trúc diễn tập đối kháng do sinh viên tự xây dựng nhằm minh họa thực nghiệm các luận điểm trong bài báo."
         },
 
         # SLIDE 11
@@ -293,12 +297,12 @@ def create_document():
             "header": "SECTION 7 — TỔNG KẾT TOÀN VĂN BÀI BÁO (HARRY HALPIN 2025)",
             "lead": "Bảng đối sánh giữa các giả định hình thức truyền thống và nhận thức luận của Harry Halpin",
             "bullets": [
-                ("1. Bản chất thông tin & Bí mật (Sec 1–2):", "Mô hình cũ: Thông tin xác suất, nhiễu ngẫu nhiên ↔ Halpin: Thông tin ngữ nghĩa khách quan (Dretske), đối thủ có chủ đích.",
-                 "Đối thủ có chủ đích buộc hệ thống phải dùng hàm băm phi tuyến SHA-256 thay vì mã tuyến tính CRC32."),
-                ("2. Giới hạn hình thức hóa (Sec 5):", "Mô hình cũ: Mật mã là hộp đen toán học, thời gian vô hình ↔ Halpin: Điểm mù vật lý (thời gian CPU, bộ nhớ đệm Cache).",
-                 "Phòng thủ đòi hỏi so khớp thời gian hằng số (hmac.compare_digest) để triệt tiêu rò rỉ kênh kề."),
-                ("3. Đối thủ thế giới thực (Sec 6):", "Mô hình cũ: Giới hạn đối thủ trong bài toán PPT ↔ Halpin: Đối thủ thể chế (NSA) cài cửa sau và khai thác siêu dữ liệu."),
-                ("4. Chương trình nghiên cứu mở (Sec 7):", "Mô hình cũ: Mật mã thuần túy toán học rời rạc ↔ Halpin: 4 câu hỏi mở kết hợp liên ngành với thống kê và triết học.")
+                ("1. Bản chất Thông tin & Kẻ thù (Mục 1–2):", "Mô hình cũ: Coi lỗi chỉ là do nhiễu ngẫu nhiên đường truyền ↔ Halpin: Thông tin mang tính khách quan (Dretske), đối thủ là kẻ có chủ đích phá hoại.",
+                 "Bài học kỹ thuật: Vì kẻ tấn công có chủ đích tính toán trước nên ta bắt buộc phải dùng hàm băm mật mã SHA-256 (như dấu vân tay số độc nhất) thay vì dùng mã CRC32 đơn giản."),
+                ("2. Giới hạn hình thức hóa (Mục 5):", "Mô hình cũ: Mật mã là chiếc hộp đen toán học hoàn hảo ↔ Halpin: Kẻ địch đo thời gian xử lý CPU và bộ nhớ đệm Cache ngoài đời thực để lấy cắp khóa.",
+                 "Bài học kỹ thuật: Lập trình phòng thủ đòi hỏi phải dùng phép so sánh thời gian hằng số (hmac.compare_digest) để triệt tiêu nguy cơ lộ lọt qua kênh kề thời gian."),
+                ("3. Đối thủ thế giới thực (Mục 6):", "Mô hình cũ: Giới hạn đối thủ trong năng lực tính toán thông thường (PPT) ↔ Halpin: Đối thủ thể chế (NSA) cài cửa sau vào chuẩn bảo mật và khai thác siêu dữ liệu diện rộng."),
+                ("4. Chương trình nghiên cứu mở (Mục 7):", "Mô hình cũ: Mật mã thuần túy là toán học rời rạc trên giấy ↔ Halpin: 4 câu hỏi mở kết hợp liên ngành với thống kê thực nghiệm và triết học.")
             ],
             "footer": "Tài liệu tham khảo chính: Halpin (2025), Shannon (1949), Goldwasser-Micali (1984), Dolev-Yao (1983), Kocher (1996), RFC 6962."
         },
@@ -311,7 +315,7 @@ def create_document():
             "header": "Trường ĐH Tài nguyên và Môi trường TP.HCM — Khoa Công nghệ thông tin",
             "lead": "CẢM ƠN THẦY VÀ CÁC BẠN ĐÃ LẮNG NGHE!",
             "bullets": [
-                ("Thông điệp kết thúc:", "Q & A — Lắng nghe câu hỏi và đóng góp ý kiến hoàn thiện đề tài."),
+                ("Thông điệp kết thúc:", "Q & A — Em xin cảm ơn Thầy và các bạn đã chú ý theo dõi. Rất mong nhận được câu hỏi phản biện và góp ý từ Thầy để hoàn thiện đề tài."),
                 ("Thông tin đề tài:", "Đề tài DT005: Hệ thống kiểm tra toàn vẹn tệp bằng SHA-256, HMAC và cây Merkle phân cấp động | GVHD: ThS. Phạm Trọng Huynh | SVTH: Võ Anh Kiệt — MSSV: 1150080143.")
             ],
             "footer": "Phiên hỏi đáp học thuật và đóng góp ý kiến hoàn thiện đồ án."
@@ -372,7 +376,7 @@ def create_document():
             r_b.font.size = Pt(10)
             r_b.font.color.rgb = RGBColor(51, 65, 85)
 
-            # Dòng mở rộng (chỉ xuất hiện khi có khái niệm khó hiểu hoặc quan trọng)
+            # Dòng mở rộng (giải thích tự nhiên cho khái niệm quan trọng)
             if exp:
                 p_exp = doc.add_paragraph()
                 p_exp.paragraph_format.space_before = Pt(0)
@@ -414,8 +418,9 @@ def create_document():
 
     p_intro_demo = doc.add_paragraph()
     p_intro_demo.add_run(
-        "Mục tiêu diễn tập giữa kỳ: Tập trung vào 2 kịch bản đối kháng cốt lõi phản ánh bài báo của Harry Halpin (2025). "
-        "Các tính năng nghiên cứu mở rộng phục vụ đồ án cuối kỳ được lược bỏ để đảm bảo thời lượng và làm nổi bật trọng tâm khoa học."
+        "Mục tiêu diễn tập giữa kỳ: Minh họa trực quan 2 kịch bản đối kháng then chốt để kiểm chứng luận điểm của bài báo Harry Halpin (2025). "
+        "Bài báo gốc là công trình triết học lý thuyết, không có mã nguồn; toàn bộ hệ thống demo đối kháng 2 màn hình này do nhóm sinh viên tự thiết kế "
+        "nhằm đưa các khái niệm trừu tượng vào kiểm chứng thực nghiệm trên máy tính thật."
     )
 
     # PHƯƠNG ÁN 1: GIAO DIỆN WEB TRỰC QUAN
@@ -429,32 +434,37 @@ def create_document():
     demo_steps = [
         ("Bước 1: Khởi động 2 dịch vụ Web trong nền",
          "Mở terminal và chạy 2 dịch vụ:\n"
-         "• Blue Team Service:  python -m src.demo.web_demo --port 8080\n"
-         "• Red Team Service:   python -m src.demo.red_team_web --port 8081\n"
-         "Mở 2 cửa sổ trình duyệt chia đôi màn hình: Cửa sổ trái vào http://localhost:8080 (Blue Team); cửa sổ phải vào http://localhost:8081 (Red Team)."),
+         "• Blue Team Service (Phía phòng thủ):  python -m src.demo.web_demo --port 8080\n"
+         "• Red Team Service (Phía tấn công):   python -m src.demo.red_team_web --port 8081\n"
+         "Chia đôi màn hình trình duyệt: Nửa trái mở http://localhost:8080 (Blue Team); nửa phải mở http://localhost:8081 (Red Team)."),
 
         ("Bước 2: Thiết lập mốc tin cậy sạch tại Blue Team (Port 8080)",
-         "Tại cổng 8080, chọn thư mục 'kaggle_dataset' (~112.8 MB).\n"
-         "Bấm 'Nạp & Tính toán Toàn vẹn'. Hệ thống sinh Root Hash ban đầu H_0 sạch với trạng thái xanh: '100% NGUYÊN VẸN'.\n"
-         "Điểm nói lý thuyết (Paper-to-Code): Minh họa việc thiết lập trạng thái tin cậy khách quan theo Dretske. Hệ thống áp dụng chuẩn RFC 6962 (tiền tố 0x00 cho lá, 0x01 cho nhánh) khi băm cây dữ liệu, giải quyết triệt để điểm mù nhập nhằng cấu trúc dữ liệu mà Halpin cảnh báo tại Mục 5."),
+         "Tại cổng 8080, chọn thư mục 'kaggle_dataset' (~112.8 MB gồm 2.485 tệp tin).\n"
+         "Bấm 'Nạp & Tính toán Toàn vẹn'. Hệ thống tính ra Root Hash ban đầu H_0 sạch với trạng thái xanh: '100% NGUYÊN VẸN'.\n"
+         "Ý tưởng trực quan & Điểm nói lý thuyết: Giống như việc chụp lại dấu vân tay số của toàn bộ thư viện tệp tin. Cây Merkle hoạt động như một hóa đơn tổng: "
+         "nó băm từ các tệp lá lên gốc, giúp quản lý hàng nghìn tệp cực nhanh. Hệ thống áp dụng chuẩn RFC 6962 (thêm tiền tố byte 0x00 cho lá, 0x01 cho nhánh), "
+         "giúp phòng chống hiệu quả nguy cơ kẻ gian làm giả cấu trúc cây (Node-Leaf Confusion) — đúng theo tinh thần cảnh báo của Halpin tại Mục 5."),
 
         ("Bước 3: Phát động Kịch bản 1 — Can thiệp tệp tin tại Red Team (Port 8081)",
-         "Tại cổng 8081, bấm 'Can thiệp tệp tin ngẫu nhiên' (In-place Tampering) để sửa đổi tệp Resume/Resume.csv trên đĩa.\n"
+         "Tại cổng 8081, bấm 'Can thiệp tệp tin ngẫu nhiên' (In-place Tampering) để cố tình sửa tệp Resume/Resume.csv trên đĩa cứng.\n"
          "Quay lại Blue Team (Port 8080), bấm 'Kiểm tra toàn vẹn':\n"
          "• Hệ thống đổi sang cảnh báo đỏ: 'CẢNH BÁO: PHÁT HIỆN CAN THIỆP DỮ LIỆU!'.\n"
-         "• Bảng truy vết chỉ rõ tệp Resume/Resume.csv bị thay đổi.\n"
-         "Ý nghĩa: Chứng minh hàm băm phát hiện ngay lập tức hành vi sửa đổi của đối thủ."),
+         "• Bảng đối soát chỉ rõ chính xác tệp Resume/Resume.csv đã bị thay đổi.\n"
+         "Ý nghĩa khi nói: SHA-256 hoạt động như một dấu vân tay số cực kỳ nhạy. Dù kẻ tấn công chỉ thay đổi đúng một dấu phẩy trong tệp tin, "
+         "mã băm đầu ra cũng biến đổi hoàn toàn và hệ thống phát hiện chính xác ngay khi đối chiếu."),
 
         ("Bước 4: Phát động Kịch bản 2 — Bù 4 byte GF(2) qua mặt CRC32 tại Red Team (Port 8081)",
-         "Tại cổng 8081, bấm 'Tấn công bù 4 byte GF(2)' (CRC32 Forge Attack). Động cơ Red Team giải hệ phương trình tuyến tính, làm sai lệch nội dung tệp nhưng bù 4 byte patch khiến mã CRC32 không đổi.\n"
+         "Tại cổng 8081, bấm 'Tấn công bù 4 byte GF(2)' (CRC32 Forge Attack). Động cơ Red Team giải hệ phương trình tuyến tính, làm sai lệch nội dung tệp nhưng chèn thêm 4 byte bù khiến mã CRC32 không hề đổi.\n"
          "Quay lại Blue Team (Port 8080), bấm 'Kiểm tra toàn vẹn':\n"
-         "• Bảng đối chứng hiển thị: Thuật toán CRC32 bị qua mặt (báo khớp sai do tính chất tuyến tính).\n"
-         "• Ngược lại, hàm băm SHA-256 phát hiện gian lận ngay lập tức nhờ tính phi tuyến.\n"
-         "Điểm nói lý thuyết (Paper-to-Code): Minh họa trực tiếp luận điểm Halpin (Mục 1 & 2): Mã kiểm tra tuyến tính (CRC32) chỉ bắt được nhiễu ngẫu nhiên trong truyền dẫn, hoàn toàn bất lực trước kẻ thù có chủ đích. Ngược lại, hàm băm mật mã SHA-256 có tính phi tuyến và hiệu ứng tuyết lở (~50% bit đảo khi sửa 1 bit), ngăn chặn kẻ thù bẻ gãy bằng đại số."),
+         "• Bảng đối chứng hiển thị: Thuật toán CRC32 bị qua mặt hoàn toàn (báo xanh hợp lệ sai do tính chất tuyến tính).\n"
+         "• Ngược lại, hàm băm SHA-256 phát hiện gian lận chính xác nhờ tính phi tuyến mạnh.\n"
+         "Ví dụ trực quan & Điểm nói lý thuyết: Mã CRC32 giống như việc đếm tổng số chữ cái trong bức thư — kẻ gian bớt chữ này và bù chữ khác cho đủ số thì qua mặt được. "
+         "Đúng như Halpin phân tích tại Mục 1 & 2: Mã tuyến tính như CRC32 chỉ bắt được lỗi ngẫu nhiên vô tình, hoàn toàn bất lực trước kẻ thù có chủ đích. "
+         "Còn SHA-256 là hàm băm phi tuyến có hiệu ứng tuyết lở (~50% bit đảo khi sửa 1 bit), kẻ địch không thể dùng đại số giải phương trình để bù mã được."),
 
         ("Bước 5: Hoàn nguyên dữ liệu sạch (Rollback All)",
-         "Tại giao diện Red Team (Port 8081), bấm 'ROLLBACK ALL' để khôi phục toàn bộ tệp từ thư mục sao lưu .adversary_backups/.\n"
-         "Tại Blue Team bấm kiểm tra lại: Hệ thống trở về trạng thái an toàn màu xanh.")
+         "Tại giao diện Red Team (Port 8081), bấm 'ROLLBACK ALL' để khôi phục toàn bộ tệp từ thư mục sao lưu an toàn .adversary_backups/.\n"
+         "Quay lại Blue Team bấm kiểm tra lại: Hệ thống trở về trạng thái an toàn màu xanh nguyên trạng.")
     ]
 
     for s_title, s_desc in demo_steps:
@@ -486,9 +496,11 @@ def create_document():
     cli_text = (
         "1. Chạy Suite Kiểm định Toán học Đối kháng:\n"
         "   Lệnh: python -m src.proposed_model.security_games\n"
-        "   Kết quả & Điểm nói lý thuyết: Đo đạc tính phi tuyến của SHA-256, hiệu ứng tuyết lở SAC ~50%, kịch bản bẻ gãy mã tuyến tính CRC32 trên GF(2), và kiểm chứng rò rỉ kênh kề thời gian (Kocher 1996 - Mục 5 bài báo) khi so sánh chuỗi ngắt sớm so với hàm thời gian hằng số hmac.compare_digest.\n\n"
+        "   Kết quả & Điểm nói lý thuyết: Đo đạc tính phi tuyến của SHA-256, kiểm chứng hiệu ứng tuyết lở SAC đạt xấp xỉ 50% bit đảo, "
+        "chứng minh kịch bản bẻ gãy mã tuyến tính CRC32 trên trường GF(2), và kiểm chứng rò rỉ kênh kề thời gian (Kocher 1996 - Mục 5 bài báo) "
+        "khi so sánh chuỗi ngắt sớm so với hàm thời gian hằng số hmac.compare_digest.\n\n"
         "2. Diễn tập 2 Terminal Red Team vs Blue Team:\n"
-        "   • Terminal 1 (Red Team): Chạy 'python src/adversary/red_team_cli.py'. Chọn phím '1' can thiệp tệp, hoặc phím '4' bù mã CRC32.\n"
+        "   • Terminal 1 (Red Team): Chạy 'python src/adversary/red_team_cli.py'. Chọn phím '1' để can thiệp tệp, hoặc phím '4' để bù mã CRC32.\n"
         "   • Terminal 2 (Blue Team): Chạy 'python -m src.baselines.sha256_manifest --dir kaggle_dataset --verify'. Blue Team phát hiện vi phạm: MODIFIED_FILE: Resume/Resume.csv.\n"
         "   • Terminal 1: Chọn phím '9' để Rollback All khôi phục đĩa cứng an toàn."
     )
@@ -515,35 +527,52 @@ def create_document():
     qa_list = [
         ("Câu hỏi 1: Bài báo của Halpin là khảo luận triết học, tại sao đề tài lại chọn bài toán Kiểm tra toàn vẹn tệp tin?",
          "Luận điểm phản biện:\n"
-         "1. Thuộc tính an ninh cốt lõi: Trong tam giác an ninh CIA (Bảo mật, Toàn vẹn, Khả dụng), Halpin phân tích rằng Tính toàn vẹn (Integrity) là điều kiện tiên quyết. Một thông điệp có thể không bí mật nhưng bắt buộc phải toàn vẹn thì người nhận mới có thể tin cậy sử dụng.\n"
-         "2. Kiểm định thực nghiệm: Halpin phê phán việc toán học hóa trừu tượng đã làm mật mã học xa rời thực tế vật lý. Bài toán kiểm tra toàn vẹn tệp tin trên đĩa cứng là bài toán thực tế, cho phép đưa các khái niệm trừu tượng vào kiểm định vật lý rõ ràng.\n"
-         "3. Mô hình hóa đối thủ: Hệ thống toàn vẹn tệp tin cho phép minh họa trực quan các dạng đối thủ được Halpin đề cập: Kẻ can thiệp Dolev-Yao, kẻ khai thác kênh kề Kocher và kẻ sửa đổi dữ liệu có chủ đích."),
+         "1. Tính toàn vẹn là điều kiện tiên quyết: Trong tam giác an ninh CIA (Bảo mật - Toàn vẹn - Khả dụng), Halpin nhấn mạnh Tính toàn vẹn (Integrity) là nền tảng số một. "
+         "Một tệp tin hay thông điệp có thể không cần giữ kín bí mật, nhưng bắt buộc phải toàn vẹn thì người nhận mới có thể tin cậy sử dụng (ví dụ: một bản cập nhật phần mềm nếu bị sửa đổi chèn mã độc thì cực kỳ nguy hiểm dù mã nguồn có công khai hay không).\n"
+         "2. Đưa triết lý vào kiểm định thực tế: Halpin phê phán việc toán học hóa trừu tượng đã làm mật mã học xa rời thực tế vật lý. "
+         "Bài toán kiểm tra toàn vẹn tệp tin trên đĩa cứng là môi trường thực nghiệm lý tưởng để đưa các khái niệm trừu tượng vào đo đạc thời gian, bộ nhớ và khả năng bắt lỗi đối kháng rõ ràng.\n"
+         "3. Minh họa trực quan các mô hình kẻ tấn công: Hệ thống tệp cho phép mô phỏng sống động các dạng đối thủ được Halpin đề cập: "
+         "Kẻ can thiệp đường truyền Dolev-Yao, kẻ đo thời gian rò rỉ Kocher và kẻ chủ đích giả mạo dữ liệu."),
 
         ("Câu hỏi 2: Bài báo có 134 tài liệu tham khảo, khi thẩm định và tái lập thì có bắt buộc phải làm theo toàn bộ không?",
          "Luận điểm phản biện:\n"
-         "1. Bản chất bài khảo cứu: Bài báo của Halpin là bài tổng quan triết học (philosophical survey) dài 17 trang, 134 trích dẫn là kho tàng tài liệu lịch sử từ năm 1883 đến 2024 (bao gồm sách triết học, tài liệu lưu trữ chính phủ về NSA, v.v.). Không một công trình kỹ thuật nào có thể hay bắt buộc phải tái lập toàn bộ 134 tài liệu nền đó.\n"
-         "2. Tinh lọc trọng tâm: Thẩm định bài báo lý thuyết là tinh lọc các trụ cột kỹ thuật trực tiếp liên quan đến bài toán an ninh. Nhóm đã tinh lọc và kết nối với các tài liệu kỹ thuật cốt lõi: Shannon (Mã tuyến tính vs Hàm băm), Goldwasser-Micali (Trò chơi an ninh PPT), Kocher (Kênh kề thời gian), Bellare-Rogaway (Random Oracle), Dolev-Yao (Mạng thù địch), Snowden (Đối thủ thể chế), và bổ sung chuẩn IETF RFC 6962 về phân tách miền."),
+         "1. Bản chất là bài tổng quan học thuật: Bài báo của Halpin là bài khảo cứu triết học dài 17 trang, với 134 tài liệu tham khảo là kho tàng lịch sử từ năm 1883 đến 2024 "
+         "(bao gồm cả sách triết học cổ điển, hồ sơ giải mật chính phủ về NSA, v.v.). Không có một công trình kỹ thuật nào có thể hay bắt buộc phải tái lập toàn bộ 134 tài liệu nền đó.\n"
+         "2. Tinh lọc đúng các trụ cột an ninh cốt lõi: Nhóm đã tinh lọc 6 trụ cột kỹ thuật trực tiếp liên quan đến bài toán an ninh: "
+         "Shannon (Mã tuyến tính vs Hàm băm), Goldwasser-Micali (Trò chơi an ninh PPT), Kocher (Kênh kề thời gian), Bellare-Rogaway (Random Oracle), "
+         "Dolev-Yao (Mạng thù địch), Snowden (Đối thủ thể chế), đồng thời nhóm bổ sung chuẩn IETF RFC 6962 về phân tách miền để hoàn thiện giải pháp kỹ thuật."),
 
         ("Câu hỏi 3: Tập dữ liệu kaggle_dataset từ đâu ra? Có xuất hiện trong bài báo gốc không?",
          "Luận điểm phản biện:\n"
-         "1. Khẳng định minh bạch: Bài báo gốc của Harry Halpin hoàn toàn KHÔNG CÓ tập dữ liệu, bảng số liệu thực nghiệm hay mã nguồn nào. Bài báo là công trình khảo luận nhận thức luận trên tạp chí lý thuyết.\n"
-         "2. Mục đích đưa tập dữ liệu vào: Tập dữ liệu Kaggle Resume Dataset (2.485 tệp tin, ~112.81 MiB theo benchmark) do nhóm sinh viên tự chọn và tiền xử lý. Mục đích là cung cấp môi trường cây thư mục doanh nghiệp nhiều tầng thực tế, kích thước tệp biến thiên, phản ánh tải làm việc thực tế để đo tốc độ quét và kiểm tra khả năng bắt lỗi đối kháng, hoàn toàn không phải ngụy tạo số liệu tác giả."),
+         "1. Khẳng định minh bạch: Bài báo gốc của Harry Halpin là công trình khảo luận nhận thức luận thuần túy, hoàn toàn KHÔNG có tập dữ liệu, bảng số liệu thực nghiệm hay mã nguồn đi kèm.\n"
+         "2. Mục đích đưa tập dữ liệu vào: Bộ dữ liệu Kaggle Resume Dataset (2.485 tệp tin, ~112,8 MB) do nhóm sinh viên tự chọn và tiền xử lý. "
+         "Mục đích là tạo môi trường cây thư mục doanh nghiệp nhiều tầng thực tế, kích thước tệp biến thiên, phản ánh tải làm việc thực tế để đo tốc độ quét và kiểm tra khả năng bắt lỗi đối kháng, "
+         "hoàn toàn là phần đóng góp thực nghiệm độc lập của sinh viên, không phải ngụy tạo số liệu tác giả."),
 
         ("Câu hỏi 4: Tại sao mã kiểm tra lỗi CRC32 bị qua mặt bằng GF(2), trong khi SHA-256 lại phát hiện được gian lận?",
          "Luận điểm phản biện:\n"
-         "1. Tính tuyến tính của CRC32: CRC32 hoạt động dựa trên phép chia đa thức trên trường nhị phân GF(2). Do tính chất tuyến tính, giá trị CRC của thông điệp sửa đổi có thể tính trước được. Đối thủ giải hệ phương trình đại số tuyến tính để tìm ra 4 byte bù (patch) nối vào đuôi tệp, khiến CRC32 của tệp giả mạo trùng khớp với tệp gốc trong kịch bản kiểm thử này.\n"
-         "2. Tính phi tuyến của SHA-256: SHA-256 xây dựng trên cấu trúc lặp Merkle-Damgard với các hàm phi tuyến. Hàm băm đạt hiệu ứng tuyết lở (SAC ~50%): Chỉ đổi 1 bit đầu vào thì trung bình 50% số bit đầu ra bị đảo ngẫu nhiên. Bài toán tìm tiền ảnh thứ hai trên SHA-256 có độ phức tạp 2^256, vượt quá năng lực tính toán của đối thủ thời gian đa thức (PPT)."),
+         "1. Tính tuyến tính của CRC32: CRC32 hoạt động dựa trên phép chia đa thức trên trường nhị phân GF(2). "
+         "Do tính chất tuyến tính, giá trị kiểm tra của dữ liệu sửa đổi có thể tính trước được bằng đại số. "
+         "Kẻ tấn công giải hệ phương trình tuyến tính để tìm ra 4 byte bù (patch) nối vào đuôi tệp, khiến mã CRC32 của tệp giả mạo trùng khớp hoàn toàn với tệp gốc trong kịch bản kiểm thử này.\n"
+         "2. Tính phi tuyến mạnh của SHA-256: SHA-256 xây dựng trên cấu trúc lặp Merkle-Damgard với các phép toán phi tuyến phức tạp. "
+         "Hàm băm đạt hiệu ứng tuyết lở (SAC ~50%): Chỉ đổi đúng 1 bit đầu vào thì trung bình 50% số bit đầu ra bị đảo ngẫu nhiên. "
+         "Bài toán tìm tiền ảnh thứ hai trên SHA-256 có độ phức tạp 2^256, vượt xa năng lực tính toán của kẻ tấn công thời gian đa thức (PPT)."),
 
         ("Câu hỏi 5: Tấn công Kênh kề thời gian (Timing Side-Channel) trong so sánh chuỗi hoạt động thế nào và cách giải quyết?",
          "Luận điểm phản biện:\n"
-         "1. Cơ chế rò rỉ: Hàm so sánh chuỗi thông thường (toán tử ==) so sánh tuần tự từng ký tự từ trái sang phải và ngắt sớm (early return) khi thấy ký tự sai đầu tiên. Đối thủ gửi các chuỗi thử và đo thời gian phản hồi: Thời gian xử lý lâu hơn nghĩa là đã đoán đúng thêm ký tự. Nhờ đó, đối thủ dò ra khóa bí mật mà không cần giải mã.\n"
-         "2. Giải pháp kỹ thuật: Sử dụng hàm so sánh thời gian hằng số (Constant-time comparison) `hmac.compare_digest`. Hàm này luôn duyệt hết độ dài chuỗi bằng phép XOR tích lũy, đảm bảo thời gian xử lý độc lập với vị trí sai khác, triệt tiêu kênh rò rỉ thời gian ở mức phần mềm."),
+         "1. Cơ chế rò rỉ qua thời gian: Lệnh so sánh chuỗi thông thường (toán tử ==) so sánh tuần tự từng ký tự từ trái sang phải và ngắt sớm (early return) ngay khi thấy ký tự sai đầu tiên. "
+         "Kẻ tấn công gửi các chuỗi thử và đo thời gian phản hồi: Thời gian xử lý lâu hơn nghĩa là đã đoán đúng thêm ký tự. Nhờ đó, kẻ địch dò ra khóa bí mật mà không cần giải mã.\n"
+         "2. Giải pháp kỹ thuật triệt để: Sử dụng hàm so sánh thời gian hằng số (Constant-time comparison) `hmac.compare_digest`. "
+         "Hàm này luôn duyệt hết độ dài chuỗi bằng phép toán XOR tích lũy, đảm bảo thời gian xử lý luôn không đổi dù chuỗi khớp hay không, loại bỏ hoàn toàn kênh rò rỉ thời gian ở mức phần mềm ứng dụng."),
 
         ("Câu hỏi 6: Cây Merkle phân cấp và phân tách miền RFC 6962 đóng vai trò gì trong đề tài?",
          "Luận điểm phản biện:\n"
-         "1. Đóng góp độc lập: Halpin không đề xuất Cây Merkle hay chuẩn RFC 6962. Đây là phần mở rộng độc lập của nhóm nhằm giải quyết bài toán toàn vẹn dữ liệu tệp tin.\n"
-         "2. Phân tách miền RFC 6962: Phép ghép băm thông thường H(L || R) có nguy cơ dẫn đến lỗi nhập nhằng nút lá (Node-leaf ambiguity) khi một nút lá bị giả mạo thành cặp băm của nút nhánh nội bộ. Nhóm áp dụng chuẩn RFC 6962: Thêm tiền tố 0x00 cho lá và 0x01 cho nhánh, triệt tiêu hoàn toàn sự nhập nhằng cấu trúc ở cấp độ cây.\n"
-         "3. Định hướng cuối kỳ: Nhóm tiếp tục tối ưu hóa cơ chế bộ đệm cập nhật cục bộ và đo đạc thực nghiệm trên các quy mô dữ liệu lớn hơn.")
+         "1. Đóng góp kỹ thuật độc lập của nhóm: Tác giả Halpin chỉ nêu triết lý chứ không đề xuất Cây Merkle hay chuẩn RFC 6962. "
+         "Đây là phần giải pháp kỹ thuật do nhóm chủ động tích hợp nhằm giải quyết bài toán kiểm tra toàn vẹn cây thư mục dữ liệu lớn.\n"
+         "2. Phân tách miền RFC 6962: Phép ghép băm thông thường H(L || R) có nguy cơ dẫn đến lỗi nhầm lẫn cấu trúc cây (Node-leaf ambiguity) "
+         "khi nút lá bị kẻ gian giả mạo thành cặp băm của nút nhánh nội bộ. Nhóm áp dụng chuẩn RFC 6962: Thêm tiền tố byte 0x00 cho lá và 0x01 cho nhánh, "
+         "ngăn chặn hiệu quả sự nhập nhằng cấu trúc ở cấp độ cây Merkle.\n"
+         "3. Định hướng cho đồ án cuối kỳ: Nhóm tiếp tục tối ưu hóa cơ chế bộ đệm cập nhật cục bộ và đo đạc thực nghiệm trên các quy mô dữ liệu lớn hơn.")
     ]
 
     for q_title, q_ans in qa_list:
@@ -563,12 +592,10 @@ def create_document():
         r_a.font.size = Pt(10)
         r_a.font.color.rgb = RGBColor(51, 65, 85)
 
-    # Lưu file Word tại docs/ và sao chép ra thư mục gốc
+    # Lưu thành file Word chính thức duy nhất
     target_docs = "docs/Kich_Ban_Thuyet_Trinh_Va_Demo_DT005.docx"
-    target_root = "Kich_Ban_Thuyet_Trinh_Va_Demo_DT005.docx"
     doc.save(target_docs)
-    shutil.copyfile(target_docs, target_root)
-    print(f"[THÀNH CÔNG] Đã tạo tài liệu Word hoàn chỉnh tại:\n - {target_docs}\n - {target_root}")
+    print(f"[THÀNH CÔNG] Đã cập nhật file Word chính thức tại: {target_docs}")
 
 if __name__ == "__main__":
     create_document()
